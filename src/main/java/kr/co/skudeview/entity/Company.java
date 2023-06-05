@@ -1,6 +1,7 @@
 package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,14 +23,20 @@ public class Company extends BaseEntity{
     @JoinColumn(name = "member_id")
     private Member member_id;
 
+    @NotNull
+    @Column(name = "company_name")
     private String companyName;
 
+    @Column(name = "position")
     private String position;
 
+    @Column(name = "start_date")
     private LocalDate startDate;
 
+    @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "description")
     private String Description;
 
 

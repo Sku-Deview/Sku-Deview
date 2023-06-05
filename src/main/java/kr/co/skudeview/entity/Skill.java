@@ -17,6 +17,7 @@ public class Skill {
     @Column(name = "skill_id")
     private Long id;
 
+    @Column(name = "skill_name")
     private ArrayList<String> name = new ArrayList<>();
 
 

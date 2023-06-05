@@ -1,6 +1,7 @@
 package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,14 +22,21 @@ public class University extends BaseEntity{
     @JoinColumn(name = "member_id")
     private Member member_id;
 
+    @Column(name = "univ_name")
+    @NotNull
     private String univName;
 
+    @Column(name = "major")
+    @NotNull
     private String major;
 
+    @Column(name = "start_date")
     private LocalDate startDate;
 
+    @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "description")
     private String Description;
 
     @Builder
