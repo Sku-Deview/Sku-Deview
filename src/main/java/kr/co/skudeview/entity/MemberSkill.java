@@ -15,9 +15,11 @@ public class MemberSkill {
     @Column(name = "memberSkill_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member_id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "skill_id")
     private Skill skill_id;
 }
