@@ -2,6 +2,7 @@ package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +18,10 @@ public class Skill {
     private Long id;
 
     private ArrayList<String> name = new ArrayList<>();
+
+
+    @Builder
+    public Skill(String name) {
+        this.name.add(name);
+    }
 }

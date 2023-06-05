@@ -2,6 +2,7 @@ package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,15 @@ public class Company extends BaseEntity{
     private LocalDate endDate;
 
     private String Description;
+
+
+    @Builder
+    public Company(String companyName, String position, LocalDate startDate, LocalDate endDate, String description) {
+
+        this.companyName = companyName;
+        this.position = position;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        Description = description;
+    }
 }

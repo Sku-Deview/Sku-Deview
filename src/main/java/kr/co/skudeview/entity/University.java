@@ -2,6 +2,7 @@ package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,14 @@ public class University extends BaseEntity{
     private LocalDate endDate;
 
     private String Description;
+
+    @Builder
+    public University(Member member_id, String univName, String major, LocalDate startDate, LocalDate endDate, String description) {
+        this.member_id = member_id;
+        this.univName = univName;
+        this.major = major;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        Description = description;
+    }
 }

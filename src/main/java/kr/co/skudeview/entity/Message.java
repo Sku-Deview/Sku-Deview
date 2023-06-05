@@ -3,6 +3,7 @@ package kr.co.skudeview.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,11 @@ public class Message extends BaseEntity {
     @Column(name = "content")
     @NotNull
     private String content;
+
+    @Builder
+    public Message(Member sender, Member receiver, String content) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
+    }
 }
