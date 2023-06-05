@@ -1,5 +1,6 @@
 package kr.co.skudeview.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -15,12 +16,15 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     @CreatedDate
+    @Column(name = "reg_date", updatable = false)
     private LocalDateTime regDate;
 
     @LastModifiedDate
+    @Column(name = "mod_date")
     private LocalDateTime modDate;
 
     // enum 으로 수정할지 고민 'Y' 'N'
+    @Column(name = "delete_at", columnDefinition = "CHAR(1) DEFAULT 'N'")
     private String deleteAt;
 
 }

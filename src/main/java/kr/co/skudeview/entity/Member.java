@@ -1,6 +1,7 @@
 package kr.co.skudeview.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import kr.co.skudeview.entity.enums.Gender;
 import kr.co.skudeview.entity.enums.Role;
 import lombok.Builder;
@@ -19,25 +20,40 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "email", unique = true)
+    @NotNull
     private String email;
 
+    @Column(name = "password")
+    @NotNull
     private String password;
 
+    @Column(name = "name")
+    @NotNull
     private String name;
 
-    @Column(unique = true)
+    @Column(name = "nickname", unique = true)
+    @NotNull
     private String nickname;
 
-    @Column(unique = true)
+    @Column(name="telephone", unique = true)
+    @NotNull
     private String telephone;
 
+    @Column(name = "address")
+    @NotNull
     private String address;
 
+    @Column(name = "birth_date")
+    @NotNull
     private LocalDate birthDate;
 
+    @Column(name = "member_gender")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(name = "member_role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder
