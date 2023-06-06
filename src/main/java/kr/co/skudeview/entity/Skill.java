@@ -18,11 +18,10 @@ public class Skill {
     private Long id;
 
     @Column(name = "skill_name")
-    private ArrayList<String> name = new ArrayList<>();
-
+    private String name;
 
     @Builder
     public Skill(String name) {
-        this.name.add(name);
+        this.name = name;
     }
 }
