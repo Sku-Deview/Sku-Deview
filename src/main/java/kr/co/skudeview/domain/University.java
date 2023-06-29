@@ -1,4 +1,4 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,27 +8,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Company extends BaseEntity{
+public class University extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "company_id")
+    @Column(name = "university_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member_id;
 
+    @Column(name = "univ_name")
     @NotNull
-    @Column(name = "company_name")
-    private String companyName;
+    private String univName;
 
-    @Column(name = "position")
-    private String position;
+    @Column(name = "major")
+    @NotNull
+    private String major;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -39,12 +39,11 @@ public class Company extends BaseEntity{
     @Column(name = "description")
     private String Description;
 
-
     @Builder
-    public Company(String companyName, String position, LocalDate startDate, LocalDate endDate, String description) {
-
-        this.companyName = companyName;
-        this.position = position;
+    public University(Member member_id, String univName, String major, LocalDate startDate, LocalDate endDate, String description) {
+        this.member_id = member_id;
+        this.univName = univName;
+        this.major = major;
         this.startDate = startDate;
         this.endDate = endDate;
         Description = description;

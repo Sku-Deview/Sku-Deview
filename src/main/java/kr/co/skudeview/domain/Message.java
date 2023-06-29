@@ -1,33 +1,40 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Follow extends BaseEntity{
+public class Message extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "follow_id")
+    @Column(name = "message_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
     @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
-    private Member toMember;
+    private Member sender;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
     @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
-    private Member fromMember;
+    private Member receiver;
+
+    @Column(name = "content")
+    @NotNull
+    private String content;
 
     @Builder
-    public Follow(Member toMember, Member fromMember) {
-        this.toMember = toMember;
-        this.fromMember = fromMember;
+    public Message(Member sender, Member receiver, String content) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
     }
 }
