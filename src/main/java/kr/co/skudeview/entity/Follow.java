@@ -16,11 +16,13 @@ public class Follow extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+//    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
     private Member toMember;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+//    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
     private Member fromMember;
 
     @Builder

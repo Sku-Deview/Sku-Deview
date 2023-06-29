@@ -17,11 +17,14 @@ public class Message extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+//    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
     private Member sender;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+//    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", insertable = false, updatable = false)
     private Member receiver;
 
     @Column(name = "content")
