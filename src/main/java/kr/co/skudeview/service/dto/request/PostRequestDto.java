@@ -31,6 +31,8 @@ public class PostRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UPDATE {
+        private Long postId;
+
         private String title;
 
         private String content;

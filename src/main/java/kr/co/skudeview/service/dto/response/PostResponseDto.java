@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class PostResponseDto {
 
+
     @Getter
     @Builder
     @AllArgsConstructor
@@ -25,9 +26,9 @@ public class PostResponseDto {
 
         private PostCategory postCategory;
 
-        private Integer likeCount;
+        private int likeCount;
 
-        private Integer viewCount;
+        private int viewCount;
 
         public READ(Post post) {
         }

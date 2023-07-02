@@ -12,9 +12,9 @@ public interface PostService {
 
     public List<PostResponseDto.READ> findAll();
 
-    public Long updatePost(final Long id, final PostResponseDto.READ read);
+    public Long updatePost(final Long id, final PostRequestDto.UPDATE update);
 
     public Long deletePost(final Long id);
 
-    public PostResponseDto.READ findById(final long id);
+    public PostResponseDto.READ findById(final Long id);
 }

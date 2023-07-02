@@ -36,9 +36,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(Long id, PostResponseDto.READ read) {
+    public Long updatePost(Long id, PostRequestDto.UPDATE update) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException());
-        post.updatePost(read.getTitle(),read.getContent(), read.getPostCategory());
+        post.updatePost(update.getTitle(),update.getContent(), update.getPostCategory());
         return id;
     }
 
@@ -54,7 +54,8 @@ public class PostServiceImpl implements PostService {
      * 게시글 상세정보 조회
      */
     @Override
-    public PostResponseDto.READ findById(long id) {
+    @Transactional
+    public PostResponseDto.READ findById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException());
         post.increaseViewCount();
         return postMapper.toReadDto(post);
