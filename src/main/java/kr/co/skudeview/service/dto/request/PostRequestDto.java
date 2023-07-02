@@ -7,7 +7,7 @@ import lombok.*;
 public class PostRequestDto {
 
     @Getter
-    @Setter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CREATE {
@@ -22,6 +22,7 @@ public class PostRequestDto {
         private Integer likeCount;
 
         private Integer viewCount;
+
 
     }
 
