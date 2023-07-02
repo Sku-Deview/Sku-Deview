@@ -19,7 +19,7 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -35,11 +35,11 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PostCategory postCategory;
 
-    @Column(name = "like_count", columnDefinition = "INTEGER DEFAULT 0")
-    private Integer likeCount;
+    @Column(name = "like_count")
+    private int likeCount;
 
-    @Column(name = "view_count", columnDefinition = "INTEGER DEFAULT 0")
-    private Integer viewCount;
+    @Column(name = "view_count")
+    private int viewCount;
 
     @Builder
     public Post(Member member,
