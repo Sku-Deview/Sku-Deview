@@ -1,8 +1,8 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import kr.co.skudeview.entity.enums.PostCategory;
+import kr.co.skudeview.domain.enums.PostCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

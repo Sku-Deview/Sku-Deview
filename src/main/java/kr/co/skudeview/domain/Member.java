@@ -1,9 +1,10 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import kr.co.skudeview.entity.enums.Gender;
-import kr.co.skudeview.entity.enums.Role;
+import kr.co.skudeview.domain.enums.Gender;
+import kr.co.skudeview.domain.enums.Role;
+import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +38,7 @@ public class Member extends BaseEntity {
     @NotNull
     private String nickname;
 
-    @Column(name="telephone", unique = true)
+    @Column(name = "telephone", unique = true)
     @NotNull
     private String telephone;
 
@@ -79,8 +80,15 @@ public class Member extends BaseEntity {
     }
 
     // modify 위한 메소드
-    public void updateMember() {
-
+    public void updateMember(MemberRequestDto.UPDATE update) {
+        this.password = update.getPassword();
+        this.name = update.getName();
+        this.nickname = update.getNickname();
+        this.telephone = update.getTelephone();
+        this.address = update.getAddress();
+        this.birthDate = update.getBirthDate();
+        this.gender = Gender.valueOf(update.getGender());
+        this.role = Role.valueOf(update.getRole());
     }
 
 }

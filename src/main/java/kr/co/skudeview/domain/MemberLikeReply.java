@@ -1,4 +1,4 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

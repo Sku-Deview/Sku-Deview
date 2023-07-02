@@ -1,4 +1,4 @@
-package kr.co.skudeview.entity.enums;
+package kr.co.skudeview.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

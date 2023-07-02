@@ -1,4 +1,4 @@
-package kr.co.skudeview.entity;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,24 +9,26 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberSkill {
+public class MemberLikePost extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberSkill_id")
+    @Column(name = "memberLikePost_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member_id;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "skill_id")
-    private Skill skill_id;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @Builder
-    public MemberSkill(Member member_id, Skill skill_id) {
-        this.member_id = member_id;
-        this.skill_id = skill_id;
+    public MemberLikePost(Member member,
+                          Post post) {
+        this.member = member;
+        this.post = post;
     }
+
 }
