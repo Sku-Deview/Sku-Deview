@@ -28,7 +28,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto.READ> findAll() {
+    public List<PostResponseDto.READ> getAllPosts() {
         Sort sort = Sort.by(Sort.Direction.DESC,"id","regDate");
         List<Post> list = postRepository.findAll(sort);
         return list.stream().map(PostResponseDto.READ::new).collect(Collectors.toList());
@@ -36,16 +36,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(Long id, PostRequestDto.UPDATE update) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    public Long updatePost(Long postId, PostRequestDto.UPDATE update) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
         post.updatePost(update.getTitle(),update.getContent(), update.getPostCategory());
-        return id;
+        return postId;
     }
 
     @Override
     @Transactional
-    public Long deletePost(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    public Long deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
         postRepository.delete(post);
         return post.getId();
     }
@@ -55,8 +55,8 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     @Transactional
-    public PostResponseDto.READ findById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    public PostResponseDto.READ getPostDetail(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
         post.increaseViewCount();
         return postMapper.toReadDto(post);
     }
