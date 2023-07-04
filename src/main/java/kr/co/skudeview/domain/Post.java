@@ -3,6 +3,7 @@ package kr.co.skudeview.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import kr.co.skudeview.domain.enums.PostCategory;
+import kr.co.skudeview.service.dto.request.PostRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -34,11 +35,11 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PostCategory postCategory;
 
-    @Column(name = "like_count", columnDefinition = "INTEGER DEFAULT 0")
-    private Integer likeCount;
+    @Column(name = "like_count")
+    private int likeCount;
 
-    @Column(name = "view_count", columnDefinition = "INTEGER DEFAULT 0")
-    private Integer viewCount;
+    @Column(name = "view_count")
+    private int viewCount;
 
     @Builder
     public Post(Member member,
@@ -55,5 +56,19 @@ public class Post extends BaseEntity {
         this.postCategory = postCategory;
     }
 
+    //modify를 위한 method
+    public void updatePost(String title, String content, PostCategory postCategory) {
+        this.title = title;
+        this.content = content;
+        this.postCategory= postCategory;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
 
 }
