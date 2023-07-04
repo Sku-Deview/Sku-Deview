@@ -10,11 +10,11 @@ public interface PostService {
 
     public Long createPost(PostRequestDto.CREATE create);
 
-    public List<PostResponseDto.READ> findAll();
+    public List<PostResponseDto.READ> getAllPosts();
 
-    public Long updatePost(final Long id, final PostRequestDto.UPDATE update);
+    public Long updatePost(final Long postId, final PostRequestDto.UPDATE update);
 
-    public Long deletePost(final Long id);
+    public Long deletePost(final Long postId);
 
-    public PostResponseDto.READ findById(final Long id);
+    public PostResponseDto.READ getPostDetail(final Long postId);
 }
