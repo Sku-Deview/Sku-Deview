@@ -18,7 +18,7 @@ public class PostResponseDto {
     public static class READ {
         private Long postId;
 
-        private Member member;
+        private String memberEmail;
 
         private String title;
 
