@@ -11,7 +11,7 @@ public class PostRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CREATE {
-        private Member member;
+        private String memberEmail;
 
         private String title;
 
