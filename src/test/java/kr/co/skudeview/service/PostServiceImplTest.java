@@ -53,7 +53,7 @@ class PostServiceImplTest {
         Member member = memberMapper.toEntity(readMember);
 
         PostRequestDto.CREATE readPost = PostRequestDto.CREATE.builder()
-                .member(member)
+                .memberEmail(readMember.getEmail())
                 .title("테스트제목")
                 .content("테스트본문")
                 .postCategory(PostCategory.FREE)
@@ -67,7 +67,7 @@ class PostServiceImplTest {
 
     @Test
     void findAll() {
-        List<PostResponseDto.READ> all = postService.findAll();
+        List<PostResponseDto.READ> all = postService.getAllPosts();
         assertThat(all.size()).isEqualTo(1);
 
     }
@@ -107,7 +107,7 @@ class PostServiceImplTest {
         Member member = memberMapper.toEntity(readMember);
 
         PostRequestDto.CREATE readPost = PostRequestDto.CREATE.builder()
-                .member(member)
+                .memberEmail(readMember.getEmail())
                 .title("delete")
                 .content("delete")
                 .postCategory(PostCategory.FREE)
@@ -115,17 +115,17 @@ class PostServiceImplTest {
                 .viewCount(1)
                 .build();
         Long postId = postService.createPost(readPost);
-        List<PostResponseDto.READ> all = postService.findAll();
+        List<PostResponseDto.READ> all = postService.getAllPosts();
         assertThat(all.size()).isEqualTo(2);
         postService.deletePost(postId);
-        List<PostResponseDto.READ> all2 = postService.findAll();
+        List<PostResponseDto.READ> all2 = postService.getAllPosts();
         assertThat(all2.size()).isEqualTo(1);
 
     }
 
     @Test
     void findById() {
-        PostResponseDto.READ post = postService.findById(1L);
+        PostResponseDto.READ post = postService.getPostDetail(1L);
         Optional<Post> result = postRepository.findById(1L);
         assertThat(result.get().getViewCount()).isEqualTo(3);
     }
