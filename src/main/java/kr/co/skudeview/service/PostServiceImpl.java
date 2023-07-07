@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponseDto.READ> getAllPosts() {
         List<Post> list = postRepository.findAll(); //추후 삭제 여부에 따른 동적쿼리로 변경
-        return list.stream().map(PostResponseDto.READ::new).collect(Collectors.toList());
+        List<PostResponseDto.READ> posts = new ArrayList<>();
+        for (Post post : list) {
+            PostResponseDto.READ dto = PostResponseDto.READ.builder()
+                    .title(post.getTitle())
+                    .postCategory(post.getPostCategory())
+                    .postId(post.getId())
+                    .viewCount(post.getViewCount())
+                    .likeCount(post.getLikeCount())
+                    .memberEmail(post.getMember().getEmail())
+                    .content(post.getContent())
+                    .build();
+            posts.add(dto);
+        }
+        return posts;
     }
 
     @Override
@@ -45,7 +59,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Long deletePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
-        post.getDeleteAt().replace('N','Y');
+        post.delete();
         return post.getId();
     }
 
