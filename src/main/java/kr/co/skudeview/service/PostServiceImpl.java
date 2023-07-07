@@ -29,8 +29,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponseDto.READ> getAllPosts() {
-        Sort sort = Sort.by(Sort.Direction.DESC,"id","regDate");
-        List<Post> list = postRepository.findAll(sort);
+        List<Post> list = postRepository.findAll(); //추후 삭제 여부에 따른 동적쿼리로 변경
         return list.stream().map(PostResponseDto.READ::new).collect(Collectors.toList());
     }
 
