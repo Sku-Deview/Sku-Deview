@@ -1,6 +1,8 @@
 package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import kr.co.skudeview.service.dto.request.SkillRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,10 +18,16 @@ public class Skill {
     private Long id;
 
     @Column(name = "skill_name")
+    @NotNull
     private String name;
 
     @Builder
     public Skill(String name) {
         this.name = name;
+    }
+
+    // modify를 위한 메서드
+    public void updateSkill(SkillRequestDto.UPDATE update) {
+        this.name = update.getName();
     }
 }
