@@ -71,4 +71,10 @@ public class Post extends BaseEntity {
         this.likeCount++;
     }
 
+    /**
+     * 게시글 삭제
+     */
+    public void delete() {
+       this.setDeleteAt("Y");
+        }
 }
