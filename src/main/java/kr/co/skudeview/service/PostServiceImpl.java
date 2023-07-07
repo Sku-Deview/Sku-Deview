@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Long deletePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
-        postRepository.delete(post);
+        post.getDeleteAt().replace('N','Y');
         return post.getId();
     }
 
