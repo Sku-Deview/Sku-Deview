@@ -1,6 +1,8 @@
 package kr.co.skudeview.service;
 
+import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Post;
+import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,11 +22,21 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
     private final PostMapper postMapper;
     @Override
     @Transactional
     public Long createPost(PostRequestDto.CREATE create) {
-        Post post = postMapper.toEntity(create);
+        Optional<Member> findMember = memberRepository.findMemberByEmail(create.getMemberEmail());
+        Post post = Post.builder()
+                .member(findMember.get())
+                .title(create.getTitle())
+                .content(create.getContent())
+                .likeCount(create.getLikeCount())
+                .viewCount(create.getViewCount())
+                .postCategory(create.getPostCategory())
+                .build();
+
         postRepository.save(post);
         return post.getId();
     }
@@ -34,13 +47,13 @@ public class PostServiceImpl implements PostService {
         List<PostResponseDto.READ> posts = new ArrayList<>();
         for (Post post : list) {
             PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                    .title(post.getTitle())
-                    .postCategory(post.getPostCategory())
                     .postId(post.getId())
+                    .memberEmail(post.getMember().getEmail())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
-                    .memberEmail(post.getMember().getEmail())
-                    .content(post.getContent())
                     .build();
             posts.add(dto);
         }
@@ -71,7 +84,16 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto.READ getPostDetail(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException());
         post.increaseViewCount();
-        return postMapper.toReadDto(post);
+        PostResponseDto.READ dto = PostResponseDto.READ.builder()
+                .postId(post.getId())
+                .memberEmail(post.getMember().getEmail())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .postCategory(post.getPostCategory())
+                .viewCount(post.getViewCount())
+                .likeCount(post.getLikeCount())
+                .build();
+        return dto;
     }
 
 
