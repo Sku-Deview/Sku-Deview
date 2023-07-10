@@ -57,6 +57,8 @@ public class MemberServiceImpl implements MemberService {
         final Optional<Member> member = memberRepository.findById(update.getMemberId());
 
         isMember(member);
+        isTelephone(update.getTelephone());
+        isNickname(update.getNickname());
 
         member.get().updateMember(update);
 
