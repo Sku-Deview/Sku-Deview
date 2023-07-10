@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -58,6 +60,13 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL},
+            mappedBy = "member"
+    )
+    private List<MemberSkill> memberSkills = new ArrayList<>();
+
     @Builder
     public Member(String email,
                   String password,
@@ -67,7 +76,8 @@ public class Member extends BaseEntity {
                   String address,
                   LocalDate birthDate,
                   Gender gender,
-                  Role role) {
+                  Role role,
+                  List<MemberSkill> memberSkills) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -77,6 +87,7 @@ public class Member extends BaseEntity {
         this.birthDate = birthDate;
         this.gender = gender;
         this.role = role;
+        this.memberSkills = memberSkills;
     }
 
     // modify 위한 메소드
@@ -89,6 +100,10 @@ public class Member extends BaseEntity {
         this.birthDate = update.getBirthDate();
         this.gender = Gender.valueOf(update.getGender());
         this.role = Role.valueOf(update.getRole());
+    }
+
+    public void changeMemberSkills(List<MemberSkill> changeMemberSkills) {
+        this.memberSkills = changeMemberSkills;
     }
 
 }

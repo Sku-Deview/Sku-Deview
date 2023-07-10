@@ -13,20 +13,20 @@ public class MemberSkill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberSkill_id")
+    @Column(name = "member_skill_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member_id;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "skill_id")
-    private Skill skill_id;
+    private Skill skill;
 
     @Builder
-    public MemberSkill(Member member_id, Skill skill_id) {
-        this.member_id = member_id;
-        this.skill_id = skill_id;
+    public MemberSkill(Member member, Skill skill) {
+        this.member = member;
+        this.skill = skill;
     }
 }

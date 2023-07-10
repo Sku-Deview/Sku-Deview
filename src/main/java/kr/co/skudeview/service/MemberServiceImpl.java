@@ -2,15 +2,19 @@ package kr.co.skudeview.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Member;
+import kr.co.skudeview.domain.MemberSkill;
+import kr.co.skudeview.domain.Skill;
 import kr.co.skudeview.repository.MemberRepository;
+import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import kr.co.skudeview.service.mapper.MemberMapper;
+import kr.co.skudeview.service.mapper.MemberSkillMapper;
+import kr.co.skudeview.service.mapper.SkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,19 +23,40 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+    private final SkillRepository skillRepository;
+
     private final MemberMapper memberMapper;
+
+    private final MemberSkillMapper memberSkillMapper;
 
     @Transactional
     @Override
     public void createMember(MemberRequestDto.CREATE create) throws Exception {
-        final Member member = memberMapper.toEntity(create);
 
-        isTelephone(member.getTelephone());
-        isEmail(member.getEmail());
-        isNickname(member.getNickname());
+        isTelephone(create.getTelephone());
+        isEmail(create.getEmail());
+        isNickname(create.getEmail());
+
+        Member member = memberMapper.toEntity(create, Collections.emptyList());
+
+        final List<MemberSkill> memberSkills = getSkills(create.getSkillName(), member);
+
+        member.changeMemberSkills(memberSkills);
 
         memberRepository.save(member);
+
     }
+
+    private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
+
+        final List<Skill> skills = skillRepository.findAllByNameIn(skillNames);
+
+        //연관 엔티티 반
+        return skills.stream()
+                .map(skill -> memberSkillMapper.toEntity(skill, member))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public MemberResponseDto.READ getMemberByEmail(String email) throws Exception {
@@ -39,16 +64,22 @@ public class MemberServiceImpl implements MemberService {
 
         isMember(member);
 
-        return memberMapper.toReadDto(member.get());
+        return memberMapper.toReadDto(member.get(), getSkillsNameByMember(member.get()));
     }
 
     @Override
     public List<MemberResponseDto.READ> getAllMembers() throws Exception {
-        final List<Member> members = memberRepository.findAll();
 
-        return members.stream()
-                .map(memberMapper::toReadDto)
-                .collect(Collectors.toList());
+        List<Member> members = memberRepository.findAll();
+        List<MemberResponseDto.READ> readList = new ArrayList<>();
+
+        for (Member member : members) {
+            List<String> skillsName = getSkillsNameByMember(member);
+            MemberResponseDto.READ dto = memberMapper.toReadDto(member, skillsName);
+            readList.add(dto);
+        }
+
+        return readList;
     }
 
     @Transactional
@@ -78,6 +109,15 @@ public class MemberServiceImpl implements MemberService {
          * 현재 BaseEntity에 deleteAt을 사용해주기에, 추후에 delete가 아닌, 해당 컬럼을 N -> Y 로 바꾸도록 수정이 필요
          */
         memberRepository.delete(member.get());
+    }
+
+    private List<String> getSkillsNameByMember(Member member) {
+        return member
+                .getMemberSkills()
+                .stream()
+                .map(MemberSkill::getSkill)
+                .map(Skill::getName)
+                .collect(Collectors.toList());
     }
 
 
