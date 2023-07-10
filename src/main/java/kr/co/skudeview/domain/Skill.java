@@ -17,7 +17,7 @@ public class Skill {
     @Column(name = "skill_id")
     private Long id;
 
-    @Column(name = "skill_name")
+    @Column(name = "skill_name", unique = true)
     @NotNull
     private String name;
 
