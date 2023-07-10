@@ -1,17 +1,13 @@
 package kr.co.skudeview.service.dto.request;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
-import kr.co.skudeview.domain.enums.Gender;
-import kr.co.skudeview.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 public class MemberRequestDto {
 
@@ -40,6 +36,8 @@ public class MemberRequestDto {
         private String gender;
 
         private String role;
+
+        private List<String> skillName;
     }
 
     @Getter
@@ -67,6 +65,8 @@ public class MemberRequestDto {
         private String gender;
 
         private String role;
+
+        private List<String> skillName;
 
     }
 

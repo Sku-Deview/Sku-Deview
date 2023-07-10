@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class MemberResponseDto {
 
@@ -32,6 +33,8 @@ public class MemberResponseDto {
         private String gender;
 
         private String role;
+
+        private List<String> skillName;
     }
 
 }
