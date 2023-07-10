@@ -20,7 +20,7 @@ public class PostApiController {
      * 게시글 생성
      */
     @PostMapping("/post")
-    public Long savePost(@RequestBody PostRequestDto.CREATE createParams) {
+    public Long createPost(@RequestBody PostRequestDto.CREATE createParams) {
         Long postId = postService.createPost(createParams);
         return postId;
     }
