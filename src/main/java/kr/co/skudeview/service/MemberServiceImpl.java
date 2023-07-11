@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
 
     private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
 
-        final List<Skill> skills = skillRepository.findAllByNameIn(skillNames);
+        final List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
 
         //연관 엔티티 반
         return skills.stream()
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto.READ getMemberByEmail(String email) throws Exception {
-        final Optional<Member> member = memberRepository.findMemberByEmail(email);
+        final Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(member);
 
@@ -72,7 +72,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponseDto.READ> getAllMembers() throws Exception {
 
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepository.findAllByDeleteAtFalse();
         List<MemberResponseDto.READ> readList = new ArrayList<>();
 
         for (Member member : members) {
@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void updateMember(MemberRequestDto.UPDATE update) throws Exception {
-        final Optional<Member> member = memberRepository.findById(update.getMemberId());
+        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(update.getMemberId());
 
         isMember(member);
         isTelephone(update.getTelephone());
@@ -104,7 +104,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void deleteMember(Long id) throws Exception {
-        final Optional<Member> member = memberRepository.findById(id);
+        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(id);
 
         isMember(member);
 
@@ -137,19 +137,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void isTelephone(String telephone) throws Exception {
-        if (memberRepository.existsMemberByTelephone(telephone)) {
+        if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
             throw new Exception("This Telephone is Already Use");
         }
     }
 
     private void isNickname(String nickname) throws Exception {
-        if (memberRepository.existsMemberByNickname(nickname)) {
+        if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
             throw new Exception("This Nickname is Already Use");
         }
     }
 
     private void isEmail(String email) throws Exception {
-        if (memberRepository.existsMemberByEmail(email)) {
+        if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
             throw new Exception("This Email is Already Use");
         }
     }

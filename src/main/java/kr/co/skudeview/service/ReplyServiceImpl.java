@@ -23,30 +23,38 @@ import java.util.Optional;
 public class ReplyServiceImpl implements ReplyService{
 
     private final MemberRepository memberRepository;
+
     private final PostRepository postRepository;
+
     private final ReplyRepository replyRepository;
 
     @Override
     @Transactional
     public Long createReply(Long postId,ReplyRequestDto.CREATE create) {
-        Optional<Post> findPost = postRepository.findById(postId);
-        Optional<Member> findMember = memberRepository.findMemberByEmail(create.getMemberEmail());
+        Optional<Post> findPost = postRepository.findPostByIdAndDeleteAtFalse(postId);
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
+
         log.info("memberRepository.findMember = {}",findMember);
+
         Reply reply = Reply.builder()
                 .post(findPost.get())
                 .member(findMember.get())
                 .content(create.getContent())
                 .likeCount(create.getLikeCount())
                 .build();
+
         replyRepository.save(reply);
+
         return reply.getId();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ReplyResponseDto.READ> getAllReplies(Long postId) {
-        List<Reply> list = replyRepository.findAllByPostId(postId);
+//        List<Reply> list = replyRepository.findAllByPostId(postId);
+        List<Reply> list = replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId);
         List<ReplyResponseDto.READ> replies = new ArrayList<>();
+
         for (Reply reply : list) {
             ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
                     .replyId(reply.getId())
@@ -57,22 +65,30 @@ public class ReplyServiceImpl implements ReplyService{
                     .build();
             replies.add(dto);
         }
+
         return replies;
     }
 
     @Override
     @Transactional
     public Long updateReply(Long replyId,ReplyRequestDto.UPDATE update) {
-        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new RuntimeException());
+        Reply reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId).orElseThrow(() -> new RuntimeException());
+
         reply.updateReply(update.getContent());
+
         return reply.getId();
     }
 
     @Override
     @Transactional
     public Long deleteReply(Long postId,Long replyId) {
-        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new RuntimeException());
-        reply.setDeleteAt("Y");
+        Reply reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId).orElseThrow(() -> new RuntimeException());
+
+//        reply.setDeleteAt("Y");
+        reply.changeDeleteAt();
+
+        replyRepository.save(reply);
+
         return reply.getId();
     }
 }
