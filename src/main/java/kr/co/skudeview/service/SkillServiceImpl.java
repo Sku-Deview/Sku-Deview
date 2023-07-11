@@ -24,16 +24,16 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional
     public void createSkill(SkillRequestDto.CREATE create) throws Exception{
-        final Skill skill = skillMapper.toEntity(create);
+        isSkillName(create.getName());
 
-        isSkillName(skill.getName());
+        final Skill skill = skillMapper.toEntity(create);
 
         skillRepository.save(skill);
     }
 
     @Override
     public SkillResponseDto.READ getSkillBySkillId(Long skillId) throws Exception {
-        final Optional<Skill> skill = skillRepository.findSkillById(skillId);
+        final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(skillId);
 
         isSkill(skill);
 
@@ -42,7 +42,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<SkillResponseDto.READ> getAllSkills() {
-        final List<Skill> skills = skillRepository.findAll();
+        final List<Skill> skills = skillRepository.findAllByDeleteAtFalse();
 
         return skills.stream()
                 .map(skillMapper::toReadDto)
@@ -52,9 +52,10 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional
     public void updateSkill(SkillRequestDto.UPDATE update) throws Exception {
-        final Optional<Skill> skill = skillRepository.findById(update.getSkillId());
+        final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(update.getSkillId());
 
         isSkill(skill);
+
         isSkillName(update.getName());
 
         skill.get().updateSkill(update);
@@ -65,16 +66,18 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional
     public void deleteSkill(Long skillId) throws Exception {
-        final Optional<Skill> skill = skillRepository.findById(skillId);
+        final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(skillId);
 
         isSkill(skill);
 
-        skillRepository.delete(skill.get());
+        skill.get().changeDeleteAt();
+
+        skillRepository.save(skill.get());
     }
 
     // skill name이 중복인지
     private void isSkillName(String name) throws Exception {
-        if (skillRepository.existsSkillByName(name)) {
+        if (skillRepository.existsSkillByNameAndDeleteAtFalse(name)) {
             throw new Exception("This Skill is Already Exist");
         }
     }

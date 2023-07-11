@@ -10,10 +10,16 @@ import java.util.Optional;
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Long> {
 
-    Optional<Skill> findSkillById(Long SkillId);
+    // skillId 값으로 skill 단일 조회 + 삭제되지 않은 skill
+    Optional<Skill> findSkillByIdAndDeleteAtFalse(Long id);
 
-    boolean existsSkillByName(String name);
+    // skill 다중 조회 + 삭제되지 않은 skill
+    List<Skill> findAllByDeleteAtFalse();
 
-    List<Skill> findAllByNameIn(List<String> skillNames);
+    // skillName 과 동일한 skill 다중 조회 + 삭제되지 않은 skill
+    List<Skill> findAllByNameInAndDeleteAtFalse(List<String> skillNames);
+
+    // skillName 검증 + 삭제되지 않은 skill
+    boolean existsSkillByNameAndDeleteAtFalse(String name);
 
 }

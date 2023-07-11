@@ -1,8 +1,10 @@
 package kr.co.skudeview.service.dto.request;
 
-import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.enums.PostCategory;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PostRequestDto {
 

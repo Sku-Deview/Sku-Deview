@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-@Setter //delete_at 값을 Y로 바꾸기 위한 setter 추후 상의할 예정
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
@@ -25,10 +24,12 @@ public abstract class BaseEntity {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
 
-    // enum 으로 수정할지 고민 'Y' 'N'
-//    @Column(name = "delete_at", columnDefinition = "CHAR(1) DEFAULT 'N'")
-//    private String deleteAt;
-    @Column(name = "delete_at", columnDefinition = "CHAR(1)")
-    private String deleteAt = "N";
+    // false = 삭제되지 않은 상태
+    // true  = 삭제된 상태
+    @Column(name = "delete_at")
+    private boolean deleteAt = false;
 
+    public void changeDeleteAt() {
+        this.deleteAt = true;
+    }
 }

@@ -10,11 +10,13 @@ import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import kr.co.skudeview.service.mapper.MemberMapper;
 import kr.co.skudeview.service.mapper.MemberSkillMapper;
-import kr.co.skudeview.service.mapper.SkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
 
     private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
 
-        final List<Skill> skills = skillRepository.findAllByNameIn(skillNames);
+        final List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
 
         //연관 엔티티 반
         return skills.stream()
@@ -60,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto.READ getMemberByEmail(String email) throws Exception {
-        final Optional<Member> member = memberRepository.findMemberByEmail(email);
+        final Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(member);
 
@@ -70,7 +72,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponseDto.READ> getAllMembers() throws Exception {
 
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepository.findAllByDeleteAtFalse();
         List<MemberResponseDto.READ> readList = new ArrayList<>();
 
         for (Member member : members) {
@@ -85,13 +87,16 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void updateMember(MemberRequestDto.UPDATE update) throws Exception {
-        final Optional<Member> member = memberRepository.findById(update.getMemberId());
+        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(update.getMemberId());
 
         isMember(member);
         isTelephone(update.getTelephone());
         isNickname(update.getNickname());
 
+        final List<MemberSkill> memberSkills = getSkills(update.getSkillName(), member.get());
+
         member.get().updateMember(update);
+        member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
     }
@@ -99,16 +104,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void deleteMember(Long id) throws Exception {
-        final Optional<Member> member = memberRepository.findById(id);
+        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(id);
 
         isMember(member);
 
-        /**
-         * TODO
-         *
-         * 현재 BaseEntity에 deleteAt을 사용해주기에, 추후에 delete가 아닌, 해당 컬럼을 N -> Y 로 바꾸도록 수정이 필요
-         */
-        memberRepository.delete(member.get());
+        // 논리적 삭제
+        member.get().changeDeleteAt();
+
+        memberRepository.save(member.get());
     }
 
     private List<String> getSkillsNameByMember(Member member) {
@@ -134,19 +137,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void isTelephone(String telephone) throws Exception {
-        if (memberRepository.existsMemberByTelephone(telephone)) {
+        if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
             throw new Exception("This Telephone is Already Use");
         }
     }
 
     private void isNickname(String nickname) throws Exception {
-        if (memberRepository.existsMemberByNickname(nickname)) {
+        if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
             throw new Exception("This Nickname is Already Use");
         }
     }
 
     private void isEmail(String email) throws Exception {
-        if (memberRepository.existsMemberByEmail(email)) {
+        if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
             throw new Exception("This Email is Already Use");
         }
     }
