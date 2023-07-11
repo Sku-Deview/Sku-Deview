@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-@Setter //delete_at 값을 Y로 바꾸기 위한 setter 추후 상의할 예정
+@Setter // setter를 사용하게 되면, regDate, modDate 모두 수정이 가능해지기에 메서드로 변경
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
@@ -31,4 +31,7 @@ public abstract class BaseEntity {
     @Column(name = "delete_at", columnDefinition = "CHAR(1)")
     private String deleteAt = "N";
 
+    public void changeDeleteAt() {
+        this.deleteAt = "Y";
+    }
 }
