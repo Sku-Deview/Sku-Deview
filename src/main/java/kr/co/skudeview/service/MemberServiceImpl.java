@@ -10,11 +10,13 @@ import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import kr.co.skudeview.service.mapper.MemberMapper;
 import kr.co.skudeview.service.mapper.MemberSkillMapper;
-import kr.co.skudeview.service.mapper.SkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,7 +93,10 @@ public class MemberServiceImpl implements MemberService {
         isTelephone(update.getTelephone());
         isNickname(update.getNickname());
 
+        final List<MemberSkill> memberSkills = getSkills(update.getSkillName(), member.get());
+
         member.get().updateMember(update);
+        member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
     }
@@ -103,12 +108,10 @@ public class MemberServiceImpl implements MemberService {
 
         isMember(member);
 
-        /**
-         * TODO
-         *
-         * 현재 BaseEntity에 deleteAt을 사용해주기에, 추후에 delete가 아닌, 해당 컬럼을 N -> Y 로 바꾸도록 수정이 필요
-         */
-        memberRepository.delete(member.get());
+        // 논리적 삭제
+        member.get().changeDeleteAt();
+
+        memberRepository.save(member.get());
     }
 
     private List<String> getSkillsNameByMember(Member member) {

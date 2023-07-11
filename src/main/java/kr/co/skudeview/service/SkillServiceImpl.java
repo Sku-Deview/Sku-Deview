@@ -24,9 +24,9 @@ public class SkillServiceImpl implements SkillService {
     @Override
     @Transactional
     public void createSkill(SkillRequestDto.CREATE create) throws Exception{
-        final Skill skill = skillMapper.toEntity(create);
+        isSkillName(create.getName());
 
-        isSkillName(skill.getName());
+        final Skill skill = skillMapper.toEntity(create);
 
         skillRepository.save(skill);
     }
@@ -55,6 +55,7 @@ public class SkillServiceImpl implements SkillService {
         final Optional<Skill> skill = skillRepository.findById(update.getSkillId());
 
         isSkill(skill);
+
         isSkillName(update.getName());
 
         skill.get().updateSkill(update);
@@ -69,7 +70,9 @@ public class SkillServiceImpl implements SkillService {
 
         isSkill(skill);
 
-        skillRepository.delete(skill.get());
+        skill.get().changeDeleteAt();
+
+        skillRepository.save(skill.get());
     }
 
     // skill name이 중복인지
