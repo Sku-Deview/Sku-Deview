@@ -1,6 +1,5 @@
 package kr.co.skudeview.controller;
 
-import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.service.PostService;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;

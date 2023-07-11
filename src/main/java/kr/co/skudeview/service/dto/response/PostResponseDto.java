@@ -1,6 +1,5 @@
 package kr.co.skudeview.service.dto.response;
 
-import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Post;
 import kr.co.skudeview.domain.enums.PostCategory;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class PostResponseDto {
-
 
     @Getter
     @Builder
