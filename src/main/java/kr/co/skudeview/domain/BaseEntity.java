@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-@Setter // setter를 사용하게 되면, regDate, modDate 모두 수정이 가능해지기에 메서드로 변경
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
@@ -25,13 +24,12 @@ public abstract class BaseEntity {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
 
-    // enum 으로 수정할지 고민 'Y' 'N'
-//    @Column(name = "delete_at", columnDefinition = "CHAR(1) DEFAULT 'N'")
-//    private String deleteAt;
-    @Column(name = "delete_at", columnDefinition = "CHAR(1)")
-    private String deleteAt = "N";
+    // false = 삭제되지 않은 상태
+    // true  = 삭제된 상태
+    @Column(name = "delete_at")
+    private boolean deleteAt = false;
 
     public void changeDeleteAt() {
-        this.deleteAt = "Y";
+        this.deleteAt = true;
     }
 }
