@@ -1,5 +1,7 @@
 package kr.co.skudeview.service;
 
+import kr.co.skudeview.domain.Member;
+import kr.co.skudeview.domain.Post;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 
@@ -17,4 +19,15 @@ public interface PostService {
     public Long deletePost(final Long postId);
 
     public PostResponseDto.READ getPostDetail(final Long postId);
+
+//    default Post toEntity(PostRequestDto.CREATE create, Member findMember) {
+//        return Post.builder()
+//                .member(findMember)
+//                .title(create.getTitle())
+//                .content(create.getContent())
+//                .likeCount(create.getLikeCount())
+//                .viewCount(create.getViewCount())
+//                .postCategory(create.getPostCategory())
+//                .build();
+//    }
 }

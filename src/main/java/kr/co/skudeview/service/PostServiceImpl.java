@@ -32,14 +32,7 @@ public class PostServiceImpl implements PostService {
     public Long createPost(PostRequestDto.CREATE create) {
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
 
-        Post post = Post.builder()
-                .member(findMember.get())
-                .title(create.getTitle())
-                .content(create.getContent())
-                .likeCount(create.getLikeCount())
-                .viewCount(create.getViewCount())
-                .postCategory(create.getPostCategory())
-                .build();
+        Post post = postMapper.toEntity(create, findMember.get());
 
         postRepository.save(post);
 
@@ -52,15 +45,17 @@ public class PostServiceImpl implements PostService {
         List<PostResponseDto.READ> posts = new ArrayList<>();
 
         for (Post post : list) {
-            PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                    .postId(post.getId())
-                    .memberEmail(post.getMember().getEmail())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postCategory(post.getPostCategory())
-                    .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
-                    .build();
+//            PostResponseDto.READ dto = PostResponseDto.READ.builder()
+//                    .postId(post.getId())
+//                    .memberEmail(post.getMember().getEmail())
+//                    .title(post.getTitle())
+//                    .content(post.getContent())
+//                    .postCategory(post.getPostCategory())
+//                    .viewCount(post.getViewCount())
+//                    .likeCount(post.getLikeCount())
+//                    .build();
+            PostResponseDto.READ dto = postMapper.toReadDto(post);
+
             posts.add(dto);
         }
         return posts;
@@ -96,15 +91,17 @@ public class PostServiceImpl implements PostService {
 
         post.increaseViewCount();
 
-        PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                .postId(post.getId())
-                .memberEmail(post.getMember().getEmail())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .postCategory(post.getPostCategory())
-                .viewCount(post.getViewCount())
-                .likeCount(post.getLikeCount())
-                .build();
+//        PostResponseDto.READ dto = PostResponseDto.READ.builder()
+//                .postId(post.getId())
+//                .memberEmail(post.getMember().getEmail())
+//                .title(post.getTitle())
+//                .content(post.getContent())
+//                .postCategory(post.getPostCategory())
+//                .viewCount(post.getViewCount())
+//                .likeCount(post.getLikeCount())
+//                .build();
+        PostResponseDto.READ dto = postMapper.toReadDto(post);
+
         return dto;
     }
 

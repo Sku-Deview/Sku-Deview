@@ -25,3 +25,4 @@ public interface MemberService {
     void deleteMember(Long id) throws Exception;
 
 }
+
