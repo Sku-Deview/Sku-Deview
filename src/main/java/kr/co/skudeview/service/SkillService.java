@@ -7,14 +7,12 @@ import java.util.List;
 
 public interface SkillService {
 
-    void createSkill(SkillRequestDto.CREATE create) throws Exception;
-
-    SkillResponseDto.READ getSkillBySkillId(Long skillId) throws Exception;
+    void createSkill(SkillRequestDto.CREATE create);
 
     List<SkillResponseDto.READ> getAllSkills();
 
-    void updateSkill(SkillRequestDto.UPDATE update) throws Exception;
+    void updateSkill(SkillRequestDto.UPDATE update);
 
-    void deleteSkill(Long skillId) throws Exception;
+    void deleteSkill(Long skillId);
 
 }

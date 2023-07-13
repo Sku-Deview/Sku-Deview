@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
@@ -33,11 +35,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void createMember(MemberRequestDto.CREATE create) throws Exception {
+    public void createMember(MemberRequestDto.CREATE create) {
 
         isTelephone(create.getTelephone());
         isEmail(create.getEmail());
-        isNickname(create.getEmail());
+        isNickname(create.getNickname());
 
         Member member = memberMapper.toEntity(create, Collections.emptyList());
 
@@ -59,18 +61,19 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
-    public MemberResponseDto.READ getMemberByEmail(String email) throws Exception {
-        final Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
+    public MemberResponseDto.READ getMemberDetail(Long memberId) {
+
+        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
 
         isMember(member);
 
         return memberMapper.toReadDto(member.get(), getSkillsNameByMember(member.get()));
     }
 
+
     @Override
-    public List<MemberResponseDto.READ> getAllMembers() throws Exception {
+    public List<MemberResponseDto.READ> getAllMembers() {
 
         List<Member> members = memberRepository.findAllByDeleteAtFalse();
         List<MemberResponseDto.READ> readList = new ArrayList<>();
@@ -86,7 +89,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void updateMember(MemberRequestDto.UPDATE update) throws Exception {
+    public void updateMember(MemberRequestDto.UPDATE update) {
         final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(update.getMemberId());
 
         isMember(member);
@@ -103,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void deleteMember(Long id) throws Exception {
+    public void deleteMember(Long id) {
         final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(id);
 
         isMember(member);
@@ -124,33 +127,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    /**
-     * validation + exception 처리를 위한 method
-     *
-     * TODO
-     * Exception 추가해준것 모두 삭제 예정 -> Custom 한 Exception과 ResponseStatus추가 후 변경 예정
-     */
-    private void isMember(Optional<Member> member) throws Exception {
+    private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
-            throw new Exception("This Member is Not Exist");
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
         }
     }
 
-    private void isTelephone(String telephone) throws Exception {
+    private void isTelephone(String telephone) {
         if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
-            throw new Exception("This Telephone is Already Use");
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_TELEPHONE_DUPLICATED);
         }
     }
 
-    private void isNickname(String nickname) throws Exception {
+    private void isNickname(String nickname) {
         if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
-            throw new Exception("This Nickname is Already Use");
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NICKNAME_DUPLICATED);
         }
     }
 
-    private void isEmail(String email) throws Exception {
+    private void isEmail(String email) {
         if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
-            throw new Exception("This Email is Already Use");
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
         }
     }
 

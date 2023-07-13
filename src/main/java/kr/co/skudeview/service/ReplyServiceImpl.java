@@ -3,6 +3,8 @@ package kr.co.skudeview.service;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Post;
 import kr.co.skudeview.domain.Reply;
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.repository.ReplyRepository;
@@ -31,10 +33,13 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     @Transactional
     public Long createReply(Long postId,ReplyRequestDto.CREATE create) {
-        Optional<Post> findPost = postRepository.findPostByIdAndDeleteAtFalse(postId);
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
 
-        log.info("memberRepository.findMember = {}",findMember);
+        isMember(findMember);
+
+        Optional<Post> findPost = postRepository.findPostByIdAndDeleteAtFalse(postId);
+
+        isPost(findPost);
 
         Reply reply = Reply.builder()
                 .post(findPost.get())
@@ -51,7 +56,6 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     @Transactional(readOnly = true)
     public List<ReplyResponseDto.READ> getAllReplies(Long postId) {
-//        List<Reply> list = replyRepository.findAllByPostId(postId);
         List<Reply> list = replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId);
         List<ReplyResponseDto.READ> replies = new ArrayList<>();
 
@@ -72,23 +76,45 @@ public class ReplyServiceImpl implements ReplyService{
     @Override
     @Transactional
     public Long updateReply(Long replyId,ReplyRequestDto.UPDATE update) {
-        Reply reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId).orElseThrow(() -> new RuntimeException());
+        Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
-        reply.updateReply(update.getContent());
+        isReply(reply);
 
-        return reply.getId();
+        reply.get().updateReply(update.getContent());
+
+        return reply.get().getId();
     }
 
     @Override
     @Transactional
     public Long deleteReply(Long postId,Long replyId) {
-        Reply reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId).orElseThrow(() -> new RuntimeException());
+        Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
-//        reply.setDeleteAt("Y");
-        reply.changeDeleteAt();
+        isReply(reply);
 
-        replyRepository.save(reply);
+        reply.get().changeDeleteAt();
 
-        return reply.getId();
+        replyRepository.save(reply.get());
+
+        return reply.get().getId();
     }
+
+    private void isMember(Optional<Member> member) {
+        if (member.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
+        }
+    }
+
+    private void isPost(Optional<Post> post) {
+        if (post.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND);
+        }
+    }
+
+    private void isReply(Optional<Reply> reply) {
+        if (reply.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_REPLY_NOT_FOUND);
+        }
+    }
+
 }

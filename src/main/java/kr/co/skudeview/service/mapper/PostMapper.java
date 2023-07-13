@@ -17,6 +17,7 @@ public interface PostMapper {
     Post toEntity(PostRequestDto.CREATE create, Member member);
 
     @Mapping(target = "postId", source = "id")
+    @Mapping(target="memberEmail", source = "member.email")
     PostResponseDto.READ toReadDto(Post post);
 
 }

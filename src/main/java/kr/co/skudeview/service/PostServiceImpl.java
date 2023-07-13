@@ -2,6 +2,9 @@ package kr.co.skudeview.service;
 
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Post;
+import kr.co.skudeview.domain.enums.PostCategory;
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
@@ -31,6 +34,9 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Long createPost(PostRequestDto.CREATE create) {
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
+
+        isMember(findMember);
+        isPostCategory(String.valueOf(create.getPostCategory()));
 
         Post post = postMapper.toEntity(create, findMember.get());
 
@@ -64,21 +70,27 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Long updatePost(Long postId, PostRequestDto.UPDATE update) {
-        Post post = postRepository.findPostByIdAndDeleteAtFalse(postId).orElseThrow(() -> new RuntimeException());
-        post.updatePost(update.getTitle(),update.getContent(), update.getPostCategory());
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+
+        isPost(post);
+
+        post.get().updatePost(update.getTitle(),update.getContent(), update.getPostCategory());
+
         return postId;
     }
 
     @Override
     @Transactional
     public Long deletePost(Long postId) {
-        Post post = postRepository.findPostByIdAndDeleteAtFalse(postId).orElseThrow(() -> new RuntimeException());
-//        post.delete();
-        post.changeDeleteAt();
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
 
-        postRepository.save(post);
+        isPost(post);
 
-        return post.getId();
+        post.get().changeDeleteAt();
+
+        postRepository.save(post.get());
+
+        return post.get().getId();
     }
 
     /**
@@ -87,9 +99,11 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponseDto.READ getPostDetail(Long postId) {
-        Post post = postRepository.findPostByIdAndDeleteAtFalse(postId).orElseThrow(() -> new RuntimeException());
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
 
-        post.increaseViewCount();
+        isPost(post);
+
+        post.get().increaseViewCount();
 
 //        PostResponseDto.READ dto = PostResponseDto.READ.builder()
 //                .postId(post.getId())
@@ -100,9 +114,25 @@ public class PostServiceImpl implements PostService {
 //                .viewCount(post.getViewCount())
 //                .likeCount(post.getLikeCount())
 //                .build();
-        PostResponseDto.READ dto = postMapper.toReadDto(post);
+        PostResponseDto.READ dto = postMapper.toReadDto(post.get());
 
         return dto;
+    }
+
+    private void isMember(Optional<Member> member) {
+        if (member.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
+        }
+    }
+
+    private void isPost(Optional<Post> post) {
+        if (post.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_POST_NOT_FOUND);
+        }
+    }
+
+    private void isPostCategory(String category) {
+        PostCategory.of(category);
     }
 
 }

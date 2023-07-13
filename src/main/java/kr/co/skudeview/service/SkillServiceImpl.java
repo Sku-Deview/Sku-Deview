@@ -2,6 +2,8 @@ package kr.co.skudeview.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.SkillRequestDto;
 import kr.co.skudeview.service.dto.response.SkillResponseDto;
@@ -23,21 +25,12 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional
-    public void createSkill(SkillRequestDto.CREATE create) throws Exception{
+    public void createSkill(SkillRequestDto.CREATE create) {
         isSkillName(create.getName());
 
         final Skill skill = skillMapper.toEntity(create);
 
         skillRepository.save(skill);
-    }
-
-    @Override
-    public SkillResponseDto.READ getSkillBySkillId(Long skillId) throws Exception {
-        final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(skillId);
-
-        isSkill(skill);
-
-        return skillMapper.toReadDto(skill.get());
     }
 
     @Override
@@ -51,7 +44,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional
-    public void updateSkill(SkillRequestDto.UPDATE update) throws Exception {
+    public void updateSkill(SkillRequestDto.UPDATE update) {
         final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(update.getSkillId());
 
         isSkill(skill);
@@ -65,7 +58,7 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     @Transactional
-    public void deleteSkill(Long skillId) throws Exception {
+    public void deleteSkill(Long skillId) {
         final Optional<Skill> skill = skillRepository.findSkillByIdAndDeleteAtFalse(skillId);
 
         isSkill(skill);
@@ -75,17 +68,20 @@ public class SkillServiceImpl implements SkillService {
         skillRepository.save(skill.get());
     }
 
-    // skill name이 중복인지
-    private void isSkillName(String name) throws Exception {
-        if (skillRepository.existsSkillByNameAndDeleteAtFalse(name)) {
-            throw new Exception("This Skill is Already Exist");
+    // 해당 skill이 존재하는지
+    private void isSkill(Optional<Skill> skill) {
+        if (skill.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_SKILL_NOT_FOUND);
         }
     }
 
-    // 해당 skill이 존재하는지
-    private void isSkill(Optional<Skill> skill) throws Exception {
-        if (skill.isEmpty()) {
-            throw new Exception("This Skill is Not Exist");
+    // skill name이 중복인지
+    private void isSkillName(String name) {
+        if (skillRepository.existsSkillByNameAndDeleteAtFalse(name)) {
+            throw new NotFoundException(ResponseStatus.FAIL_SKILL_NAME_DUPLICATED);
         }
     }
+
+//    private void isSkillCount()
+
 }
