@@ -1,5 +1,7 @@
 package kr.co.skudeview.domain.enums;
 
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,11 +21,10 @@ public enum PostCategory {
 
     String postCategory;
 
-    public static PostCategory of(String postCategory) throws Exception {
+    public static PostCategory of(String postCategory) {
         return Arrays.stream(PostCategory.values())
                 .filter(type -> type.toString().equalsIgnoreCase(postCategory))
-                .findAny().orElseThrow(() -> new Exception(""));
+                .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_POST_CATEGORY_NOT_FOUND));
     }
-
 
 }
