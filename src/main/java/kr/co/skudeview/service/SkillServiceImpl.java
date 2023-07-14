@@ -2,6 +2,7 @@ package kr.co.skudeview.service;
 
 import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.SkillRepository;
@@ -68,17 +69,15 @@ public class SkillServiceImpl implements SkillService {
         skillRepository.save(skill.get());
     }
 
-    // 해당 skill이 존재하는지
     private void isSkill(Optional<Skill> skill) {
         if (skill.isEmpty()) {
             throw new NotFoundException(ResponseStatus.FAIL_SKILL_NOT_FOUND);
         }
     }
 
-    // skill name이 중복인지
     private void isSkillName(String name) {
         if (skillRepository.existsSkillByNameAndDeleteAtFalse(name)) {
-            throw new NotFoundException(ResponseStatus.FAIL_SKILL_NAME_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_SKILL_NAME_DUPLICATED);
         }
     }
 

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
@@ -135,19 +136,19 @@ public class MemberServiceImpl implements MemberService {
 
     private void isTelephone(String telephone) {
         if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
-            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_TELEPHONE_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_TELEPHONE_DUPLICATED);
         }
     }
 
     private void isNickname(String nickname) {
         if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
-            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NICKNAME_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_NICKNAME_DUPLICATED);
         }
     }
 
     private void isEmail(String email) {
         if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
-            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
         }
     }
 
