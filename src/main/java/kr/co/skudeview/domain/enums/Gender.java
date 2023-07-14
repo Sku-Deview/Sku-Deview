@@ -1,5 +1,7 @@
 package kr.co.skudeview.domain.enums;
 
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,9 +17,10 @@ public enum Gender {
 
     String gender;
 
-    public static Gender of(String gender) throws Exception {
+    public static Gender of(String gender){
         return Arrays.stream(Gender.values())
                 .filter(type -> type.toString().equalsIgnoreCase(gender))
-                .findAny().orElseThrow(() -> new Exception(""));
+                .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_GENDER_NOT_FOUND));
     }
+
 }

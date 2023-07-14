@@ -1,5 +1,7 @@
 package kr.co.skudeview.domain.enums;
 
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -21,10 +23,10 @@ public enum ReportCategory {
 
     String reportCategory;
 
-    public static ReportCategory of(String reportCategory) throws Exception {
+    public static ReportCategory of(String reportCategory) {
         return Arrays.stream(ReportCategory.values())
                 .filter(type -> type.toString().equalsIgnoreCase(reportCategory))
-                .findAny().orElseThrow(() -> new Exception(""));
+                .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_REPORT_CATEGORY_NOT_FOUND));
     }
 
 }

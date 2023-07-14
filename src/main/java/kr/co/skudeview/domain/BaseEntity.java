@@ -24,8 +24,7 @@ public abstract class BaseEntity {
     @Column(name = "mod_date", nullable = false)
     private LocalDateTime modDate;
 
-    // false = 삭제되지 않은 상태
-    // true  = 삭제된 상태
+    // true  = 삭제된 상태 , false = 삭제되지 않은 상태
     @Column(name = "delete_at")
     private boolean deleteAt = false;
 
