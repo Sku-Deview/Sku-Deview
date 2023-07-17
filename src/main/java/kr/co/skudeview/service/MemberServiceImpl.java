@@ -8,18 +8,17 @@ import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
+import kr.co.skudeview.repository.MemberSkillRepository;
 import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
-import kr.co.skudeview.service.mapper.MemberMapper;
-import kr.co.skudeview.service.mapper.MemberSkillMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,9 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final SkillRepository skillRepository;
 
-    private final MemberMapper memberMapper;
-
-    private final MemberSkillMapper memberSkillMapper;
+    private final MemberSkillRepository memberSkillRepository;
 
     @Transactional
     @Override
@@ -42,24 +39,28 @@ public class MemberServiceImpl implements MemberService {
         isEmail(create.getEmail());
         isNickname(create.getNickname());
 
-        Member member = memberMapper.toEntity(create, Collections.emptyList());
+        Member member = toEntity(create);
 
         final List<MemberSkill> memberSkills = getSkills(create.getSkillName(), member);
 
         member.changeMemberSkills(memberSkills);
 
         memberRepository.save(member);
-
     }
 
     private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
 
         final List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
+        List<MemberSkill> memberSkills = new ArrayList<>();
 
-        //연관 엔티티 반
-        return skills.stream()
-                .map(skill -> memberSkillMapper.toEntity(skill, member))
-                .collect(Collectors.toList());
+        for (Skill skill : skills) {
+            memberSkills.add(MemberSkill.builder()
+                    .member(member)
+                    .skill(skill)
+                    .build());
+        }
+
+        return memberSkills;
     }
 
     @Override
@@ -69,9 +70,8 @@ public class MemberServiceImpl implements MemberService {
 
         isMember(member);
 
-        return memberMapper.toReadDto(member.get(), getSkillsNameByMember(member.get()));
+        return toReadDto(member.get());
     }
-
 
     @Override
     public List<MemberResponseDto.READ> getAllMembers() {
@@ -80,9 +80,7 @@ public class MemberServiceImpl implements MemberService {
         List<MemberResponseDto.READ> readList = new ArrayList<>();
 
         for (Member member : members) {
-            List<String> skillsName = getSkillsNameByMember(member);
-            MemberResponseDto.READ dto = memberMapper.toReadDto(member, skillsName);
-            readList.add(dto);
+            readList.add(toReadDto(member));
         }
 
         return readList;
@@ -97,13 +95,35 @@ public class MemberServiceImpl implements MemberService {
         isTelephone(update.getTelephone());
         isNickname(update.getNickname());
 
-        final List<MemberSkill> memberSkills = getSkills(update.getSkillName(), member.get());
+        final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());
 
         member.get().updateMember(update);
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
     }
+
+    private List<MemberSkill> updateSkillByMember(List<String> updateSkillName, Member member) {
+
+        final List<Skill> updateSkills = skillRepository.findAllByNameInAndDeleteAtFalse(updateSkillName);
+        List<MemberSkill> originSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
+
+        for (MemberSkill memberSkill : originSkills) {
+            memberSkill.changeDeleteAt();
+        }
+
+        List<MemberSkill> memberSkills = new ArrayList<>();
+
+        for (Skill skill : updateSkills) {
+            memberSkills.add(MemberSkill.builder()
+                    .member(member)
+                    .skill(skill)
+                    .build());
+        }
+
+        return memberSkills;
+    }
+
 
     @Transactional
     @Override
@@ -118,15 +138,18 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member.get());
     }
 
-    private List<String> getSkillsNameByMember(Member member) {
-        return member
-                .getMemberSkills()
+    @Override
+    public Set<String> getSkillsNameByMember(Member member) {
+        List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
+
+        Set<String> skillNames = memberSkills
                 .stream()
                 .map(MemberSkill::getSkill)
                 .map(Skill::getName)
-                .collect(Collectors.toList());
-    }
+                .collect(Collectors.toSet());
 
+        return skillNames;
+    }
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
