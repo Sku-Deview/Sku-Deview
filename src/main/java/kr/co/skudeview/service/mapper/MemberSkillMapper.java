@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MemberSkillMapper {
 
-    MemberSkill toEntity(Skill skill, Member member);
+//    MemberSkill toEntity(Skill skill, Member member);
 
 }

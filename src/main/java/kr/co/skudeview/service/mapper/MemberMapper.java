@@ -13,9 +13,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
-    Member toEntity(MemberRequestDto.CREATE create, List<MemberSkill> memberSkills);
-
-    @Mapping(target = "memberId", source = "member.id")
-    @Mapping(target="skillName", source = "memberSkills")
-    MemberResponseDto.READ toReadDto(Member member, List<String> memberSkills);
+//    Member toEntity(MemberRequestDto.CREATE create, List<MemberSkill> memberSkills);
+//
+//    @Mapping(target = "memberId", source = "member.id")
+//    @Mapping(target="skillName", source = "memberSkills")
+//    MemberResponseDto.READ toReadDto(Member member, List<String> memberSkills);
 }
