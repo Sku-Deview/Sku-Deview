@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public class MemberResponseDto {
 
@@ -34,7 +34,7 @@ public class MemberResponseDto {
 
         private String role;
 
-        private List<String> skillName;
+        private Set<String> skillName;
     }
 
 }

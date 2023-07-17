@@ -28,24 +28,29 @@ public enum ResponseStatus {
 
     // Member Failed Status
     FAIL_MEMBER_NOT_FOUND("클라이언트가 요청한 소유자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FAIL_MEMBER_GENDER_NOT_FOUND("클라이언트가 요청한 소유자의 성별을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_MEMBER_ROLE_NOT_FOUND("클라이언트가 요청한 소유자의 권한을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_MEMBER_EMAIL_DUPLICATED("클라이언트가 요청한 이메일이 중복되었습니다.", HttpStatus.BAD_REQUEST),
     FAIL_MEMBER_TELEPHONE_DUPLICATED("클라이언트가 요청한 전화번호가 중복되었습니다.", HttpStatus.BAD_REQUEST),
-    FAIL_MEMBER_NICKNAME_DUPLICATED("클라이언트가 요청한 전화번호가 중복되었습니다.", HttpStatus.BAD_REQUEST),
+    FAIL_MEMBER_NICKNAME_DUPLICATED("클라이언트가 요청한 닉네임이 중복되었습니다.", HttpStatus.BAD_REQUEST),
     FAIL_MEMBER_PASSWORD_NOT_MATCHED("클라이언트가 입력한 비밀번호가 소유자의 비밀번호와 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 
     // Post
     FAIL_POST_NOT_FOUND("클라이언트가 요청한 게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_POST_CATEGORY_NOT_FOUND("클라이언트가 요청한 게시글의 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
-    //Reply
+
+    // Reply
     FAIL_REPLY_NOT_FOUND("클라이언트가 요청한 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    // Report
+    FAIL_REPORT_CATEGORY_NOT_FOUND("클라이언트가 요청한 신고의 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
 
     // Skill
     FAIL_SKILL_NOT_FOUND("클라이언트가 요청한 스킬을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_SKILL_NAME_DUPLICATED("클라이언트가 요청한 스킬이 중복되었습니다.", HttpStatus.BAD_REQUEST),
     FAIL_SKILL_OUT_OF_BOUND("클라이언트가 요청한 스킬의 갯수가 초과되었습니다.", HttpStatus.BAD_REQUEST);
-
 
 
     // Login Failed Status
