@@ -50,17 +50,17 @@ public class MemberServiceImpl implements MemberService {
 
     private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
 
-        final List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
-        List<MemberSkill> memberSkills = new ArrayList<>();
+        List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
 
-        for (Skill skill : skills) {
-            memberSkills.add(MemberSkill.builder()
-                    .member(member)
-                    .skill(skill)
-                    .build());
-        }
+        List<MemberSkill> memberSkills = skills.stream()
+                .map(skill -> MemberSkill.builder()
+                        .member(member)
+                        .skill(skill)
+                        .build())
+                .collect(Collectors.toList());
 
         return memberSkills;
+
     }
 
     @Override
@@ -75,15 +75,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberResponseDto.READ> getAllMembers() {
-
         List<Member> members = memberRepository.findAllByDeleteAtFalse();
-        List<MemberResponseDto.READ> readList = new ArrayList<>();
 
-        for (Member member : members) {
-            readList.add(toReadDto(member));
-        }
-
-        return readList;
+        return members.stream()
+                .map(this::toReadDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -104,24 +100,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private List<MemberSkill> updateSkillByMember(List<String> updateSkillName, Member member) {
-
-        final List<Skill> updateSkills = skillRepository.findAllByNameInAndDeleteAtFalse(updateSkillName);
+        List<Skill> updateSkills = skillRepository.findAllByNameInAndDeleteAtFalse(updateSkillName);
         List<MemberSkill> originSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
 
-        for (MemberSkill memberSkill : originSkills) {
-            memberSkill.changeDeleteAt();
-        }
+        originSkills.forEach(MemberSkill::changeDeleteAt);
 
-        List<MemberSkill> memberSkills = new ArrayList<>();
-
-        for (Skill skill : updateSkills) {
-            memberSkills.add(MemberSkill.builder()
-                    .member(member)
-                    .skill(skill)
-                    .build());
-        }
-
-        return memberSkills;
+        return updateSkills.stream()
+                .map(skill -> MemberSkill.builder()
+                        .member(member)
+                        .skill(skill)
+                        .build())
+                .collect(Collectors.toList());
     }
 
 
