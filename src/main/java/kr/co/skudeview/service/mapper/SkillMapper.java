@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SkillMapper {
 
-    Skill toEntity(SkillRequestDto.CREATE create);
-
-    @Mapping(target = "skillId", source = "id")
-    SkillResponseDto.READ toReadDto(Skill skill);
+//    Skill toEntity(SkillRequestDto.CREATE create);
+//
+//    @Mapping(target = "skillId", source = "id")
+//    SkillResponseDto.READ toReadDto(Skill skill);
 }
