@@ -1,5 +1,7 @@
 package kr.co.skudeview.domain.enums;
 
+import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.model.ResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,9 +19,9 @@ public enum Role {
 
     String role;
 
-    public static Role of(String role) throws Exception {
+    public static Role of(String role) {
         return Arrays.stream(Role.values())
                 .filter(type -> type.toString().equalsIgnoreCase(role))
-                .findAny().orElseThrow(() -> new Exception(""));
+                .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_ROLE_NOT_FOUND));
     }
 }
