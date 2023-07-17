@@ -9,26 +9,20 @@ import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
-import kr.co.skudeview.service.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-
     private final MemberRepository memberRepository;
-
-    private final PostMapper postMapper;
 
     @Override
     @Transactional
@@ -38,19 +32,14 @@ public class PostServiceImpl implements PostService {
         isMember(findMember);
         isPostCategory(String.valueOf(create.getPostCategory()));
 
-        Post post = Post.builder()
-                .member(findMember.get())
-                .title(create.getTitle())
-                .content(create.getContent())
-                .likeCount(create.getLikeCount())
-                .viewCount(create.getViewCount())
-                .postCategory(create.getPostCategory())
-                .build();
+        Post post = toEntity(create, findMember.get());
 
         postRepository.save(post);
 
         return post.getId();
     }
+
+
 
     @Override
     public List<PostResponseDto.READ> getAllPosts() {
@@ -58,16 +47,7 @@ public class PostServiceImpl implements PostService {
         List<PostResponseDto.READ> posts = new ArrayList<>();
 
         for (Post post : list) {
-            PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                    .postId(post.getId())
-                    .memberEmail(post.getMember().getEmail())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postCategory(post.getPostCategory())
-                    .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
-                    .build();
-
+            PostResponseDto.READ dto = toDto(post);
 
             posts.add(dto);
         }
@@ -112,19 +92,13 @@ public class PostServiceImpl implements PostService {
 
         post.get().increaseViewCount();
 
-        PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                .postId(post.get().getId())
-                .memberEmail(post.get().getMember().getEmail())
-                .title(post.get().getTitle())
-                .content(post.get().getContent())
-                .postCategory(post.get().getPostCategory())
-                .viewCount(post.get().getViewCount())
-                .likeCount(post.get().getLikeCount())
-                .build();
+        PostResponseDto.READ dto = toDto(post.get());
 
 
         return dto;
     }
+
+
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
@@ -142,4 +116,28 @@ public class PostServiceImpl implements PostService {
         PostCategory.of(category);
     }
 
+    private static PostResponseDto.READ toDto(Post post) {
+        PostResponseDto.READ dto = PostResponseDto.READ.builder()
+                .postId(post.getId())
+                .memberEmail(post.getMember().getEmail())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .postCategory(post.getPostCategory())
+                .viewCount(post.getViewCount())
+                .likeCount(post.getLikeCount())
+                .build();
+        return dto;
+    }
+
+    private static Post toEntity(PostRequestDto.CREATE create, Member member) {
+        Post post = Post.builder()
+                .member(member)
+                .title(create.getTitle())
+                .content(create.getContent())
+                .likeCount(create.getLikeCount())
+                .viewCount(create.getViewCount())
+                .postCategory(create.getPostCategory())
+                .build();
+        return post;
+    }
 }
