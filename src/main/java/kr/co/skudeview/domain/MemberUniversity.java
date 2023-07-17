@@ -1,4 +1,4 @@
-package kr.co.skudeview.domain.enums;
+package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import kr.co.skudeview.domain.Member;

@@ -3,7 +3,6 @@ package kr.co.skudeview.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import kr.co.skudeview.domain.enums.Gender;
-import kr.co.skudeview.domain.enums.MemberUniversity;
 import kr.co.skudeview.domain.enums.Role;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import lombok.AccessLevel;
@@ -68,8 +67,10 @@ public class Member extends BaseEntity {
     )
     private List<MemberSkill> memberSkills = new ArrayList<>();
 
-    @OneToMany(cascade ={CascadeType.MERGE,CascadeType.PERSIST},
-               mappedBy = "member")
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
+            mappedBy = "member")
     List<MemberUniversity> memberUniversities = new ArrayList<>();
 
 
