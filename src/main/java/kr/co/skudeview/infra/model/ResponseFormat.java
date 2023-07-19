@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResponseFormat<T> {
+public class ResponseFormat<T>  {
 
     private boolean isSuccessful;
 

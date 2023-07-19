@@ -67,11 +67,11 @@ public class Member extends BaseEntity {
     )
     private List<MemberSkill> memberSkills = new ArrayList<>();
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
-            mappedBy = "member")
-    List<MemberUniversity> memberUniversities = new ArrayList<>();
+//    @OneToMany(
+//            fetch = FetchType.LAZY,
+//            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
+//            mappedBy = "member")
+//    List<MemberUniversity> memberUniversities = new ArrayList<>();
 
 
 
