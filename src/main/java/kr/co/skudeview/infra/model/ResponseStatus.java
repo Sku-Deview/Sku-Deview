@@ -39,13 +39,13 @@ public enum ResponseStatus {
     FAIL_POST_NOT_FOUND("클라이언트가 요청한 게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_POST_CATEGORY_NOT_FOUND("클라이언트가 요청한 게시글의 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
-
     // Reply
     FAIL_REPLY_NOT_FOUND("클라이언트가 요청한 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // Report
+    FAIL_REPORT_NOT_FOUND("클라이언트가 요청한 신고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FAIL_REPORT_DUPLICATED("클라이언트가 요청한 신고는 이미 접수되었습니다. 중복 신고는 불가능합나디.", HttpStatus.BAD_REQUEST),
     FAIL_REPORT_CATEGORY_NOT_FOUND("클라이언트가 요청한 신고의 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-
 
     // Skill
     FAIL_SKILL_NOT_FOUND("클라이언트가 요청한 스킬을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
