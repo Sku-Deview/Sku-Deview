@@ -8,10 +8,11 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.SkillRequestDto;
 import kr.co.skudeview.service.dto.response.SkillResponseDto;
-import kr.co.skudeview.service.mapper.SkillMapper;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SkillServiceImpl implements SkillService {
 
-    private final SkillMapper skillMapper;
-
     private final SkillRepository skillRepository;
 
     @Override
@@ -29,17 +28,15 @@ public class SkillServiceImpl implements SkillService {
     public void createSkill(SkillRequestDto.CREATE create) {
         isSkillName(create.getName());
 
-        final Skill skill = skillMapper.toEntity(create);
-
-        skillRepository.save(skill);
+        skillRepository.save(toEntity(create));
     }
 
     @Override
     public List<SkillResponseDto.READ> getAllSkills() {
-        final List<Skill> skills = skillRepository.findAllByDeleteAtFalse();
+        List<Skill> skills = skillRepository.findAllByDeleteAtFalse();
 
         return skills.stream()
-                .map(skillMapper::toReadDto)
+                .map(this::toReadDto)
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +77,5 @@ public class SkillServiceImpl implements SkillService {
             throw new DuplicatedException(ResponseStatus.FAIL_SKILL_NAME_DUPLICATED);
         }
     }
-
-//    private void isSkillCount()
 
 }
