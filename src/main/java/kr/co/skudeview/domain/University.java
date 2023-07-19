@@ -52,4 +52,6 @@ public class University {
         this.univName = univName;
         this.major = major;
     }
+
+
 }

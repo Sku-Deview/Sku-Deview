@@ -73,7 +73,7 @@ public class Member extends BaseEntity {
 //            mappedBy = "member")
 //    List<MemberUniversity> memberUniversities = new ArrayList<>();
 
-
+    private String memberUnivMajor;
 
     @Builder
     public Member(String email,
@@ -112,6 +112,14 @@ public class Member extends BaseEntity {
 
     public void changeMemberSkills(List<MemberSkill> changeMemberSkills) {
         this.memberSkills = changeMemberSkills;
+    }
+
+    public void changeUnivMajor(String univMajor) {
+        this.memberUnivMajor = univMajor;
+    }
+
+    public void deleteUnivMajor() {
+        this.memberUnivMajor = null;
     }
 
 }
