@@ -67,6 +67,14 @@ public class Member extends BaseEntity {
     )
     private List<MemberSkill> memberSkills = new ArrayList<>();
 
+//    @OneToMany(
+//            fetch = FetchType.LAZY,
+//            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
+//            mappedBy = "member")
+//    List<MemberUniversity> memberUniversities = new ArrayList<>();
+
+    private String memberUnivMajor;
+
     @Builder
     public Member(String email,
                   String password,
@@ -104,6 +112,14 @@ public class Member extends BaseEntity {
 
     public void changeMemberSkills(List<MemberSkill> changeMemberSkills) {
         this.memberSkills = changeMemberSkills;
+    }
+
+    public void changeUnivMajor(String univMajor) {
+        this.memberUnivMajor = univMajor;
+    }
+
+    public void deleteUnivMajor() {
+        this.memberUnivMajor = null;
     }
 
 }

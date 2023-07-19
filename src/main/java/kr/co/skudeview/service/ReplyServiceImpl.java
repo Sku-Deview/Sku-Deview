@@ -41,12 +41,7 @@ public class ReplyServiceImpl implements ReplyService{
 
         isPost(findPost);
 
-        Reply reply = Reply.builder()
-                .post(findPost.get())
-                .member(findMember.get())
-                .content(create.getContent())
-                .likeCount(create.getLikeCount())
-                .build();
+        Reply reply = toEntity(create, findMember.get(), findPost.get());
 
         replyRepository.save(reply);
 
@@ -60,13 +55,7 @@ public class ReplyServiceImpl implements ReplyService{
         List<ReplyResponseDto.READ> replies = new ArrayList<>();
 
         for (Reply reply : list) {
-            ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
-                    .replyId(reply.getId())
-                    .memberEmail(reply.getMember().getEmail())
-                    .postId(reply.getPost().getId())
-                    .content(reply.getContent())
-                    .likeCount(reply.getLikeCount())
-                    .build();
+            ReplyResponseDto.READ dto = toDto(reply);
             replies.add(dto);
         }
 
@@ -117,4 +106,23 @@ public class ReplyServiceImpl implements ReplyService{
         }
     }
 
+    private static Reply toEntity(ReplyRequestDto.CREATE create, Member member , Post post) {
+        Reply reply = Reply.builder()
+                .post(post)
+                .member(member)
+                .content(create.getContent())
+                .likeCount(create.getLikeCount())
+                .build();
+        return reply;
+    }
+    private static ReplyResponseDto.READ toDto(Reply reply) {
+        ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
+                .replyId(reply.getId())
+                .memberEmail(reply.getMember().getEmail())
+                .postId(reply.getPost().getId())
+                .content(reply.getContent())
+                .likeCount(reply.getLikeCount())
+                .build();
+        return dto;
+    }
 }
