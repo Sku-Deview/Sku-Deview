@@ -8,7 +8,7 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.SkillRepository;
 import kr.co.skudeview.service.dto.request.SkillRequestDto;
 import kr.co.skudeview.service.dto.response.SkillResponseDto;
-import kr.co.skudeview.service.mapper.SkillMapper;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
