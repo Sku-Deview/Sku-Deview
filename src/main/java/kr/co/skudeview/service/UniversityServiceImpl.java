@@ -25,7 +25,7 @@ public class UniversityServiceImpl implements UniversityService {
     public void createUniversity(Long memberId, UniversityDto universityDto) {
         Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
         UniversityDto findDto = getUniversityMajor(universityDto);
-        findMember.get().changeUnivMajor(toCombine(findDto));
+        findMember.get().changeUnivMajor(findDto.getUnivName(), findDto.getMajor());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UniversityServiceImpl implements UniversityService {
         Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
         UniversityDto findDto = getUniversityMajor(universityDto);
 
-        findMember.get().changeUnivMajor(toCombine(findDto));
+        findMember.get().changeUnivMajor(findDto.getUnivName(),findDto.getMajor());
     }
 
     @Override
@@ -57,8 +57,5 @@ public class UniversityServiceImpl implements UniversityService {
         findMember.get().deleteUnivMajor();
     }
 
-    @Override
-    public String toCombine(UniversityDto universityDto) {
-        return universityDto.getUnivName() +" " +universityDto.getMajor();
-    }
+
 }
