@@ -20,9 +20,8 @@ public class Company extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member_id;
+    private Member member;
 
-    @NotNull
     @Column(name = "company_name")
     private String companyName;
 
@@ -36,16 +35,14 @@ public class Company extends BaseEntity{
     private LocalDate endDate;
 
     @Column(name = "description")
-    private String Description;
-
+    private String description;
 
     @Builder
     public Company(String companyName, String position, LocalDate startDate, LocalDate endDate, String description) {
-
         this.companyName = companyName;
         this.position = position;
         this.startDate = startDate;
         this.endDate = endDate;
-        Description = description;
+        this.description = description;
     }
 }

@@ -48,6 +48,9 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    /*
+    member를 생성할 때 입력한 skill을 string -> memberSkill로 변환
+     */
     private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
 
         List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
@@ -60,7 +63,22 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
 
         return memberSkills;
+    }
 
+    /*
+    MemberSkill -> String으로 변환
+     */
+    @Override
+    public Set<String> getSkillsNameByMember(Member member) {
+        List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
+
+        Set<String> skillNames = memberSkills
+                .stream()
+                .map(MemberSkill::getSkill)
+                .map(Skill::getName)
+                .collect(Collectors.toSet());
+
+        return skillNames;
     }
 
     @Override
@@ -99,6 +117,10 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member.get());
     }
 
+    /*
+    update를 요청할 때, 기존의 연관관계를 지정한 곳의 기존의 memberSkill을 모두 deleteAt = false로 변경
+    새롭게 update를 요청한 memberSkill을 다시 새롭게 저장
+     */
     private List<MemberSkill> updateSkillByMember(List<String> updateSkillName, Member member) {
         List<Skill> updateSkills = skillRepository.findAllByNameInAndDeleteAtFalse(updateSkillName);
         List<MemberSkill> originSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
@@ -125,19 +147,6 @@ public class MemberServiceImpl implements MemberService {
         member.get().changeDeleteAt();
 
         memberRepository.save(member.get());
-    }
-
-    @Override
-    public Set<String> getSkillsNameByMember(Member member) {
-        List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
-
-        Set<String> skillNames = memberSkills
-                .stream()
-                .map(MemberSkill::getSkill)
-                .map(Skill::getName)
-                .collect(Collectors.toSet());
-
-        return skillNames;
     }
 
     private void isMember(Optional<Member> member) {
