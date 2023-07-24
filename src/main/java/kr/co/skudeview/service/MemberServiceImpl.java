@@ -1,12 +1,14 @@
 package kr.co.skudeview.service;
 
 import jakarta.transaction.Transactional;
+import kr.co.skudeview.domain.Company;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
 import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
+import kr.co.skudeview.repository.CompanyRepository;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.MemberSkillRepository;
 import kr.co.skudeview.repository.SkillRepository;
@@ -140,11 +142,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(Long id) {
         final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(id);
+        final List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(id);
 
         isMember(member);
 
         // 논리적 삭제
         member.get().changeDeleteAt();
+
+        memberSkills.forEach(memberSkill -> {
+            memberSkill.changeDeleteAt();
+            memberSkillRepository.save(memberSkill);
+        });
 
         memberRepository.save(member.get());
     }
