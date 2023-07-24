@@ -62,12 +62,26 @@ public class Member extends BaseEntity {
 
     @OneToMany(
             fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL},
+            cascade = CascadeType.ALL,
             mappedBy = "member"
     )
     private List<MemberSkill> memberSkills = new ArrayList<>();
 
+
     private String univName;
+
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "member"
+    )
+    private List<Company> companies = new ArrayList<>();
+
+//    @OneToMany(
+//            fetch = FetchType.LAZY,
+//            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
+//            mappedBy = "member")
+//    List<MemberUniversity> memberUniversities = new ArrayList<>();
 
     private String major;
 

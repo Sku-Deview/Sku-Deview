@@ -2,6 +2,8 @@ package kr.co.skudeview.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import kr.co.skudeview.service.dto.request.CompanyRequestDto;
+import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,32 +22,48 @@ public class Company extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member_id;
+    private Member member;
 
-    @NotNull
     @Column(name = "company_name")
+    @NotNull
     private String companyName;
 
     @Column(name = "position")
+    @NotNull
     private String position;
 
     @Column(name = "start_date")
+    @NotNull
     private LocalDate startDate;
 
     @Column(name = "end_date")
+    @NotNull
     private LocalDate endDate;
 
     @Column(name = "description")
-    private String Description;
-
+    @NotNull
+    private String description;
 
     @Builder
-    public Company(String companyName, String position, LocalDate startDate, LocalDate endDate, String description) {
-
+    public Company(Member member,
+                   String companyName,
+                   String position,
+                   LocalDate startDate,
+                   LocalDate endDate,
+                   String description) {
+        this.member = member;
         this.companyName = companyName;
         this.position = position;
         this.startDate = startDate;
         this.endDate = endDate;
-        Description = description;
+        this.description = description;
+    }
+
+    public void updateCompany(CompanyRequestDto.UPDATE update) {
+        this.companyName = update.getCompanyName();
+        this.position = update.getPosition();
+        this.startDate = update.getStartDate();
+        this.endDate = update.getEndDate();
+        this.description = update.getDescription();
     }
 }

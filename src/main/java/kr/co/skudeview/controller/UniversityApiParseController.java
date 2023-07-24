@@ -54,7 +54,6 @@ public class UniversityApiParseController {
                     JSONObject object = (JSONObject) jsonArray.get(i);
                     String univName = (String) object.get("학교명");
                     String major = (String) object.get("학부_과(전공)명");
-                    //UniversityRequestDto universityRequestDto = new UniversityRequestDto(univName,major);
                     University university = new University(univName, major);
                     universityRepository.save(university);
                 }

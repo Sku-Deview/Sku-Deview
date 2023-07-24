@@ -50,8 +50,11 @@ public enum ResponseStatus {
     // Skill
     FAIL_SKILL_NOT_FOUND("클라이언트가 요청한 스킬을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_SKILL_NAME_DUPLICATED("클라이언트가 요청한 스킬이 중복되었습니다.", HttpStatus.BAD_REQUEST),
-    FAIL_SKILL_OUT_OF_BOUND("클라이언트가 요청한 스킬의 갯수가 초과되었습니다.", HttpStatus.BAD_REQUEST);
+    FAIL_SKILL_OUT_OF_BOUND("클라이언트가 요청한 스킬의 갯수가 초과되었습니다.", HttpStatus.BAD_REQUEST),
 
+    // COMPANY
+    FAIL_COMPANY_NOT_FOUND("클라이언트가 요청한 회사 경력을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FAIL_DATE_RANGE_INVALID("클라이언트가 요청한 날짜가 잘못되습니다.", HttpStatus.BAD_REQUEST);
 
     // Login Failed Status
 //    FAIL_LOGIN_NOT_SUCCESS("로그인이 되지 않았습니다. 재시도 해주세요.", HttpStatus.BAD_REQUEST),
