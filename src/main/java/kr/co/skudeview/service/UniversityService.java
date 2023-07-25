@@ -12,5 +12,5 @@ public interface UniversityService {
 
     void deleteUniversity(Long memberId);
 
-    String toCombine(UniversityDto universityDto);
+
 }
