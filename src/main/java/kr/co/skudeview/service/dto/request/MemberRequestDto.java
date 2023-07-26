@@ -66,7 +66,29 @@ public class MemberRequestDto {
         private String role;
 
         private List<String> skillName;
-
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CONDITION {
+
+        private List<Long> memberIds;
+
+        private String email;
+
+        private String name;
+
+        private String nickname;
+
+        private String telephone;
+
+        private LocalDate fromBirthDate;
+
+        private LocalDate toBirthDate;
+
+        private String gender;
+
+    }
 }
