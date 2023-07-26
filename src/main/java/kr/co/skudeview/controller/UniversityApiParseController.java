@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +33,8 @@ public class UniversityApiParseController {
 
     @GetMapping("/api/load")
     public ResponseFormat<Void> loadJsonFromApi() {
+        List<University> universities = new ArrayList<>();
+        long start = System.nanoTime();
         String result = "";
         for (int j = 1; j <= 53; j++) {
             try {
@@ -55,7 +60,7 @@ public class UniversityApiParseController {
                     String univName = (String) object.get("학교명");
                     String major = (String) object.get("학부_과(전공)명");
                     University university = new University(univName, major);
-                    universityRepository.save(university);
+                    universities.add(university);
                 }
 
 
@@ -64,6 +69,10 @@ public class UniversityApiParseController {
                 return ResponseFormat.error(ResponseStatus.FAIL_BAD_REQUEST);
             }
         }
+        universityRepository.saveAll(universities);
+        long end = System.nanoTime();
+        System.out.println("수행시간: " + (end - start) + " ns");
+        System.out.println("universities.size = " + universities.size());
         return ResponseFormat.success(ResponseStatus.SUCCESS_OK);
     }
 }
