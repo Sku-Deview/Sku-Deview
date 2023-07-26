@@ -39,13 +39,13 @@ public class ReplySearchRepository {
                         DynamicQueryUtils.filter(condition.getReplyEmail(), reply.member.email::eq),
                         DynamicQueryUtils.filter(condition.getReplyName(), reply.member.name::eq),
                         DynamicQueryUtils.filter(condition.getReplyNickname(), reply.member.nickname::eq),
-                        replyWriteBetween(condition.getFromReplyDate(), condition.getToReplyDate()),
+                        replyDateBetween(condition.getFromReplyDate(), condition.getToReplyDate()),
                         reply.deleteAt.eq(Boolean.FALSE)
                 )
                 .fetch();
     }
 
-    private BooleanExpression replyWriteBetween(LocalDate fromReplyDate, LocalDate toReplyDate) {
+    private BooleanExpression replyDateBetween(LocalDate fromReplyDate, LocalDate toReplyDate) {
         if (fromReplyDate == null && toReplyDate == null) {
             return null;
         }

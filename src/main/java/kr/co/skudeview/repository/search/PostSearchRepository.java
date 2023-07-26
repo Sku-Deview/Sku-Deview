@@ -34,13 +34,13 @@ public class PostSearchRepository {
                         DynamicQueryUtils.filter(condition.getWriterEmail(), post.member.email::eq),
                         DynamicQueryUtils.filter(condition.getWriterName(), post.member.name::eq),
                         DynamicQueryUtils.filter(condition.getWriterNickname(), post.member.nickname::eq),
-                        postWriteBetween(condition.getFromPostDate(), condition.getToPostDate()),
+                        postDateBetween(condition.getFromPostDate(), condition.getToPostDate()),
                         post.deleteAt.eq(Boolean.FALSE)
                 )
                 .fetch();
     }
 
-    private BooleanExpression postWriteBetween(LocalDate fromPostDate, LocalDate toPostDate) {
+    private BooleanExpression postDateBetween(LocalDate fromPostDate, LocalDate toPostDate) {
         if (fromPostDate == null && toPostDate == null) {
             return null;
         }
