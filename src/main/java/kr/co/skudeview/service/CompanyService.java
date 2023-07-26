@@ -16,6 +16,8 @@ public interface CompanyService {
 
     CompanyResponseDto.DETAIL getCompanyDetail(Long memberId, Long companyId);
 
+    List<CompanyResponseDto.DETAIL> getSearchCompanies(CompanyRequestDto.CONDITION condition);
+
     void updateCompany(Long memberId, CompanyRequestDto.UPDATE company);
 
     void deleteCompany(Long memberId, Long companyId);
