@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class PostRequestDto {
 
     @Getter
@@ -24,8 +27,6 @@ public class PostRequestDto {
         private Integer likeCount;
 
         private Integer viewCount;
-
-
     }
 
     @Getter
@@ -40,5 +41,27 @@ public class PostRequestDto {
         private String content;
 
         private PostCategory postCategory;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CONDITION {
+        private List<Long> postIds;
+
+        private String title;
+
+        private PostCategory postCategory;
+
+        private String writerEmail;
+
+        private String writerName;
+
+        private String writerNickname;
+
+        private LocalDate fromPostDate;
+
+        private LocalDate toPostDate;
     }
 }
