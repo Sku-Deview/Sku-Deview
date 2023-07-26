@@ -21,7 +21,7 @@ public class ReportResponseDto {
 
         private String memberName;
 
-        private String postCategory;
+        private String reportCategory;
 
         private String postTitle;
 
