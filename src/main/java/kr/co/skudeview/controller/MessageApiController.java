@@ -2,14 +2,10 @@ package kr.co.skudeview.controller;
 
 import kr.co.skudeview.infra.model.ResponseFormat;
 import kr.co.skudeview.infra.model.ResponseStatus;
-import kr.co.skudeview.repository.MemberRepository;
-import kr.co.skudeview.repository.MessageRepository;
-import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.MessageService;
 import kr.co.skudeview.service.dto.request.MessageRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

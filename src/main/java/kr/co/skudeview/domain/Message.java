@@ -21,17 +21,11 @@ public class Message extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-    //@JoinColumn(name = "sender_id", referencedColumnName = "member_id", insertable = false, updatable = false)
-   // @OnDelete(action = OnDeleteAction.NO_ACTION)    //작성자가 계정을 삭제하면 함께 지우기 위함
     @JoinColumn(name = "sender", referencedColumnName = "nickname")
     private Member sender;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-   // @OnDelete(action = OnDeleteAction.NO_ACTION)    //수신자가 계정을 삭제하면 함께 지우기 위함
-    //@JoinColumn(name = "receiver_id", referencedColumnName = "nickname")
     @JoinColumn(name = "receiver", referencedColumnName = "nickname")
     private Member receiver;
 
@@ -55,8 +49,6 @@ public class Message extends BaseEntity {
         this.deletedByReceiver = deletedByReceiver;
         this.content = content;
         this.title = title;
-        log.info("message.this.receiver = {}",this.receiver.getNickname());
-        log.info("message.this.sender = {}",this.sender.getNickname());
     }
 
     public void deleteBySender() {
@@ -67,10 +59,5 @@ public class Message extends BaseEntity {
         this.deletedByReceiver = true;
     }
 
-    /**
-     * isDeleted 메소드는 deleteBySender&Receiver 의 값이 둘다 true이면 true를 반환해줍니다
-     */
-//    public boolean isDeleted() {
-//        return isDeletedBySender() && isDeletedByReceiver();
-//    }
+
 }
