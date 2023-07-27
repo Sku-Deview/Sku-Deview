@@ -1,23 +1,21 @@
 package kr.co.skudeview.service;
 
 import jakarta.transaction.Transactional;
-import kr.co.skudeview.domain.Company;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
 import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
-import kr.co.skudeview.repository.CompanyRepository;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.MemberSkillRepository;
 import kr.co.skudeview.repository.SkillRepository;
+import kr.co.skudeview.repository.search.MemberSearchRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +26,8 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+
+    private final MemberSearchRepository memberSearchRepository;
 
     private final SkillRepository skillRepository;
 
@@ -96,6 +96,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponseDto.READ> getAllMembers() {
         List<Member> members = memberRepository.findAllByDeleteAtFalse();
+
+        return members.stream()
+                .map(this::toReadDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MemberResponseDto.READ> getSearchMembers(MemberRequestDto.CONDITION condition) {
+        final List<Member> members = memberSearchRepository.find(condition);
 
         return members.stream()
                 .map(this::toReadDto)

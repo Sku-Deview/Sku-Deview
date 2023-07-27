@@ -69,7 +69,7 @@ public class ReportApiController {
     }
 
     /**
-     * Read Report API - 모듬 Report 다중 조회
+     * Read Report API - 모든 Report 다중 조회
      * @return ResponseStatus.SUCCESS_OK + List<ReportResponseDto.READ>
      */
     @GetMapping("/report")
@@ -77,4 +77,13 @@ public class ReportApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, reportService.getAllReports());
     }
 
+    /**
+     * Read Report API - 검색 조건에 맞는 Report 다중 조회
+     * @param condition
+     * @return ResponseStatus.SUCCESS_OK + List<ReportResponseDto.READ>
+     */
+    @GetMapping("/report/search")
+    public ResponseFormat<List<ReportResponseDto.READ>> getSearchReports(@RequestBody @Valid ReportRequestDto.CONDITION condition) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, reportService.getSearchReports(condition));
+    }
 }

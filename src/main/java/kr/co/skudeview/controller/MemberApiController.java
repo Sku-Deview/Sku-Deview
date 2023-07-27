@@ -7,8 +7,6 @@ import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,4 +70,13 @@ public class MemberApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getAllMembers());
     }
 
+    /**
+     * Search Member API - 검색 조건에 맞는 member 다중 조회
+     * @param condition
+     * @return ResponseStatus.SUCCESS_OK + List<MemberResponseDto.READ>
+     */
+    @GetMapping("/member/search")
+    public ResponseFormat<List<MemberResponseDto.READ>> getSearchMembers(@RequestBody @Valid MemberRequestDto.CONDITION condition) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getSearchMembers(condition));
+    }
 }

@@ -66,4 +66,14 @@ public class ReplyApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
     }
 
+    /**
+     * Search Reply API - 검색 조건에 맞는 Reply 다중 조회
+     * @param condition
+     * @return ResponseStatus.SUCCESS_OK + List<ReplyResponseDto.READ>
+     */
+    @GetMapping("/reply/search")
+    public ResponseFormat<List<ReplyResponseDto.READ>> getSearchReplies(@RequestBody @Valid ReplyRequestDto.CONDITION condition) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getSearchReplies(condition));
+    }
+
 }

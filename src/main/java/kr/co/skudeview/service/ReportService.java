@@ -19,11 +19,13 @@ public interface ReportService {
 
     List<ReportResponseDto.READ> getAllReports();
 
+    List<ReportResponseDto.READ> getSearchReports(ReportRequestDto.CONDITION condition);
+
     default Report toEntity(ReportRequestDto.CREATE create, Member reporter, Post reportPost) {
         return Report.builder()
                 .member(reporter)
                 .post(reportPost)
-                .reportCategory(ReportCategory.valueOf(create.getPostCategory()))
+                .reportCategory(ReportCategory.valueOf(create.getReportCategory()))
                 .title(create.getTitle())
                 .description(create.getDescription())
                 .build();
@@ -35,7 +37,7 @@ public interface ReportService {
                 .postId(report.getPost().getId())
                 .memberEmail(report.getMember().getEmail())
                 .memberName(report.getMember().getName())
-                .postCategory(String.valueOf(report.getReportCategory()))
+                .reportCategory(String.valueOf(report.getReportCategory()))
                 .postTitle(report.getPost().getTitle())
                 .title(report.getTitle())
                 .description(report.getDescription())

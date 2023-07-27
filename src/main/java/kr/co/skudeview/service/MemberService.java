@@ -18,6 +18,8 @@ public interface MemberService {
 
     List<MemberResponseDto.READ> getAllMembers();
 
+    List<MemberResponseDto.READ> getSearchMembers(MemberRequestDto.CONDITION condition);
+
     void updateMember(MemberRequestDto.UPDATE update);
 
     void deleteMember(Long id);

@@ -12,7 +12,10 @@ public interface ReplyService {
 
     List<ReplyResponseDto.READ> getAllReplies(Long postId);
 
+    List<ReplyResponseDto.READ> getSearchReplies(ReplyRequestDto.CONDITION condition);
+
     Long updateReply(Long replyId, ReplyRequestDto.UPDATE update);
 
     Long deleteReply(Long postId, Long replyId);
+
 }

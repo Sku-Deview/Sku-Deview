@@ -1,7 +1,5 @@
 package kr.co.skudeview.service;
 
-import kr.co.skudeview.domain.Member;
-import kr.co.skudeview.domain.Post;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 
@@ -9,16 +7,17 @@ import java.util.List;
 
 public interface PostService {
 
+    Long createPost(PostRequestDto.CREATE create);
 
-    public Long createPost(PostRequestDto.CREATE create);
+    List<PostResponseDto.READ> getAllPosts();
 
-    public List<PostResponseDto.READ> getAllPosts();
+    Long updatePost(final Long postId, final PostRequestDto.UPDATE update);
 
-    public Long updatePost(final Long postId, final PostRequestDto.UPDATE update);
+    Long deletePost(final Long postId);
 
-    public Long deletePost(final Long postId);
+    PostResponseDto.READ getPostDetail(final Long postId);
 
-    public PostResponseDto.READ getPostDetail(final Long postId);
+    List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition);
 
 //    default Post toEntity(PostRequestDto.CREATE create, Member findMember) {
 //        return Post.builder()

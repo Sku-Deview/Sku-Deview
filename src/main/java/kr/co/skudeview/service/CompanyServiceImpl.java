@@ -8,6 +8,7 @@ import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.CompanyRepository;
 import kr.co.skudeview.repository.MemberRepository;
+import kr.co.skudeview.repository.search.CompanySearchRepository;
 import kr.co.skudeview.service.dto.request.CompanyRequestDto;
 import kr.co.skudeview.service.dto.response.CompanyResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final MemberRepository memberRepository;
 
     private final CompanyRepository companyRepository;
+
+    private final CompanySearchRepository companySearchRepository;
 
     @Override
     @Transactional
@@ -48,6 +51,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyResponseDto.DETAIL getCompanyDetail(Long memberId, Long companyId) {
         return toDetailDto(companyRepository.findCompanyByMember_IdAndIdAndDeleteAtFalse(memberId, companyId).get());
+    }
+
+    @Override
+    public List<CompanyResponseDto.DETAIL> getSearchCompanies(CompanyRequestDto.CONDITION condition) {
+        final List<Company> companies = companySearchRepository.find(condition);
+
+        return companies.stream()
+                .map(this::toDetailDto)
+                .collect(Collectors.toList());
     }
 
     @Override

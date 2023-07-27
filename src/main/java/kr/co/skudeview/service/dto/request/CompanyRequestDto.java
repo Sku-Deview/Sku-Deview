@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class CompanyRequestDto {
 
@@ -47,5 +48,19 @@ public class CompanyRequestDto {
         private LocalDate endDate;
 
         private String description;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CONDITION {
+        private List<Long> companyIds;
+
+        private Long memberId;
+
+        private String companyName;
+
+        private String position;
     }
 }

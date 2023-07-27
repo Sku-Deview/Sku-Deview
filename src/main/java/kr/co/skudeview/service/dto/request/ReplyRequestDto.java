@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public class ReplyRequestDto {
 
     @AllArgsConstructor
@@ -29,8 +32,28 @@ public class ReplyRequestDto {
         private Long replyId;
 
         private String content;
+    }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Builder
+    public static class CONDITION {
+        private List<Long> replyIds;
 
+        private Long writePostId;
+
+        private String writePostTitle;
+
+        private String replyEmail;
+
+        private String replyName;
+
+        private String replyNickname;
+
+        private LocalDate fromReplyDate;
+
+        private LocalDate toReplyDate;
     }
 
 }

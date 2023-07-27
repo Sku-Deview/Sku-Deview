@@ -11,6 +11,7 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.repository.ReportRepository;
+import kr.co.skudeview.repository.search.ReportSearchRepository;
 import kr.co.skudeview.service.dto.request.ReportRequestDto;
 import kr.co.skudeview.service.dto.response.ReportResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,12 @@ public class ReportServiceImpl implements ReportService {
 
     private final PostRepository postRepository;
 
+    private final ReportSearchRepository reportSearchRepository;
+
     @Override
     @Transactional
     public void createReport(Long postId, ReportRequestDto.CREATE create) {
-        isReportCategory(create.getPostCategory());
+        isReportCategory(create.getReportCategory());
 
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
         isMember(findMember);
@@ -66,6 +69,16 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<ReportResponseDto.READ> getAllReports() {
         List<Report> reports = reportRepository.findReportsByDeleteAtFalse();
+
+        return reports.stream()
+                .map(this::toReadDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportResponseDto.READ> getSearchReports(ReportRequestDto.CONDITION condition) {
+        List<Report> reports = reportSearchRepository.find(condition);
+
         return reports.stream()
                 .map(this::toReadDto)
                 .collect(Collectors.toList());

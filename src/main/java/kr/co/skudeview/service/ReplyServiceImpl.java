@@ -8,6 +8,7 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.repository.ReplyRepository;
+import kr.co.skudeview.repository.search.ReplySearchRepository;
 import kr.co.skudeview.service.dto.request.ReplyRequestDto;
 import kr.co.skudeview.service.dto.response.ReplyResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReplyServiceImpl implements ReplyService{
+public class ReplyServiceImpl implements ReplyService {
 
     private final MemberRepository memberRepository;
 
@@ -30,9 +32,11 @@ public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
 
+    private final ReplySearchRepository replySearchRepository;
+
     @Override
     @Transactional
-    public Long createReply(Long postId,ReplyRequestDto.CREATE create) {
+    public Long createReply(Long postId, ReplyRequestDto.CREATE create) {
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
 
         isMember(findMember);
@@ -52,19 +56,24 @@ public class ReplyServiceImpl implements ReplyService{
     @Transactional(readOnly = true)
     public List<ReplyResponseDto.READ> getAllReplies(Long postId) {
         List<Reply> list = replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId);
-        List<ReplyResponseDto.READ> replies = new ArrayList<>();
 
-        for (Reply reply : list) {
-            ReplyResponseDto.READ dto = toDto(reply);
-            replies.add(dto);
-        }
+        return list.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
-        return replies;
+    @Override
+    public List<ReplyResponseDto.READ> getSearchReplies(ReplyRequestDto.CONDITION condition) {
+        final List<Reply> posts = replySearchRepository.find(condition);
+
+        return posts.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Long updateReply(Long replyId,ReplyRequestDto.UPDATE update) {
+    public Long updateReply(Long replyId, ReplyRequestDto.UPDATE update) {
         Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
         isReply(reply);
@@ -76,7 +85,7 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     @Transactional
-    public Long deleteReply(Long postId,Long replyId) {
+    public Long deleteReply(Long postId, Long replyId) {
         Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
         isReply(reply);
@@ -106,7 +115,7 @@ public class ReplyServiceImpl implements ReplyService{
         }
     }
 
-    private static Reply toEntity(ReplyRequestDto.CREATE create, Member member , Post post) {
+    private static Reply toEntity(ReplyRequestDto.CREATE create, Member member, Post post) {
         Reply reply = Reply.builder()
                 .post(post)
                 .member(member)
@@ -115,7 +124,8 @@ public class ReplyServiceImpl implements ReplyService{
                 .build();
         return reply;
     }
-    private static ReplyResponseDto.READ toDto(Reply reply) {
+
+    private ReplyResponseDto.READ toDto(Reply reply) {
         ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
                 .replyId(reply.getId())
                 .memberEmail(reply.getMember().getEmail())

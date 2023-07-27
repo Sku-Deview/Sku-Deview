@@ -7,6 +7,7 @@ import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.PostRepository;
+import kr.co.skudeview.repository.search.PostSearchRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+
     private final MemberRepository memberRepository;
+
+    private final PostSearchRepository postSearchRepository;
 
     @Override
     @Transactional
@@ -30,6 +35,7 @@ public class PostServiceImpl implements PostService {
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
 
         isMember(findMember);
+
         isPostCategory(String.valueOf(create.getPostCategory()));
 
         Post post = toEntity(create, findMember.get());
@@ -38,8 +44,6 @@ public class PostServiceImpl implements PostService {
 
         return post.getId();
     }
-
-
 
     @Override
     public List<PostResponseDto.READ> getAllPosts() {
@@ -61,7 +65,7 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-        post.get().updatePost(update.getTitle(),update.getContent(), update.getPostCategory());
+        post.get().updatePost(update.getTitle(), update.getContent(), update.getPostCategory());
 
         return postId;
     }
@@ -94,11 +98,17 @@ public class PostServiceImpl implements PostService {
 
         PostResponseDto.READ dto = toDto(post.get());
 
-
         return dto;
     }
 
+    @Override
+    public List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition) {
+        final List<Post> posts = postSearchRepository.find(condition);
 
+        return posts.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
@@ -116,7 +126,7 @@ public class PostServiceImpl implements PostService {
         PostCategory.of(category);
     }
 
-    private static PostResponseDto.READ toDto(Post post) {
+    private PostResponseDto.READ toDto(Post post) {
         PostResponseDto.READ dto = PostResponseDto.READ.builder()
                 .postId(post.getId())
                 .memberEmail(post.getMember().getEmail())
