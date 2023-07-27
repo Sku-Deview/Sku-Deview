@@ -29,6 +29,10 @@ public class QMessage extends EntityPathBase<Message> {
     //inherited
     public final BooleanPath deleteAt = _super.deleteAt;
 
+    public final BooleanPath deletedByReceiver = createBoolean("deletedByReceiver");
+
+    public final BooleanPath deletedBySender = createBoolean("deletedBySender");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
@@ -40,6 +44,8 @@ public class QMessage extends EntityPathBase<Message> {
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
     public final QMember sender;
+
+    public final StringPath title = createString("title");
 
     public QMessage(String variable) {
         this(Message.class, forVariable(variable), INITS);
