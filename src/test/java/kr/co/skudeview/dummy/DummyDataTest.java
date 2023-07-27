@@ -105,6 +105,7 @@ public class DummyDataTest {
     }
 
     @Test
+
     void createMember() {
         for (int i = 1; i < 5; i++) {
             ArrayList<String> skill = new ArrayList<>();
@@ -238,23 +239,23 @@ public class DummyDataTest {
 
     @Test
     void createMessage() {
-        for (int i = 1; i < 300; i++) {
+        for (int i = 1; i < 10; i++) {
             MessageRequestDto.CREATE build = MessageRequestDto.CREATE.builder()
-                    .title("호랑이에게")
-                    .content("안녕호랑아")
-                    .senderName("토끼")
-                    .receiverName("호랑이")
+                    .title("닉네임2")
+                    .content("안녕 닉네임2")
+                    .senderName("닉네임1")
+                    .receiverName("닉네임2")
                     .build();
             messageService.createMessage(build);
         }
 
 
-        for (int i = 1; i < 300; i++) {
+        for (int i = 1; i < 10; i++) {
             MessageRequestDto.CREATE build2 = MessageRequestDto.CREATE.builder()
-                    .title("토끼에게")
-                    .content("안녕토끼야")
-                    .senderName("호랑이")
-                    .receiverName("토끼")
+                    .title("닉네임1")
+                    .content("안녕 닉네임1")
+                    .senderName("닉네임2")
+                    .receiverName("닉네임1")
                     .build();
             messageService.createMessage(build2);
         }
