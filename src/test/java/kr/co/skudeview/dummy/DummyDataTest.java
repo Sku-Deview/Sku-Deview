@@ -4,10 +4,7 @@ import kr.co.skudeview.domain.enums.Gender;
 import kr.co.skudeview.domain.enums.PostCategory;
 import kr.co.skudeview.repository.*;
 import kr.co.skudeview.service.*;
-import kr.co.skudeview.service.dto.request.MemberRequestDto;
-import kr.co.skudeview.service.dto.request.PostRequestDto;
-import kr.co.skudeview.service.dto.request.ReplyRequestDto;
-import kr.co.skudeview.service.dto.request.SkillRequestDto;
+import kr.co.skudeview.service.dto.request.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +44,11 @@ public class DummyDataTest {
     CompanyService companyService;
     @Autowired
     CompanyRepository companyRepository;
+
+    @Autowired
+    MessageService messageService;
+    @Autowired
+    MessageRepository messageRepository;
 
     @Test
     void createSkill() {
@@ -103,6 +105,7 @@ public class DummyDataTest {
     }
 
     @Test
+
     void createMember() {
         for (int i = 1; i < 5; i++) {
             ArrayList<String> skill = new ArrayList<>();
@@ -232,5 +235,31 @@ public class DummyDataTest {
 
             replyService.createReply((long) (i % 199 + 1), create);
         }
+    }
+
+    @Test
+    void createMessage() {
+        for (int i = 1; i < 10; i++) {
+            MessageRequestDto.CREATE build = MessageRequestDto.CREATE.builder()
+                    .title("닉네임2")
+                    .content("안녕 닉네임2")
+                    .senderName("닉네임1")
+                    .receiverName("닉네임2")
+                    .build();
+            messageService.createMessage(build);
+        }
+
+
+        for (int i = 1; i < 10; i++) {
+            MessageRequestDto.CREATE build2 = MessageRequestDto.CREATE.builder()
+                    .title("닉네임1")
+                    .content("안녕 닉네임1")
+                    .senderName("닉네임2")
+                    .receiverName("닉네임1")
+                    .build();
+            messageService.createMessage(build2);
+        }
+
+
     }
 }
