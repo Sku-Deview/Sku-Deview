@@ -5,6 +5,7 @@ import kr.co.skudeview.infra.model.ResponseFormat;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
+import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,4 +96,16 @@ public class MemberApiController {
     public ResponseFormat<List<MemberResponseDto.READ>> getSearchMembers(@RequestBody @Valid MemberRequestDto.CONDITION condition) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getSearchMembers(condition));
     }
+
+    /**
+     * Refresh
+     *
+     * @Param tokenDto
+     * @Return
+     */
+    @GetMapping("/refresh")
+    public ResponseFormat<TokenDto> refresh(@RequestBody @Valid TokenDto tokenDto) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.refreshAccessToken(tokenDto));
+    }
+
 }

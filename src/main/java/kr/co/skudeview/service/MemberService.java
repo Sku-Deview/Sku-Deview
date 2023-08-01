@@ -4,6 +4,7 @@ import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.enums.Gender;
 import kr.co.skudeview.domain.enums.Role;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
+import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 
 import java.util.Collections;
@@ -27,6 +28,8 @@ public interface MemberService {
     Set<String> getSkillsNameByMember(Member member);
 
     MemberResponseDto.READ loginMember(MemberRequestDto.LOGIN login);
+
+    TokenDto refreshAccessToken(TokenDto tokenDto);
 
     default Member toEntity(MemberRequestDto.CREATE create) {
         return Member.builder()

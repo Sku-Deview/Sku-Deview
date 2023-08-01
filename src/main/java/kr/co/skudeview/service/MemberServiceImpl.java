@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.domain.Token;
 import kr.co.skudeview.domain.enums.Gender;
 import kr.co.skudeview.domain.enums.Role;
 import kr.co.skudeview.infra.exception.DuplicatedException;
+import kr.co.skudeview.infra.exception.InvalidRequestException;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.exception.WrongPasswordException;
 import kr.co.skudeview.infra.jwt.JwtProvider;
@@ -14,19 +16,20 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.MemberSkillRepository;
 import kr.co.skudeview.repository.SkillRepository;
+import kr.co.skudeview.repository.TokenRepository;
 import kr.co.skudeview.repository.search.MemberSearchRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
+import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -43,6 +46,8 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final JwtProvider jwtProvider;
+
+    private final TokenRepository tokenRepository;
 
     @Transactional
     @Override
@@ -112,7 +117,11 @@ public class MemberServiceImpl implements MemberService {
                 .gender(String.valueOf(member.get().getGender()))
                 .role(String.valueOf(member.get().getGender()))
                 .skillName(getSkillsNameByMember(member.get()))
-                .token(jwtProvider.createToken(member.get().getEmail(), String.valueOf(member.get().getRole())))
+                .token(TokenDto.builder()
+                        .accessToken(jwtProvider.createToken(member.get().getEmail(),
+                                String.valueOf(member.get().getRole())))
+                        .refreshToken(createRefreshToken(member.get()))
+                        .build())
                 .build();
 
     }
@@ -230,6 +239,19 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    private void isToken(Optional<Token> token) {
+        if (token.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_TOKEN_NOT_FOUND);
+        }
+    }
+
+    private void isRefreshToken(Token refreshToken) {
+        if (refreshToken == null) {
+            throw new InvalidRequestException(ResponseStatus.FAIL_LOGIN_NOT_SUCCESS);
+        }
+    }
+
+
     private Member createMemberBuilder(MemberRequestDto.CREATE create) {
         return Member.builder()
                 .email(create.getEmail())
@@ -244,5 +266,56 @@ public class MemberServiceImpl implements MemberService {
                 .memberSkills(Collections.emptyList())
                 .build();
     }
+
+    public String createRefreshToken(Member member) {
+        Token token = tokenRepository.save(
+                Token.builder()
+                        .id(member.getId())
+                        .refreshToken(UUID.randomUUID().toString())
+                        .expiration(120)
+                        .build()
+        );
+        return token.getRefreshToken();
+    }
+
+    public Token validRefreshToken(Member member, String refreshToken) {
+        Optional<Token> token = tokenRepository.findById(member.getId());
+
+        isToken(token);
+
+        // redis 에 해당 유저의 토큰이 존재하는지 체크
+        if (token.get().getRefreshToken() == null) {
+            return null;
+        } else {
+            if (token.get().getExpiration() < 10) {
+                token.get().setExpiration(1000);
+                tokenRepository.save(token.get());
+            }
+            if (!token.get().getRefreshToken().equals(refreshToken)) {
+                return null;
+            } else {
+                return token.get();
+            }
+        }
+    }
+
+    public TokenDto refreshAccessToken(TokenDto tokenDto) {
+        String identity = jwtProvider.getIdentity(tokenDto.getAccessToken());
+        log.info("identity = {}", identity);
+        Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(identity);
+
+        isMember(member);
+
+        Token refreshToken = validRefreshToken(member.get(), tokenDto.getRefreshToken());
+
+        isRefreshToken(refreshToken);
+
+        return TokenDto.builder()
+                .accessToken(jwtProvider.createToken(identity, String.valueOf(member.get().getRole())))
+                .refreshToken(refreshToken.getRefreshToken())
+                .build();
+
+    }
+
 
 }

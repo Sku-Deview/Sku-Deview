@@ -1,5 +1,6 @@
 package kr.co.skudeview.service.dto.response;
 
+import kr.co.skudeview.service.dto.request.TokenDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class MemberResponseDto {
 
         private Set<String> skillName;
 
-        private String token;
+        private TokenDto token;
     }
 
 }

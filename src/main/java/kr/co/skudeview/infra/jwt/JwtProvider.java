@@ -1,9 +1,6 @@
 package kr.co.skudeview.infra.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +24,7 @@ public class JwtProvider {
     private String salt;
 
     private Key secretKey;
-
+    
     private final Long exp = 1000L * 60 * 60;
 
     private final JpaUserDetailsService userDetailsService;
@@ -53,6 +50,20 @@ public class JwtProvider {
 
     //token 에 담겨있는 유저 identity get
     public String getIdentity(String token) {
+        try {
+            Jwts
+                    .parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (ExpiredJwtException e) {
+            e.printStackTrace();
+            return e.getClaims().getSubject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Jwts
                 .parserBuilder()
                 .setSigningKey(secretKey)
@@ -61,6 +72,8 @@ public class JwtProvider {
                 .getBody()
                 .getSubject();
     }
+
+
 
     //권한 정보 획득
     public Authentication getAuthentication(String token) {
