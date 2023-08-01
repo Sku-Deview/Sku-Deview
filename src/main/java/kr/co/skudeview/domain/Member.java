@@ -130,8 +130,8 @@ public class Member extends BaseEntity {
     }
 
     public void deleteUnivMajor() {
-       this.univName = null;
-       this.major = null;
+        this.univName = null;
+        this.major = null;
     }
 
 }

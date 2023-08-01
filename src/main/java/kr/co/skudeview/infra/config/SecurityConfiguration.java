@@ -44,9 +44,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/login").permitAll()
                 .requestMatchers("/api/v1/member").permitAll()
-                .requestMatchers("/api/v1/post/**").hasAnyRole("USER","ADMIN","MANAGER")
-                .requestMatchers("/api/v1/reply/**").hasAnyRole("USER","ADMIN","MANAGER")
-                .requestMatchers("/api/v1/message/**").hasAnyRole("USER","ADMIN","MANAGER")
+                .requestMatchers("/api/v1/post/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/reply/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/message/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 //.requestMatchers("/api/load").permitAll() //university data
                 .anyRequest().authenticated();
 
@@ -63,7 +63,7 @@ public class SecurityConfiguration {
                         response.getWriter().write(ResponseStatus.FAIL_FORBIDDEN.getMessage());
                     }
                 })
-                 // 인증이 올바르지 않을 때 오류 발생 - token 오류
+                // 인증이 올바르지 않을 때 오류 발생 - token 오류
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {
                     @Override
                     public void commence(HttpServletRequest request, HttpServletResponse response,

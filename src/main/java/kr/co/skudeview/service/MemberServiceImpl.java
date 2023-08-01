@@ -220,9 +220,10 @@ public class MemberServiceImpl implements MemberService {
 
     private void isEmail(String email) {
         if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
-            throw  new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
         }
     }
+
     private void isPassword(String requestPassword, String getPassword) {
         if (!passwordEncoder.matches(requestPassword, getPassword)) {
             throw new WrongPasswordException(ResponseStatus.FAIL_MEMBER_PASSWORD_NOT_MATCHED);

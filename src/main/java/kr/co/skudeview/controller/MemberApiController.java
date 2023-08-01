@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -22,18 +21,17 @@ public class MemberApiController {
 
     /**
      * Create Member API
+     *
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
     @PostMapping("/member")
     public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
-        log.info("createMember.create.getEmail = {}", create.getEmail());
         memberService.createMember(create);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
 
     /**
-     *
      * @param login
      * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
      */
@@ -44,6 +42,7 @@ public class MemberApiController {
 
     /**
      * Update Member API
+     *
      * @param update
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
@@ -55,6 +54,7 @@ public class MemberApiController {
 
     /**
      * Delete Member API
+     *
      * @param memberId
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
@@ -66,16 +66,18 @@ public class MemberApiController {
 
     /**
      * Read Member API - memberId 값으로 단일 조회
+     *
      * @param memberId
      * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
      */
     @GetMapping("/member/{memberId}")
-    public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name= "memberId") Long memberId) {
+    public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name = "memberId") Long memberId) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getMemberDetail(memberId));
     }
 
     /**
      * Read Member API - 모든 member 다중 조회
+     *
      * @return ResponseStatus.SUCCESS_OK + List<MemberResponseDto.READ>
      */
     @GetMapping("/member")
@@ -85,6 +87,7 @@ public class MemberApiController {
 
     /**
      * Search Member API - 검색 조건에 맞는 member 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<MemberResponseDto.READ>
      */
