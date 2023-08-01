@@ -4,8 +4,12 @@ import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.MemberSkill;
 import kr.co.skudeview.domain.Skill;
+import kr.co.skudeview.domain.enums.Gender;
+import kr.co.skudeview.domain.enums.Role;
 import kr.co.skudeview.infra.exception.DuplicatedException;
 import kr.co.skudeview.infra.exception.NotFoundException;
+import kr.co.skudeview.infra.exception.WrongPasswordException;
+import kr.co.skudeview.infra.jwt.JwtProvider;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.MemberSkillRepository;
@@ -14,8 +18,10 @@ import kr.co.skudeview.repository.search.MemberSearchRepository;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +39,11 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberSkillRepository memberSkillRepository;
 
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtProvider jwtProvider;
+
     @Transactional
     @Override
     public void createMember(MemberRequestDto.CREATE create) {
@@ -41,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         isEmail(create.getEmail());
         isNickname(create.getNickname());
 
-        Member member = toEntity(create);
+        Member member = createMemberBuilder(create);
 
         final List<MemberSkill> memberSkills = getSkills(create.getSkillName(), member);
 
@@ -81,6 +92,29 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toSet());
 
         return skillNames;
+    }
+
+    @Override
+    public MemberResponseDto.READ loginMember(MemberRequestDto.LOGIN login) {
+        Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(login.getEmail());
+        isMember(member);
+
+        isPassword(login.getPassword(), member.get().getPassword());
+
+        return MemberResponseDto.READ.builder()
+                .memberId(member.get().getId())
+                .email(member.get().getEmail())
+                .name(member.get().getName())
+                .nickname(member.get().getNickname())
+                .telephone(member.get().getTelephone())
+                .address(member.get().getAddress())
+                .birthDate(member.get().getBirthDate())
+                .gender(String.valueOf(member.get().getGender()))
+                .role(String.valueOf(member.get().getGender()))
+                .skillName(getSkillsNameByMember(member.get()))
+                .token(jwtProvider.createToken(member.get().getEmail(), String.valueOf(member.get().getRole())))
+                .build();
+
     }
 
     @Override
@@ -186,8 +220,28 @@ public class MemberServiceImpl implements MemberService {
 
     private void isEmail(String email) {
         if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
-            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
+            throw  new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
         }
+    }
+    private void isPassword(String requestPassword, String getPassword) {
+        if (!passwordEncoder.matches(requestPassword, getPassword)) {
+            throw new WrongPasswordException(ResponseStatus.FAIL_MEMBER_PASSWORD_NOT_MATCHED);
+        }
+    }
+
+    private Member createMemberBuilder(MemberRequestDto.CREATE create) {
+        return Member.builder()
+                .email(create.getEmail())
+                .password(passwordEncoder.encode(create.getPassword()))
+                .name(create.getName())
+                .nickname(create.getNickname())
+                .telephone(create.getTelephone())
+                .address(create.getAddress())
+                .birthDate(create.getBirthDate())
+                .gender(Gender.valueOf(create.getGender()))
+                .role(Role.valueOf(create.getRole()))
+                .memberSkills(Collections.emptyList())
+                .build();
     }
 
 }

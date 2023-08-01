@@ -91,4 +91,16 @@ public class MemberRequestDto {
         private String gender;
 
     }
+
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LOGIN {
+
+        private String email;
+
+        private String password;
+    }
 }

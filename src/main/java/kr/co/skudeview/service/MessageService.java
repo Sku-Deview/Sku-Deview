@@ -23,6 +23,7 @@ public interface MessageService {
     //보낸 편지함 불러오기
     List<MessageRequestDto.CREATE> getSendMessages(MessageRequestDto.READ read);
 
+    //보낸 편지 삭제
     Long deleteMessageBySender(Long messageId, MessageRequestDto.READ read);
 
 

@@ -26,6 +26,8 @@ public interface MemberService {
 
     Set<String> getSkillsNameByMember(Member member);
 
+    MemberResponseDto.READ loginMember(MemberRequestDto.LOGIN login);
+
     default Member toEntity(MemberRequestDto.CREATE create) {
         return Member.builder()
                 .email(create.getEmail())

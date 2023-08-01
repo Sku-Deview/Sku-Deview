@@ -7,10 +7,12 @@ import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -25,8 +27,19 @@ public class MemberApiController {
      */
     @PostMapping("/member")
     public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
+        log.info("createMember.create.getEmail = {}", create.getEmail());
         memberService.createMember(create);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
+    }
+
+    /**
+     *
+     * @param login
+     * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
+     */
+    @PostMapping("/login")
+    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
     }
 
     /**

@@ -16,3 +16,12 @@ spring:
         show_sql: true
 
 
+jwt:
+  secret:
+    key: KWEN@OJM%I@JKQJASLJAHWUJNBZHSLKN
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true

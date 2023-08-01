@@ -35,6 +35,8 @@ public class MemberResponseDto {
         private String role;
 
         private Set<String> skillName;
+
+        private String token;
     }
 
 }
