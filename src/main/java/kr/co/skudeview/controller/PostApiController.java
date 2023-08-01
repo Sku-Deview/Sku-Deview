@@ -7,6 +7,8 @@ import kr.co.skudeview.service.PostService;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,4 +85,17 @@ public class PostApiController {
     public ResponseFormat<List<PostResponseDto.READ>> getSearchPosts(@RequestBody @Valid PostRequestDto.CONDITION condition) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getSearchPosts(condition));
     }
+
+    /**
+     * Search Post API + Paging default page=0, size=20
+     * http://localhost:8080/api/v1/posts?page=0&size=10 -> 이런식으로 지정해서 사용도 가능
+     * @param condition
+     * @param pageable
+     * @return
+     */
+    @GetMapping("/posts")
+    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@RequestBody @Valid PostRequestDto.CONDITION condition, Pageable pageable) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(condition, pageable));
+    }
+
 }
