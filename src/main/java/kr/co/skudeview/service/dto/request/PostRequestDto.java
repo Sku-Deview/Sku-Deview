@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -63,5 +64,8 @@ public class PostRequestDto {
         private LocalDate fromPostDate;
 
         private LocalDate toPostDate;
+
+        private Pageable pageable;
+
     }
 }
