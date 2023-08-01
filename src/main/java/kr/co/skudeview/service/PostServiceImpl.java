@@ -11,6 +11,9 @@ import kr.co.skudeview.repository.search.PostSearchRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +111,20 @@ public class PostServiceImpl implements PostService {
         return posts.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    //    @Override
+//    public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
+////        Pageable pageable = PageRequest.of(page - 1, size);
+//
+//        Page<Post> postPage = postSearchRepository.findWithPaging(condition, pageable);
+//
+//        // Post 엔티티를 PostResponseDto.READ로 변환하여 반환
+//        return postPage.map(this::toDto);
+//    }
+    @Override
+    public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
+        return postSearchRepository.findWithPaging(condition, pageable).map(this::toDto);
     }
 
     private void isMember(Optional<Member> member) {
