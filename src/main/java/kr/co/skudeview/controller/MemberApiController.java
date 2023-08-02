@@ -5,8 +5,10 @@ import kr.co.skudeview.infra.model.ResponseFormat;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
+import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class MemberApiController {
 
     /**
      * Create Member API
+     *
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
@@ -30,7 +33,17 @@ public class MemberApiController {
     }
 
     /**
+     * @param login
+     * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
+     */
+    @PostMapping("/login")
+    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
+    }
+
+    /**
      * Update Member API
+     *
      * @param update
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
@@ -42,6 +55,7 @@ public class MemberApiController {
 
     /**
      * Delete Member API
+     *
      * @param memberId
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
@@ -53,16 +67,18 @@ public class MemberApiController {
 
     /**
      * Read Member API - memberId 값으로 단일 조회
+     *
      * @param memberId
      * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
      */
     @GetMapping("/member/{memberId}")
-    public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name= "memberId") Long memberId) {
+    public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name = "memberId") Long memberId) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getMemberDetail(memberId));
     }
 
     /**
      * Read Member API - 모든 member 다중 조회
+     *
      * @return ResponseStatus.SUCCESS_OK + List<MemberResponseDto.READ>
      */
     @GetMapping("/member")
@@ -72,6 +88,7 @@ public class MemberApiController {
 
     /**
      * Search Member API - 검색 조건에 맞는 member 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<MemberResponseDto.READ>
      */
@@ -79,4 +96,16 @@ public class MemberApiController {
     public ResponseFormat<List<MemberResponseDto.READ>> getSearchMembers(@RequestBody @Valid MemberRequestDto.CONDITION condition) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getSearchMembers(condition));
     }
+
+    /**
+     * Refresh
+     *
+     * @Param tokenDto
+     * @Return
+     */
+    @GetMapping("/refresh")
+    public ResponseFormat<TokenDto> refresh(@RequestBody @Valid TokenDto tokenDto) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.refreshAccessToken(tokenDto));
+    }
+
 }

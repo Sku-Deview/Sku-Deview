@@ -50,6 +50,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath password = createString("password");
 
+    public final StringPath refreshToken = createString("refreshToken");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 

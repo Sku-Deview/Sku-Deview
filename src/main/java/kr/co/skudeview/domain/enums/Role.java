@@ -11,17 +11,19 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum Role {
 
-    ADMIN("관리자"),
+    ROLE_ADMIN("관리자"),
 
-    MANAGER("매니저"),
+    ROLE_MANAGER("매니저"),
 
-    USER("유저");
+    ROLE_USER("유저");
 
-    String role;
+    String userRole;
 
-    public static Role of(String role) {
+    public static Role of(String userRole) {
+
         return Arrays.stream(Role.values())
-                .filter(type -> type.toString().equalsIgnoreCase(role))
+                .filter(role -> role.toString().equalsIgnoreCase(userRole))
                 .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_ROLE_NOT_FOUND));
     }
+
 }

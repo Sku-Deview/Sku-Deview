@@ -8,6 +8,7 @@ import kr.co.skudeview.service.dto.request.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -121,7 +122,7 @@ public class DummyDataTest {
                     .address("서울시 아무구" + i)
                     .birthDate(LocalDate.of(i % 15 + 1980, i % 11 + 1, i % 20 + 1))
                     .gender("MALE")
-                    .role("ADMIN")
+                    .role("ROLE_ADMIN")
                     .skillName(skill)
                     .build();
 
@@ -142,7 +143,7 @@ public class DummyDataTest {
                     .address("서울시 아무구" + i)
                     .birthDate(LocalDate.of(i % 15 + 1980, i % 11 + 1, i % 20 + 1))
                     .gender("FEMALE")
-                    .role("USER")
+                    .role("ROLE_USER")
                     .skillName(skill)
                     .build();
 
@@ -163,7 +164,7 @@ public class DummyDataTest {
                     .address("서울시 아무구" + i)
                     .birthDate(LocalDate.of(i % 15 + 1980, i % 11 + 1, i % 20 + 1))
                     .gender("MALE")
-                    .role("USER")
+                    .role("ROLE_USER")
                     .skillName(skill)
                     .build();
 
@@ -185,7 +186,7 @@ public class DummyDataTest {
                     .address("서울시 아무구" + i)
                     .birthDate(LocalDate.of(i % 15 + 1980, i % 11 + 1, i % 20 + 1))
                     .gender("FEMALE")
-                    .role("USER")
+                    .role("ROLE_USER")
                     .skillName(skill)
                     .build();
 

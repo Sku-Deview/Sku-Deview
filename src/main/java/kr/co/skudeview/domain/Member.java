@@ -77,6 +77,9 @@ public class Member extends BaseEntity {
     )
     private List<Company> companies = new ArrayList<>();
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
 //    @OneToMany(
 //            fetch = FetchType.LAZY,
 //            cascade = {CascadeType.MERGE,CascadeType.PERSIST},
@@ -130,8 +133,12 @@ public class Member extends BaseEntity {
     }
 
     public void deleteUnivMajor() {
-       this.univName = null;
-       this.major = null;
+        this.univName = null;
+        this.major = null;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
 }

@@ -54,15 +54,16 @@ public enum ResponseStatus {
 
     // COMPANY
     FAIL_COMPANY_NOT_FOUND("클라이언트가 요청한 회사 경력을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    FAIL_DATE_RANGE_INVALID("클라이언트가 요청한 날짜가 잘못되습니다.", HttpStatus.BAD_REQUEST);
+    FAIL_DATE_RANGE_INVALID("클라이언트가 요청한 날짜가 잘못되습니다.", HttpStatus.BAD_REQUEST),
 
     // Login Failed Status
-//    FAIL_LOGIN_NOT_SUCCESS("로그인이 되지 않았습니다. 재시도 해주세요.", HttpStatus.BAD_REQUEST),
-//
-//    // Token Failed Status
-//    FAIL_TOKEN_NOT_FOUND("클라이언트가 요청한 토큰 정보를 찾을 수 업습니다.", HttpStatus.NOT_FOUND),
-//    FAIL_REFRESHTOKEN_NOT_FOUND("클라이언트가 요청한 RefreshToken을 찾을 수 없습니다.(만료)", HttpStatus.NOT_FOUND),
-//
+    FAIL_LOGIN_NOT_SUCCESS("로그인이 되지 않았습니다. 재시도 해주세요.", HttpStatus.BAD_REQUEST),
+
+    // Token Failed Status
+    FAIL_TOKEN_NOT_FOUND("클라이언트가 요청한 토큰 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    FAIL_REFRESHTOKEN_NOT_FOUND("클라이언트가 요청한 RefreshToken을 찾을 수 없습니다.(만료)", HttpStatus.NOT_FOUND);
+
 
     private String message;
 
