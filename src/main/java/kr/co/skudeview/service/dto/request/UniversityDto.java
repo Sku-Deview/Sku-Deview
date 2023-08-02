@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UniversityDto {
 
-        private Long universityId;
+    private Long universityId;
 
-        private String univName;
+    private String univName;
 
-        private String major;
+    private String major;
 
-    }
+}
 
 

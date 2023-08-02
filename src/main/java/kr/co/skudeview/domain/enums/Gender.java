@@ -17,7 +17,7 @@ public enum Gender {
 
     String gender;
 
-    public static Gender of(String gender){
+    public static Gender of(String gender) {
         return Arrays.stream(Gender.values())
                 .filter(type -> type.toString().equalsIgnoreCase(gender))
                 .findAny().orElseThrow(() -> new NotFoundException(ResponseStatus.FAIL_MEMBER_GENDER_NOT_FOUND));

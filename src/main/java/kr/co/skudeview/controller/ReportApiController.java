@@ -36,6 +36,7 @@ public class ReportApiController {
 
     /**
      * Create Report API
+     *
      * @param postId
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
@@ -49,6 +50,7 @@ public class ReportApiController {
 
     /**
      * Read Report API - postId 값으로 다중 조회
+     *
      * @param postId
      * @return ResponseStatus.SUCCESS_OK + List<ReportResponseDto.READ>
      */
@@ -59,6 +61,7 @@ public class ReportApiController {
 
     /**
      * Read Report API - reportId 값으로 단일 조회
+     *
      * @param postId
      * @param reportId
      * @return ResponseStatus.SUCCESS_OK + ReportResponseDto.READ
@@ -70,6 +73,7 @@ public class ReportApiController {
 
     /**
      * Read Report API - 모든 Report 다중 조회
+     *
      * @return ResponseStatus.SUCCESS_OK + List<ReportResponseDto.READ>
      */
     @GetMapping("/report")
@@ -79,6 +83,7 @@ public class ReportApiController {
 
     /**
      * Read Report API - 검색 조건에 맞는 Report 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<ReportResponseDto.READ>
      */

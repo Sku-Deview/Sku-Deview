@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ReplyRepository extends JpaRepository<Reply,Long> {
+public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     // replyId 값으로 reply 단일 조회 + 삭제되지 않은 reply
     Optional<Reply> findReplyByIdAndDeleteAtFalse(Long id);

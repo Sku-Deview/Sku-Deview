@@ -16,20 +16,20 @@ public class UniversityApiController {
 
     @PostMapping("/university/{memberId}")
     public ResponseFormat<Void> createUniversity(@PathVariable final Long memberId, @RequestBody UniversityDto universityDto) {
-        universityService.createUniversity(memberId,universityDto);
+        universityService.createUniversity(memberId, universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
 
 
     @GetMapping("/university")
     public ResponseFormat<UniversityDto> getUniversity(@RequestBody UniversityDto universityDto) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,universityService.getUniversityMajor(universityDto));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, universityService.getUniversityMajor(universityDto));
     }
 
 
     @PutMapping("/university/{memberId}")
     public ResponseFormat<Void> updateUniversity(@PathVariable final Long memberId, @RequestBody UniversityDto universityDto) {
-        universityService.updateUniversity(memberId,universityDto);
+        universityService.updateUniversity(memberId, universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

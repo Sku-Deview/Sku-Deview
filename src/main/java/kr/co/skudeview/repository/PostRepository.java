@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post,Long> {
+public interface PostRepository extends JpaRepository<Post, Long> {
 
     // postId 값으로 post 단일 조회 + 삭제되지 않은 post
     Optional<Post> findPostByIdAndDeleteAtFalse(Long id);

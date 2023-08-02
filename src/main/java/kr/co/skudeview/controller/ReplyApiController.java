@@ -21,6 +21,7 @@ public class ReplyApiController {
 
     /**
      * 댓글 생성
+     *
      * @param postId 게시글 PK
      * @param create ReplyRequestDto.Create
      * @return replyId
@@ -33,9 +34,10 @@ public class ReplyApiController {
 
     /**
      * 댓글 수정
+     *
      * @param @PathVariable postId
      * @param @PathVariable replyId
-     * @param update ReplyRequestDto.UPDATE
+     * @param update        ReplyRequestDto.UPDATE
      * @return updateReplyId
      */
     @PatchMapping("/reply/{postId}/{replyId}")
@@ -46,9 +48,10 @@ public class ReplyApiController {
 
     /**
      * 댓글 삭제
+     *
      * @param @PathVariable postId
      * @param @PathVariable replyId
-     * @return  deleteReplyId
+     * @return deleteReplyId
      */
     @DeleteMapping("/reply/{postId}/{replyId}")
     public ResponseFormat<Long> deleteReply(@PathVariable Long postId, @PathVariable Long replyId) {
@@ -58,6 +61,7 @@ public class ReplyApiController {
 
     /**
      * 게시글 번호로 모든 댓글 조회
+     *
      * @param postId 게시글 PK
      * @return List<ReplyResponseDto.READ>
      */
@@ -68,6 +72,7 @@ public class ReplyApiController {
 
     /**
      * Search Reply API - 검색 조건에 맞는 Reply 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<ReplyResponseDto.READ>
      */

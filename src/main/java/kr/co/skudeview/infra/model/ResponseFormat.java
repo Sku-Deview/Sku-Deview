@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResponseFormat<T>  {
+public class ResponseFormat<T> {
 
     private boolean isSuccessful;
 
@@ -78,7 +78,7 @@ public class ResponseFormat<T>  {
 
     // Failed - If the ResponseStatus is Not declared
     public static <T> ResponseFormat<T> error(String message,
-                                                HttpStatus httpStatus) {
+                                              HttpStatus httpStatus) {
         return ResponseFormat.<T>builder()
                 .isSuccessful(false)
                 .data(Optional.empty())

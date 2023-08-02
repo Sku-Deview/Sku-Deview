@@ -22,6 +22,7 @@ public class PostApiController {
 
     /**
      * Create Post API
+     *
      * @param createParams
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
@@ -34,6 +35,7 @@ public class PostApiController {
 
     /**
      * Update Post API
+     *
      * @param id
      * @param updateParams
      * @return ResponseStatus.SUCCESS_OK + Long postId
@@ -47,6 +49,7 @@ public class PostApiController {
 
     /**
      * Delete Post API
+     *
      * @param id
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
@@ -59,6 +62,7 @@ public class PostApiController {
 
     /**
      * Read Post API - 모든 Post 다중 조회
+     *
      * @return ResponseStatus.SUCCESS_OK + List<PostResponseDto.READ>
      */
     @GetMapping("/post")
@@ -68,6 +72,7 @@ public class PostApiController {
 
     /**
      * Read Post API - postId 값으로 단일 조회
+     *
      * @param id
      * @return ResponseStatus.SUCCESS_OK + PostResponseDto.READ
      */
@@ -78,6 +83,7 @@ public class PostApiController {
 
     /**
      * Search Post API - 검색 조건에 맞는 post 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<PostResponseDto.READ>
      */
@@ -89,6 +95,7 @@ public class PostApiController {
     /**
      * Search Post API + Paging default page=0, size=20
      * http://localhost:8080/api/v1/posts?page=0&size=10 -> 이런식으로 지정해서 사용도 가능
+     *
      * @param condition
      * @param pageable
      * @return

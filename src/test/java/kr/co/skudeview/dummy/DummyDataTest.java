@@ -1,6 +1,5 @@
 package kr.co.skudeview.dummy;
 
-import kr.co.skudeview.domain.enums.Gender;
 import kr.co.skudeview.domain.enums.PostCategory;
 import kr.co.skudeview.repository.*;
 import kr.co.skudeview.service.*;
@@ -8,7 +7,6 @@ import kr.co.skudeview.service.dto.request.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -106,7 +104,6 @@ public class DummyDataTest {
     }
 
     @Test
-
     void createMember() {
         for (int i = 1; i < 5; i++) {
             ArrayList<String> skill = new ArrayList<>();

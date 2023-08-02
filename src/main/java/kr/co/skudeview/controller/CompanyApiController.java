@@ -20,6 +20,7 @@ public class CompanyApiController {
 
     /**
      * Create API - Member에 Company 정보 추가
+     *
      * @param memberId
      * @param company
      * @return ResponseStatus.SUCCESS_CREATE + Void
@@ -32,6 +33,7 @@ public class CompanyApiController {
 
     /**
      * Update API - Member에 작성했던 Company 정보 수정
+     *
      * @param memberId
      * @param company
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
@@ -44,6 +46,7 @@ public class CompanyApiController {
 
     /**
      * Delete API - Member에 작성했던 Company 정보 삭제
+     *
      * @param memberId
      * @param companyId
      * @return ResponseStatus.SUCCESS_CREATE + Void
@@ -56,6 +59,7 @@ public class CompanyApiController {
 
     /**
      * Get(Read) API - memberId에 해당하는 Company 정보 다중 조회
+     *
      * @param memberId
      * @return ResponseStatus.SUCCESS_OK + List<CompanyResponseDto.READ>
      */
@@ -66,6 +70,7 @@ public class CompanyApiController {
 
     /**
      * Get(Read) API - memberId에 해당하는 CompanyId 정보 단일 조회
+     *
      * @param memberId
      * @param companyId
      * @return ResponseStatus.SUCCESS_OK + CompanyResponseDto.DETAIL
@@ -77,6 +82,7 @@ public class CompanyApiController {
 
     /**
      * Get(Read) API - 검색 조건에 맞는 Company에 해당하는 Member 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<CompanyResponseDto.DETAIL>
      */

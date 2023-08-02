@@ -34,7 +34,7 @@ public class UniversityServiceImpl implements UniversityService {
         String major = universityDto.getMajor();
         String univName = universityDto.getUnivName();
         Optional<University> findUnivMajor = universityRepository.findByUnivNameAndMajor(univName, major);
-        return  universityDto.builder()
+        return universityDto.builder()
                 .universityId(findUnivMajor.get().getId())
                 .univName(findUnivMajor.get().getUnivName())
                 .major(findUnivMajor.get().getMajor())
@@ -47,7 +47,7 @@ public class UniversityServiceImpl implements UniversityService {
         Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
         UniversityDto findDto = getUniversityMajor(universityDto);
 
-        findMember.get().changeUnivMajor(findDto.getUnivName(),findDto.getMajor());
+        findMember.get().changeUnivMajor(findDto.getUnivName(), findDto.getMajor());
     }
 
     @Override

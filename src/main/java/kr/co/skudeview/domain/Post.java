@@ -19,7 +19,7 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -60,7 +60,7 @@ public class Post extends BaseEntity {
     public void updatePost(String title, String content, PostCategory postCategory) {
         this.title = title;
         this.content = content;
-        this.postCategory= postCategory;
+        this.postCategory = postCategory;
     }
 
     public void increaseViewCount() {

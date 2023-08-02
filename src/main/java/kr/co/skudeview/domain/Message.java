@@ -16,7 +16,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
     private Long id;
 
@@ -41,6 +42,7 @@ public class Message extends BaseEntity {
     @Column(name = "title")
     @NotNull
     private String title;
+
     @Builder
     public Message(Member sender, Member receiver, boolean deletedBySender, boolean deletedByReceiver, String content, String title) {
         this.sender = sender;

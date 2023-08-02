@@ -6,9 +6,9 @@ public interface UniversityService {
 
     void createUniversity(Long memberId, UniversityDto universityDto);
 
-    UniversityDto getUniversityMajor(UniversityDto universityDto);  
+    UniversityDto getUniversityMajor(UniversityDto universityDto);
 
-    void updateUniversity(Long memberId,UniversityDto universityDto);
+    void updateUniversity(Long memberId, UniversityDto universityDto);
 
     void deleteUniversity(Long memberId);
 
