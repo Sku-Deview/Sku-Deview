@@ -34,8 +34,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long createPost(PostRequestDto.CREATE create) {
-        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
+    public Long createPost(String email,PostRequestDto.CREATE create) {
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(findMember);
 
@@ -63,7 +63,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Long updatePost(Long postId, PostRequestDto.UPDATE update) {
+    public Long updatePost(String email,Long postId, PostRequestDto.UPDATE update) {
+        //email을 통한 인가 추가 예정(프론트에서 진행해야 할 것으로 생각 중 논의 예정)
+
         Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
 
         isPost(post);

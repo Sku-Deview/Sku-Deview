@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface PostService {
 
-    Long createPost(PostRequestDto.CREATE create);
+    Long createPost(String email, PostRequestDto.CREATE create);
 
     List<PostResponseDto.READ> getAllPosts();
 
-    Long updatePost(final Long postId, final PostRequestDto.UPDATE update);
+    Long updatePost(String email, final Long postId, final PostRequestDto.UPDATE update);
 
     Long deletePost(final Long postId);
 

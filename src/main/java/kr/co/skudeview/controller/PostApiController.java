@@ -9,6 +9,8 @@ import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +28,9 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-    public ResponseFormat<Long> createPost(@RequestBody @Valid PostRequestDto.CREATE createParams) {
-        Long postId = postService.createPost(createParams);
+    public ResponseFormat<Long> createPost(@AuthenticationPrincipal UserDetails userDetails,
+                                           @RequestBody @Valid PostRequestDto.CREATE createParams) {
+        Long postId = postService.createPost(userDetails.getUsername(),createParams);
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }
@@ -39,8 +42,10 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
     @PatchMapping("/post/{id}")
-    public ResponseFormat<Long> updatePost(@PathVariable Long id, @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
-        Long postId = postService.updatePost(id, updateParams);
+    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable Long id,
+                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+        Long postId = postService.updatePost(userDetails.getUsername(),id, updateParams);
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
     }
