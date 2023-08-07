@@ -5,6 +5,8 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.UniversityService;
 import kr.co.skudeview.service.dto.request.UniversityDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,9 +16,10 @@ public class UniversityApiController {
 
     private final UniversityService universityService;
 
-    @PostMapping("/university/{memberId}")
-    public ResponseFormat<Void> createUniversity(@PathVariable final Long memberId, @RequestBody UniversityDto universityDto) {
-        universityService.createUniversity(memberId,universityDto);
+    @PostMapping("/university")
+    public ResponseFormat<Void> createUniversity(@AuthenticationPrincipal UserDetails userDetails,
+                                                 @RequestBody UniversityDto universityDto) {
+        universityService.createUniversity(userDetails.getUsername(),universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
 
@@ -28,14 +31,15 @@ public class UniversityApiController {
 
 
     @PutMapping("/university/{memberId}")
-    public ResponseFormat<Void> updateUniversity(@PathVariable final Long memberId, @RequestBody UniversityDto universityDto) {
-        universityService.updateUniversity(memberId,universityDto);
+    public ResponseFormat<Void> updateUniversity(@AuthenticationPrincipal UserDetails userDetails,
+                                                 @RequestBody UniversityDto universityDto) {
+        universityService.updateUniversity(userDetails.getUsername(),universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 
     @DeleteMapping("/university/{memberId}")
-    public ResponseFormat<Void> deleteUniversity(@PathVariable final Long memberId) {
-        universityService.deleteUniversity(memberId);
+    public ResponseFormat<Void> deleteUniversity(@AuthenticationPrincipal UserDetails userDetails) {
+        universityService.deleteUniversity(userDetails.getUsername());
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 
