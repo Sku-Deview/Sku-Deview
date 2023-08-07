@@ -2,7 +2,6 @@ package kr.co.skudeview.service.dto.request;
 
 import lombok.*;
 
-
 public class MessageRequestDto {
     @Getter
     @NoArgsConstructor

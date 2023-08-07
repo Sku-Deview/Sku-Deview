@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class University {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "university_id")
     private Long id;
 

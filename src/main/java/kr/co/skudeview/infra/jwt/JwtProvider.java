@@ -74,7 +74,6 @@ public class JwtProvider {
     }
 
 
-
     //권한 정보 획득
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getIdentity(token));

@@ -34,6 +34,7 @@ public class UniversityApiController {
     public ResponseFormat<Void> updateUniversity(@AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody UniversityDto universityDto) {
         universityService.updateUniversity(userDetails.getUsername(), universityDto);
+
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

@@ -1,8 +1,6 @@
 package kr.co.skudeview.repository;
 
-import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Message;
-import kr.co.skudeview.service.dto.request.MessageRequestDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -46,14 +46,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     // JSON
-    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-
-    //JSON
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
-    //QueryDsl
-
+    // QueryDsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -75,13 +70,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-//querydsl 추가 시작
-def querydslSrcDir = 'src/main/generated'
-clean {
-    delete file(querydslSrcDir)
-}
-tasks.withType(JavaCompile) {
-    options.generatedSourceOutputDirectory = file(querydslSrcDir)
-}
-//querydsl 추가 끝

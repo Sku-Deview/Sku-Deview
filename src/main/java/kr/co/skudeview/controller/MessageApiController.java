@@ -20,7 +20,6 @@ public class MessageApiController {
 
     private final MessageService messageService;
 
-
     @PostMapping("/message")
     public ResponseFormat<MessageRequestDto.CREATE> createMessage(@RequestBody MessageRequestDto.CREATE create) {
         log.info("create.receiveNickName ={}", create.getReceiverName());
@@ -33,6 +32,7 @@ public class MessageApiController {
     @GetMapping("/message/received")
     public ResponseFormat<List<MessageRequestDto.CREATE>> getReceivedMessages(@AuthenticationPrincipal UserDetails userDetails) {
         List<MessageRequestDto.CREATE> result = messageService.getReceivedMessages(userDetails.getUsername());
+
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, result);
     }
 
@@ -41,6 +41,7 @@ public class MessageApiController {
     public ResponseFormat<Long> deleteReceivedMessage(@PathVariable("messageId") Long messageId,
                                                       @AuthenticationPrincipal UserDetails userDetails) {
         Long deleteMessageId = messageService.deleteMessageByReceiver(messageId, userDetails.getUsername());
+
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, deleteMessageId);
     }
 

@@ -17,7 +17,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
+
     private final MessageRepository messageRepository;
+
     private final MemberRepository memberRepository;
 
     @Transactional
