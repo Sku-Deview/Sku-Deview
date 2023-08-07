@@ -45,7 +45,7 @@ public class MemberRequestDto {
     @NoArgsConstructor
     public static class UPDATE {
 
-        private Long memberId;
+        //private Long memberId;
 
         private String password;
 

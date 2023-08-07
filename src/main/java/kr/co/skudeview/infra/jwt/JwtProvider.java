@@ -24,7 +24,7 @@ public class JwtProvider {
     private String salt;
 
     private Key secretKey;
-    
+
     private final Long exp = 1000L * 60 * 60;
 
     private final JpaUserDetailsService userDetailsService;
