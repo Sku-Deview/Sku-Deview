@@ -53,7 +53,7 @@ public class MemberApiController {
     @PutMapping("/member")
     public ResponseFormat<Void> updateMember(@AuthenticationPrincipal UserDetails userDetails,
                                              @RequestBody @Valid MemberRequestDto.UPDATE update) {
-        memberService.updateMember(userDetails.getUsername(),update);
+        memberService.updateMember(userDetails.getUsername(), update);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

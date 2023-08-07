@@ -21,7 +21,7 @@ public interface MemberService {
 
     List<MemberResponseDto.READ> getSearchMembers(MemberRequestDto.CONDITION condition);
 
-    void updateMember(String email,MemberRequestDto.UPDATE update);
+    void updateMember(String email, MemberRequestDto.UPDATE update);
 
     void deleteMember(Long id);
 

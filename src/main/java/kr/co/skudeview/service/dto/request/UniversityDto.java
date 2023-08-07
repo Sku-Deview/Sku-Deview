@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UniversityDto {
 
-        private String univName;
+    private String univName;
 
-        private String major;
+    private String major;
 
-    }
+}
 
 

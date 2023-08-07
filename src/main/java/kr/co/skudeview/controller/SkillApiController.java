@@ -26,6 +26,7 @@ public class SkillApiController {
 
     /**
      * Create Skill API
+     *
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
@@ -37,6 +38,7 @@ public class SkillApiController {
 
     /**
      * Update Skill API
+     *
      * @param update
      * @return ResponseStatus.SUCCESS_OK + Void
      */
@@ -48,17 +50,19 @@ public class SkillApiController {
 
     /**
      * Delete Skill API
+     *
      * @param skillId
      * @return ResponseStatus.SUCCESS_OK + Void
      */
     @DeleteMapping("/skill/{skillId}")
-    public ResponseFormat<Void> deleteSkill(@PathVariable(name = "skillId") Long skillId){
+    public ResponseFormat<Void> deleteSkill(@PathVariable(name = "skillId") Long skillId) {
         skillService.deleteSkill(skillId);
         return ResponseFormat.success(ResponseStatus.SUCCESS_OK);
     }
 
     /**
      * Read Skill API - 모든 skill 다중 조회
+     *
      * @return ResponseStatus.SUCCESS_OK + List<SkillResponseDto.READ>
      */
     @GetMapping("/skill")

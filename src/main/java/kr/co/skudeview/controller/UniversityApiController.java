@@ -19,21 +19,21 @@ public class UniversityApiController {
     @PostMapping("/university")
     public ResponseFormat<Void> createUniversity(@AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody UniversityDto universityDto) {
-        universityService.createUniversity(userDetails.getUsername(),universityDto);
+        universityService.createUniversity(userDetails.getUsername(), universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
 
 
     @GetMapping("/university")
     public ResponseFormat<UniversityDto> getUniversity(@RequestBody UniversityDto universityDto) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,universityService.getUniversityMajor(universityDto));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, universityService.getUniversityMajor(universityDto));
     }
 
 
     @PutMapping("/university/{memberId}")
     public ResponseFormat<Void> updateUniversity(@AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody UniversityDto universityDto) {
-        universityService.updateUniversity(userDetails.getUsername(),universityDto);
+        universityService.updateUniversity(userDetails.getUsername(), universityDto);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

@@ -27,6 +27,4 @@ public interface MessageService {
     Long deleteMessageBySender(Long messageId, String email);
 
 
-
-
 }

@@ -6,9 +6,9 @@ public interface UniversityService {
 
     void createUniversity(String email, UniversityDto universityDto);
 
-    UniversityDto getUniversityMajor(UniversityDto universityDto);  
+    UniversityDto getUniversityMajor(UniversityDto universityDto);
 
-    void updateUniversity(String email,UniversityDto universityDto);
+    void updateUniversity(String email, UniversityDto universityDto);
 
     void deleteUniversity(String email);
 

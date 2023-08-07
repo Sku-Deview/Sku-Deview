@@ -39,7 +39,7 @@ public class UniversityApiParseController {
         for (int j = 1; j <= 53; j++) {
             try {
                 System.out.println("j ============================================================ " + j);
-                URL url = new URL("https://api.odcloud.kr/api/15014632/v1/uddi:6939f45b-1283-4462-b394-820c26e1445d?page="+j+"&perPage=1000&serviceKey=7ZwOtbHTUQk2pJsydUaqKYShLVfbpH%2FtsehWIdHMi3hnTdkGQFXd1cH%2FPC8NHzqArTxWnA5%2FML3f3%2FjDcFKBTw%3D%3D");
+                URL url = new URL("https://api.odcloud.kr/api/15014632/v1/uddi:6939f45b-1283-4462-b394-820c26e1445d?page=" + j + "&perPage=1000&serviceKey=7ZwOtbHTUQk2pJsydUaqKYShLVfbpH%2FtsehWIdHMi3hnTdkGQFXd1cH%2FPC8NHzqArTxWnA5%2FML3f3%2FjDcFKBTw%3D%3D");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");

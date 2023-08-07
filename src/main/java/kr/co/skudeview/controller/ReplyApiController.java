@@ -23,6 +23,7 @@ public class ReplyApiController {
 
     /**
      * 댓글 생성
+     *
      * @param postId 게시글 PK
      * @param create ReplyRequestDto.Create
      * @return replyId
@@ -31,15 +32,16 @@ public class ReplyApiController {
     public ResponseFormat<Long> createReply(@AuthenticationPrincipal UserDetails userDetails,
                                             @PathVariable Long postId,
                                             @RequestBody @Valid ReplyRequestDto.CREATE create) {
-        Long replyId = replyService.createReply(userDetails.getUsername(),postId, create);
+        Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, replyId);
     }
 
     /**
      * 댓글 수정
+     *
      * @param @PathVariable postId
      * @param @PathVariable replyId
-     * @param update ReplyRequestDto.UPDATE
+     * @param update        ReplyRequestDto.UPDATE
      * @return updateReplyId
      */
     @PatchMapping("/reply/{postId}/{replyId}")
@@ -47,26 +49,28 @@ public class ReplyApiController {
                                             @PathVariable Long postId,
                                             @PathVariable Long replyId,
                                             @RequestBody @Valid ReplyRequestDto.UPDATE update) {
-        Long updateReplyId = replyService.updateReply(userDetails.getUsername(),replyId, update);
+        Long updateReplyId = replyService.updateReply(userDetails.getUsername(), replyId, update);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, updateReplyId);
     }
 
     /**
      * 댓글 삭제
+     *
      * @param @PathVariable postId
      * @param @PathVariable replyId
-     * @return  deleteReplyId
+     * @return deleteReplyId
      */
     @DeleteMapping("/reply/{postId}/{replyId}")
     public ResponseFormat<Long> deleteReply(@AuthenticationPrincipal UserDetails userDetails,
                                             @PathVariable Long postId,
                                             @PathVariable Long replyId) {
-        Long deleteReplyId = replyService.deleteReply(userDetails.getUsername(),postId, replyId);
+        Long deleteReplyId = replyService.deleteReply(userDetails.getUsername(), postId, replyId);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, deleteReplyId);
     }
 
     /**
      * 게시글 번호로 모든 댓글 조회
+     *
      * @param postId 게시글 PK
      * @return List<ReplyResponseDto.READ>
      */
@@ -77,6 +81,7 @@ public class ReplyApiController {
 
     /**
      * Search Reply API - 검색 조건에 맞는 Reply 다중 조회
+     *
      * @param condition
      * @return ResponseStatus.SUCCESS_OK + List<ReplyResponseDto.READ>
      */

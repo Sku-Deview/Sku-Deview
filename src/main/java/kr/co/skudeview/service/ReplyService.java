@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface ReplyService {
 
-    Long createReply(String email,Long postId, ReplyRequestDto.CREATE create);
+    Long createReply(String email, Long postId, ReplyRequestDto.CREATE create);
 
     List<ReplyResponseDto.READ> getAllReplies(Long postId);
 
     List<ReplyResponseDto.READ> getSearchReplies(ReplyRequestDto.CONDITION condition);
 
-    Long updateReply(String email,Long replyId, ReplyRequestDto.UPDATE update);
+    Long updateReply(String email, Long replyId, ReplyRequestDto.UPDATE update);
 
-    Long deleteReply(String email,Long postId, Long replyId);
+    Long deleteReply(String email, Long postId, Long replyId);
 
 }

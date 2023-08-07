@@ -49,6 +49,7 @@ public class MessageServiceImpl implements MessageService {
         }
         return messageDtos;
     }
+
     // 받은 편지 삭제(상대방으로부터 받은)
     @Transactional
     @Override
@@ -59,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
         if (member.getNickname() == message.getSender().getNickname()) {    //상대방의 닉네임과 messageId 체크 후
             message.deleteByReceiver(); //받은 사람에게 메시지 삭제
         }
-       return message.getId();
+        return message.getId();
 
     }
 
@@ -89,6 +90,7 @@ public class MessageServiceImpl implements MessageService {
         }
         return message.getId();
     }
+
     private static Message toEntity(MessageRequestDto.CREATE create, Member receiver, Member sender) {
         return Message.builder()
                 .receiver(receiver)
