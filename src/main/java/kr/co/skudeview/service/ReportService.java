@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ReportService {
 
-    void createReport(Long postId, ReportRequestDto.CREATE create);
+    void createReport(String email, Long postId, ReportRequestDto.CREATE create);
 
     List<ReportResponseDto.READ> getAllReportsByPost(Long postId);
 
