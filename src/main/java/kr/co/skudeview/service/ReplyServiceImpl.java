@@ -36,8 +36,8 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public Long createReply(Long postId, ReplyRequestDto.CREATE create) {
-        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
+    public Long createReply(String email,Long postId, ReplyRequestDto.CREATE create) {
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(findMember);
 
@@ -73,7 +73,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public Long updateReply(Long replyId, ReplyRequestDto.UPDATE update) {
+    public Long updateReply(String email,Long replyId, ReplyRequestDto.UPDATE update) {
         Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
         isReply(reply);
@@ -85,7 +85,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public Long deleteReply(Long postId, Long replyId) {
+    public Long deleteReply(String email,Long postId, Long replyId) {
         Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
 
         isReply(reply);

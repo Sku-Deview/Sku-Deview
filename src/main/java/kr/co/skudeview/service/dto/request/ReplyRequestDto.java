@@ -15,9 +15,6 @@ public class ReplyRequestDto {
     @Getter
     @Builder
     public static class CREATE {
-        private Long postId;
-
-        private String memberEmail;
 
         private String content;
 
