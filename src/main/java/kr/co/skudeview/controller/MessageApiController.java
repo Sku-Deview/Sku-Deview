@@ -4,6 +4,7 @@ import kr.co.skudeview.infra.model.ResponseFormat;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.MessageService;
 import kr.co.skudeview.service.dto.request.MessageRequestDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +31,7 @@ public class MessageApiController {
 
     //받은 편지함 확인
     @GetMapping("/message/received")
-    public ResponseFormat<List<MessageRequestDto.CREATE>> getReceivedMessages(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseFormat<List<MessageRequestDto.CREATE>> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<MessageRequestDto.CREATE> result = messageService.getReceivedMessages(userDetails.getUsername());
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, result);
@@ -39,7 +40,7 @@ public class MessageApiController {
     //받은 쪽지 삭제
     @DeleteMapping("/message/received/{messageId}")
     public ResponseFormat<Long> deleteReceivedMessage(@PathVariable("messageId") Long messageId,
-                                                      @AuthenticationPrincipal UserDetails userDetails) {
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long deleteMessageId = messageService.deleteMessageByReceiver(messageId, userDetails.getUsername());
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, deleteMessageId);
@@ -47,7 +48,7 @@ public class MessageApiController {
 
     //보낸 편지함 확인
     @GetMapping("/message/send")
-    public ResponseFormat<List<MessageRequestDto.CREATE>> getSendMessage(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseFormat<List<MessageRequestDto.CREATE>> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<MessageRequestDto.CREATE> result = messageService.getSendMessages(userDetails.getUsername());
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, result);
     }
@@ -55,7 +56,7 @@ public class MessageApiController {
     //보낸 쪽지 삭제
     @DeleteMapping("/message/send/{messageId}")
     public ResponseFormat<Long> deleteSendMessage(@PathVariable("messageId") Long messageId,
-                                                  @AuthenticationPrincipal UserDetails userDetails) {
+                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long deleteMessageId = messageService.deleteMessageBySender(messageId, userDetails.getUsername());
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, deleteMessageId);
     }
