@@ -35,10 +35,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public void createReport(Long postId, ReportRequestDto.CREATE create) {
+    public void createReport(String email, Long postId, ReportRequestDto.CREATE create) {
         isReportCategory(create.getReportCategory());
 
-        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
         isMember(findMember);
 
         Optional<Post> findPost = postRepository.findPostByIdAndDeleteAtFalse(postId);

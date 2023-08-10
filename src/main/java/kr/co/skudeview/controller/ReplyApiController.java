@@ -8,6 +8,8 @@ import kr.co.skudeview.service.dto.request.ReplyRequestDto;
 import kr.co.skudeview.service.dto.response.ReplyResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +29,10 @@ public class ReplyApiController {
      * @return replyId
      */
     @PostMapping("/reply/{postId}")
-    public ResponseFormat<Long> createReply(@PathVariable Long postId, @RequestBody @Valid ReplyRequestDto.CREATE create) {
-        Long replyId = replyService.createReply(postId, create);
+    public ResponseFormat<Long> createReply(@AuthenticationPrincipal UserDetails userDetails,
+                                            @PathVariable Long postId,
+                                            @RequestBody @Valid ReplyRequestDto.CREATE create) {
+        Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, replyId);
     }
 
@@ -41,8 +45,11 @@ public class ReplyApiController {
      * @return updateReplyId
      */
     @PatchMapping("/reply/{postId}/{replyId}")
-    public ResponseFormat<Long> updateReply(@PathVariable Long postId, @PathVariable Long replyId, @RequestBody @Valid ReplyRequestDto.UPDATE update) {
-        Long updateReplyId = replyService.updateReply(replyId, update);
+    public ResponseFormat<Long> updateReply(@AuthenticationPrincipal UserDetails userDetails,
+                                            @PathVariable Long postId,
+                                            @PathVariable Long replyId,
+                                            @RequestBody @Valid ReplyRequestDto.UPDATE update) {
+        Long updateReplyId = replyService.updateReply(userDetails.getUsername(), replyId, update);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, updateReplyId);
     }
 
@@ -54,8 +61,10 @@ public class ReplyApiController {
      * @return deleteReplyId
      */
     @DeleteMapping("/reply/{postId}/{replyId}")
-    public ResponseFormat<Long> deleteReply(@PathVariable Long postId, @PathVariable Long replyId) {
-        Long deleteReplyId = replyService.deleteReply(postId, replyId);
+    public ResponseFormat<Long> deleteReply(@AuthenticationPrincipal UserDetails userDetails,
+                                            @PathVariable Long postId,
+                                            @PathVariable Long replyId) {
+        Long deleteReplyId = replyService.deleteReply(userDetails.getUsername(), postId, replyId);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, deleteReplyId);
     }
 

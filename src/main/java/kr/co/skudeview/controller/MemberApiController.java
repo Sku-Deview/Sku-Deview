@@ -9,10 +9,13 @@ import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -48,8 +51,9 @@ public class MemberApiController {
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
     @PutMapping("/member")
-    public ResponseFormat<Void> updateMember(@RequestBody @Valid MemberRequestDto.UPDATE update) {
-        memberService.updateMember(update);
+    public ResponseFormat<Void> updateMember(@AuthenticationPrincipal UserDetails userDetails,
+                                             @RequestBody @Valid MemberRequestDto.UPDATE update) {
+        memberService.updateMember(userDetails.getUsername(), update);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

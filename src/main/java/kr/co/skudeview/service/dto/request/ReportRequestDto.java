@@ -16,9 +16,6 @@ public class ReportRequestDto {
     @Builder
     public static class CREATE {
 
-        private Long postId;
-
-        private String memberEmail;
 
         private String reportCategory;
 

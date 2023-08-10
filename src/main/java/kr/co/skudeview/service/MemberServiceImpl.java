@@ -156,11 +156,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void updateMember(MemberRequestDto.UPDATE update) {
-        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(update.getMemberId());
+    public void updateMember(String email, MemberRequestDto.UPDATE update) {
+        final Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(member);
-        isTelephone(update.getTelephone());
+        //isTelephone(update.getTelephone());
         isNickname(update.getNickname());
 
         final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());

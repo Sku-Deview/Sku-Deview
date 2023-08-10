@@ -4,13 +4,13 @@ import kr.co.skudeview.service.dto.request.UniversityDto;
 
 public interface UniversityService {
 
-    void createUniversity(Long memberId, UniversityDto universityDto);
+    void createUniversity(String email, UniversityDto universityDto);
 
     UniversityDto getUniversityMajor(UniversityDto universityDto);
 
-    void updateUniversity(Long memberId, UniversityDto universityDto);
+    void updateUniversity(String email, UniversityDto universityDto);
 
-    void deleteUniversity(Long memberId);
+    void deleteUniversity(String email);
 
 
 }
