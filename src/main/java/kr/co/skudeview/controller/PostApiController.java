@@ -6,6 +6,7 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.PostService;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-    public ResponseFormat<Long> createPost(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                            @RequestBody @Valid PostRequestDto.CREATE createParams) {
         Long postId = postService.createPost(userDetails.getUsername(), createParams);
 
@@ -44,7 +45,7 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
     @PatchMapping("/post/{id}")
-    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                            @PathVariable Long id,
                                            @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
         Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);

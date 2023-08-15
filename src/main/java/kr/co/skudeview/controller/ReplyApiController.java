@@ -6,6 +6,7 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.ReplyService;
 import kr.co.skudeview.service.dto.request.ReplyRequestDto;
 import kr.co.skudeview.service.dto.response.ReplyResponseDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +30,7 @@ public class ReplyApiController {
      * @return replyId
      */
     @PostMapping("/reply/{postId}")
-    public ResponseFormat<Long> createReply(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Long> createReply(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable Long postId,
                                             @RequestBody @Valid ReplyRequestDto.CREATE create) {
         Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
@@ -45,7 +46,7 @@ public class ReplyApiController {
      * @return updateReplyId
      */
     @PatchMapping("/reply/{postId}/{replyId}")
-    public ResponseFormat<Long> updateReply(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Long> updateReply(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable Long postId,
                                             @PathVariable Long replyId,
                                             @RequestBody @Valid ReplyRequestDto.UPDATE update) {
@@ -61,7 +62,7 @@ public class ReplyApiController {
      * @return deleteReplyId
      */
     @DeleteMapping("/reply/{postId}/{replyId}")
-    public ResponseFormat<Long> deleteReply(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Long> deleteReply(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable Long postId,
                                             @PathVariable Long replyId) {
         Long deleteReplyId = replyService.deleteReply(userDetails.getUsername(), postId, replyId);

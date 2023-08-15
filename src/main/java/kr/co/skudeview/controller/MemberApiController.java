@@ -7,6 +7,7 @@ import kr.co.skudeview.service.MemberService;
 import kr.co.skudeview.service.dto.request.MemberRequestDto;
 import kr.co.skudeview.service.dto.request.TokenDto;
 import kr.co.skudeview.service.dto.response.MemberResponseDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -51,7 +52,7 @@ public class MemberApiController {
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
     @PutMapping("/member")
-    public ResponseFormat<Void> updateMember(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseFormat<Void> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @RequestBody @Valid MemberRequestDto.UPDATE update) {
         memberService.updateMember(userDetails.getUsername(), update);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
