@@ -12,14 +12,14 @@ import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,8 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
 
     private final PostSearchRepository postSearchRepository;
+
+    private final RedisTemplate<String, Object> redisTemplate; // RedisTemplate 주입
 
     @Override
     @Transactional
@@ -99,7 +101,8 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-        post.get().increaseViewCount();
+//        post.get().increaseViewCount();
+        updateViewCntToRedis(postId);
 
         PostResponseDto.READ dto = toDto(post.get());
 
@@ -115,19 +118,67 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
-    //    @Override
-//    public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
-////        Pageable pageable = PageRequest.of(page - 1, size);
-//
-//        Page<Post> postPage = postSearchRepository.findWithPaging(condition, pageable);
-//
-//        // Post 엔티티를 PostResponseDto.READ로 변환하여 반환
-//        return postPage.map(this::toDto);
-//    }
     @Override
     public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
         return postSearchRepository.findWithPaging(condition, pageable).map(this::toDto);
     }
+
+    /*
+    게시글 상세조회 요청 시, 해당 postId에 해당하는 viewCnt를 +1 해준 값을 Redis에 저장
+     */
+    @Transactional
+    @Override
+    public void updateViewCntToRedis(Long postId) {
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+
+        String key = "postId::" + postId;
+        String hashKey = "views";
+
+        if (hashOperations.get(key, hashKey) == null) {
+            hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
+            hashOperations.increment(key, hashKey, 1L);
+            System.out.println("hashOperations.get is null ---- " + hashOperations.get(key, hashKey));
+        } else {
+            hashOperations.increment(key, hashKey, 1L);
+            System.out.println("hashOperations.get is not null ---- " + hashOperations.get(key, hashKey));
+        }
+    }
+
+    /*
+    Redis에 기록된 정보들을 DB에 업데이트를 진행하면서 데이터의 일관성을 유지하고, Redis의 저장된 정보들을 초기화
+    Spring Scheduled를 사용하여 일정 시간마다 실행이 되도록 설정
+     */
+    @Transactional
+    @Scheduled(fixedDelay = 1000L * 18L)
+    @Override
+    public void deleteViewCntToRedis() {
+        String hashKey = "views";
+        Set<String> redisKey = redisTemplate.keys("postId*");
+        Iterator<String> it = redisKey.iterator();
+
+        while (it.hasNext()) {
+            String data = it.next();
+            Long postId = Long.parseLong(data.split("::")[1]);
+            if (redisTemplate.opsForHash().get(data, hashKey) == null) {
+                break;
+            }
+            Long viewCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data,hashKey)));
+            addViewCntFromRedis(postId, viewCnt);
+            redisTemplate.opsForHash().delete(data, hashKey);
+        }
+        System.out.println("Views Update Complete From Redis");
+    }
+
+    private void addViewCntFromRedis(Long postId, Long viewCnt) {
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+
+        isPost(post);
+
+        post.get().addViewCount(post.get().getViewCount() + viewCnt);
+
+        postRepository.save(post.get());
+    }
+
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
