@@ -63,12 +63,8 @@ public class Post extends BaseEntity {
         this.postCategory = postCategory;
     }
 
-    public void increaseViewCount() {
-        this.viewCount++;
-    }
-
-    public void increaseLikeCount() {
-        this.likeCount++;
+    public void addViewCount(Long viewCnt) {
+        this.viewCount = viewCnt.intValue();
     }
 
 }
