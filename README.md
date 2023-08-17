@@ -5,8 +5,7 @@
     - Springboot 3.0.6
     - Gradle (Build Tool)
     - Intellij
-    - DB : MySQL + NoSQL (Redis) - 추가 예정
-
+    - DB : MySQL + NoSQL (Redis)
 
 - Commit 규칙
     - 기능 별로 개발을 하고 커밋을 한다.
