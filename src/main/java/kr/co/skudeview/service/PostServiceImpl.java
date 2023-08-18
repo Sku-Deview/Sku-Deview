@@ -101,8 +101,7 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-//        post.get().increaseViewCount();
-        updateViewCntToRedis(postId);
+        updateCntToRedis(postId, "views");
 
         PostResponseDto.READ dto = toDto(post.get());
 
@@ -128,14 +127,17 @@ public class PostServiceImpl implements PostService {
      */
     @Transactional
     @Override
-    public void updateViewCntToRedis(Long postId) {
+    public void updateCntToRedis(Long postId, String hashKey) {
         HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
 
         String key = "postId::" + postId;
-        String hashKey = "views";
 
         if (hashOperations.get(key, hashKey) == null) {
-            hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
+            if (hashKey.equals("views")) {
+                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
+            } else {
+                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getLikeCount());
+            }
             hashOperations.increment(key, hashKey, 1L);
             System.out.println("hashOperations.get is null ---- " + hashOperations.get(key, hashKey));
         } else {
@@ -151,22 +153,33 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Scheduled(fixedDelay = 1000L * 18L)
     @Override
-    public void deleteViewCntToRedis() {
-        String hashKey = "views";
+    public void deleteCntToRedis() {
+        String viewKey = "views";
+        String likeKey = "likes";
         Set<String> redisKey = redisTemplate.keys("postId*");
         Iterator<String> it = redisKey.iterator();
 
         while (it.hasNext()) {
             String data = it.next();
             Long postId = Long.parseLong(data.split("::")[1]);
-            if (redisTemplate.opsForHash().get(data, hashKey) == null) {
+
+            if (redisTemplate.opsForHash().get(data, viewKey) == null) {
                 break;
+            } else {
+                Long viewCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data,viewKey)));
+                addViewCntFromRedis(postId, viewCnt);
+                redisTemplate.opsForHash().delete(data, viewKey);
             }
-            Long viewCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data,hashKey)));
-            addViewCntFromRedis(postId, viewCnt);
-            redisTemplate.opsForHash().delete(data, hashKey);
+
+            if (redisTemplate.opsForHash().get(data, likeKey) == null) {
+                break;
+            } else {
+                Long likeCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data,likeKey)));
+                addLikeCntFromRedis(postId, likeCnt);
+                redisTemplate.opsForHash().delete(data, likeKey);
+            }
         }
-        System.out.println("Views Update Complete From Redis");
+        System.out.println("Update Complete From Redis");
     }
 
     private void addViewCntFromRedis(Long postId, Long viewCnt) {
@@ -174,11 +187,22 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-        post.get().addViewCount(post.get().getViewCount() + viewCnt);
+//        post.get().addViewCount(post.get().getViewCount() + viewCnt);
+        post.get().addViewCount(viewCnt);
 
         postRepository.save(post.get());
     }
 
+    private void addLikeCntFromRedis(Long postId, Long likeCnt) {
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+
+        isPost(post);
+
+//        post.get().addLikeCount(post.get().getLikeCount() + likeCnt);
+        post.get().addLikeCount(likeCnt);
+
+        postRepository.save(post.get());
+    }
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {

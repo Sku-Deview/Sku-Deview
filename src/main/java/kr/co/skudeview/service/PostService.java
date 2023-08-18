@@ -24,9 +24,9 @@ public interface PostService {
 
     Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable);
 
-    void updateViewCntToRedis(final Long postId);
+    void updateCntToRedis(final Long postId, String hashKey);
 
-    void deleteViewCntToRedis();
+    void deleteCntToRedis();
 
 //    default Post toEntity(PostRequestDto.CREATE create, Member findMember) {
 //        return Post.builder()
