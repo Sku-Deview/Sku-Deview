@@ -6,11 +6,13 @@ import kr.co.skudeview.service.dto.response.PostResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PostService {
 
-    Long createPost(String email, PostRequestDto.CREATE create);
+
+    Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
 
     List<PostResponseDto.READ> getAllPosts();
 
