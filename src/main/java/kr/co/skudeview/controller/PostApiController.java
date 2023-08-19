@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,11 +30,9 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-
     public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+                                           @RequestBody @Valid PostRequestDto.CREATE createParams) {
         Long postId = postService.createPost(userDetails.getUsername(), createParams);
-
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }

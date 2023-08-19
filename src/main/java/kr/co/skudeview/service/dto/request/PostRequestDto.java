@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,10 +28,6 @@ public class PostRequestDto {
         private Integer likeCount;
 
         private Integer viewCount;
-
-        private Integer fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
-
-        private MultipartFile postFile;
     }
 
     @Getter
