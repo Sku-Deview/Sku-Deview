@@ -18,7 +18,7 @@ public class PostRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CREATE {
-        private String memberEmail;
+
 
         private String title;
 
@@ -40,7 +40,7 @@ public class PostRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UPDATE {
-        private Long postId;
+
 
         private String title;
 

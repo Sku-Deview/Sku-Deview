@@ -6,9 +6,12 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.PostService;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,8 +31,11 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-    public ResponseFormat<Long> createPost(@RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-        Long postId = postService.createPost(createParams);
+
+    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+        Long postId = postService.createPost(userDetails.getUsername(), createParams);
+
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }
@@ -42,8 +48,10 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
     @PatchMapping("/post/{id}")
-    public ResponseFormat<Long> updatePost(@PathVariable Long id, @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
-        Long postId = postService.updatePost(id, updateParams);
+    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @PathVariable Long id,
+                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+        Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
     }
@@ -105,5 +113,8 @@ public class PostApiController {
     public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@RequestBody @Valid PostRequestDto.CONDITION condition, Pageable pageable) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(condition, pageable));
     }
+
+
+
 
 }

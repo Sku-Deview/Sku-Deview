@@ -40,8 +40,8 @@ public class MessageServiceImpl implements MessageService {
     // 한 명의 유저가 받은 모든 메시지
     @Transactional(readOnly = true)
     @Override
-    public List<MessageRequestDto.CREATE> getReceivedMessages(MessageRequestDto.READ read) {
-        Member findMember = memberRepository.findMemberByNicknameAndDeleteAtFalse(read.getNickName()).get();
+    public List<MessageRequestDto.CREATE> getReceivedMessages(String email) {
+        Member findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email).get();
         List<Message> messages = messageRepository.findAllByReceiver_Nickname(findMember.getNickname());
         List<MessageRequestDto.CREATE> messageDtos = new ArrayList<>();
         for (Message message : messages) {
@@ -55,9 +55,9 @@ public class MessageServiceImpl implements MessageService {
     // 받은 편지 삭제(상대방으로부터 받은)
     @Transactional
     @Override
-    public Long deleteMessageByReceiver(Long messageId, MessageRequestDto.READ read) {
+    public Long deleteMessageByReceiver(Long messageId, String email) {
         Message message = messageRepository.findById(messageId).get();
-        Member member = memberRepository.findMemberByNicknameAndDeleteAtFalse(read.getNickName()).get();
+        Member member = memberRepository.findMemberByEmailAndDeleteAtFalse(email).get();
 
         if (member.getNickname() == message.getSender().getNickname()) {    //상대방의 닉네임과 messageId 체크 후
             message.deleteByReceiver(); //받은 사람에게 메시지 삭제
@@ -68,8 +68,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MessageRequestDto.CREATE> getSendMessages(MessageRequestDto.READ read) {
-        Member findMember = memberRepository.findMemberByNicknameAndDeleteAtFalse(read.getNickName()).get();
+    public List<MessageRequestDto.CREATE> getSendMessages(String email) {
+        Member findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email).get();
         List<Message> messages = messageRepository.findAllBySender_Nickname(findMember.getNickname());
         List<MessageRequestDto.CREATE> messageDtos = new ArrayList<>();
         for (Message message : messages) {
@@ -83,9 +83,9 @@ public class MessageServiceImpl implements MessageService {
     //보낸 편지 삭제
     @Transactional
     @Override
-    public Long deleteMessageBySender(Long messageId, MessageRequestDto.READ read) {
+    public Long deleteMessageBySender(Long messageId, String email) {
         Message message = messageRepository.findById(messageId).get();
-        Member member = memberRepository.findMemberByNicknameAndDeleteAtFalse(read.getNickName()).get();
+        Member member = memberRepository.findMemberByEmailAndDeleteAtFalse(email).get();
 
         if (member.getNickname() == message.getSender().getNickname()) {    //sender의 닉네임과 messageId 체크 후
             message.deleteBySender(); //보낸 사람에게 메시지 삭제

@@ -15,16 +15,16 @@ public interface MessageService {
     MessageRequestDto.CREATE createMessage(MessageRequestDto.CREATE create);
 
     // 받은 편지함 불러오기
-    List<MessageRequestDto.CREATE> getReceivedMessages(MessageRequestDto.READ read);
+    List<MessageRequestDto.CREATE> getReceivedMessages(String email);
 
     //받은 편지 삭제
-    Long deleteMessageByReceiver(Long messageId, MessageRequestDto.READ read);
+    Long deleteMessageByReceiver(Long messageId, String email);
 
     //보낸 편지함 불러오기
-    List<MessageRequestDto.CREATE> getSendMessages(MessageRequestDto.READ read);
+    List<MessageRequestDto.CREATE> getSendMessages(String email);
 
     //보낸 편지 삭제
-    Long deleteMessageBySender(Long messageId, MessageRequestDto.READ read);
+    Long deleteMessageBySender(Long messageId, String email);
 
 
 }

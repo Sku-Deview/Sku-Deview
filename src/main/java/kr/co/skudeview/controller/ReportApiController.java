@@ -6,7 +6,10 @@ import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.ReportService;
 import kr.co.skudeview.service.dto.request.ReportRequestDto;
 import kr.co.skudeview.service.dto.response.ReportResponseDto;
+import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +45,10 @@ public class ReportApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
     @PostMapping("/report/{postId}")
-    public ResponseFormat<Void> createReport(@PathVariable Long postId, @RequestBody @Valid ReportRequestDto.CREATE create) {
-        reportService.createReport(postId, create);
+    public ResponseFormat<Void> createReport(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @PathVariable Long postId,
+                                             @RequestBody @Valid ReportRequestDto.CREATE create) {
+        reportService.createReport(userDetails.getUsername(), postId, create);
 
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }

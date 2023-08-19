@@ -22,8 +22,8 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     @Transactional
-    public void createUniversity(Long memberId, UniversityDto universityDto) {
-        Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
+    public void createUniversity(String email, UniversityDto universityDto) {
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
         UniversityDto findDto = getUniversityMajor(universityDto);
         findMember.get().changeUnivMajor(findDto.getUnivName(), findDto.getMajor());
     }
@@ -35,7 +35,6 @@ public class UniversityServiceImpl implements UniversityService {
         String univName = universityDto.getUnivName();
         Optional<University> findUnivMajor = universityRepository.findByUnivNameAndMajor(univName, major);
         return universityDto.builder()
-                .universityId(findUnivMajor.get().getId())
                 .univName(findUnivMajor.get().getUnivName())
                 .major(findUnivMajor.get().getMajor())
                 .build();
@@ -43,8 +42,8 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     @Transactional
-    public void updateUniversity(Long memberId, UniversityDto universityDto) {
-        Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
+    public void updateUniversity(String email, UniversityDto universityDto) {
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
         UniversityDto findDto = getUniversityMajor(universityDto);
 
         findMember.get().changeUnivMajor(findDto.getUnivName(), findDto.getMajor());
@@ -52,8 +51,8 @@ public class UniversityServiceImpl implements UniversityService {
 
     @Override
     @Transactional
-    public void deleteUniversity(Long memberId) {
-        Optional<Member> findMember = memberRepository.findMemberByIdAndDeleteAtFalse(memberId);
+    public void deleteUniversity(String email) {
+        Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
         findMember.get().deleteUnivMajor();
     }
 

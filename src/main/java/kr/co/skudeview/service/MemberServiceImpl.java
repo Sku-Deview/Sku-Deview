@@ -156,20 +156,22 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void updateMember(MemberRequestDto.UPDATE update) {
-        final Optional<Member> member = memberRepository.findMemberByIdAndDeleteAtFalse(update.getMemberId());
+    public void updateMember(String email, MemberRequestDto.UPDATE update) {
+        final Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         isMember(member);
-        isTelephone(update.getTelephone());
+        //isTelephone(update.getTelephone());
         isNickname(update.getNickname());
 
         final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());
 
-        member.get().updateMember(update);
+        member.get().updateMember(encodingPasswordBuild(update));
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
     }
+
+
 
     /*
     update를 요청할 때, 기존의 연관관계를 지정한 곳의 기존의 memberSkill을 모두 deleteAt = false로 변경
@@ -316,6 +318,18 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
     }
-
+    private MemberRequestDto.UPDATE encodingPasswordBuild(MemberRequestDto.UPDATE update) {
+        MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
+                .password(passwordEncoder.encode(update.getPassword()))
+                .address(update.getAddress())
+                .role(update.getRole())
+                .name(update.getName())
+                .nickname(update.getNickname())
+                .telephone(update.getTelephone())
+                .birthDate(update.getBirthDate())
+                .gender(update.getGender())
+                .build();
+        return encoding;
+    }
 
 }

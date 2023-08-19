@@ -11,11 +11,12 @@ import java.util.List;
 
 public interface PostService {
 
-    Long createPost(PostRequestDto.CREATE create) throws IOException;
+
+    Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
 
     List<PostResponseDto.READ> getAllPosts();
 
-    Long updatePost(final Long postId, final PostRequestDto.UPDATE update);
+    Long updatePost(String email, final Long postId, final PostRequestDto.UPDATE update);
 
     Long deletePost(final Long postId);
 
@@ -24,6 +25,10 @@ public interface PostService {
     List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition);
 
     Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable);
+
+    void updateCntToRedis(final Long postId, String hashKey);
+
+    void deleteCntToRedis();
 
 //    default Post toEntity(PostRequestDto.CREATE create, Member findMember) {
 //        return Post.builder()
