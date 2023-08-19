@@ -67,4 +67,7 @@ public class Post extends BaseEntity {
         this.viewCount = viewCnt.intValue();
     }
 
+    public void addLikeCount(Long likeCnt) {
+        this.likeCount = likeCnt.intValue();
+    }
 }
