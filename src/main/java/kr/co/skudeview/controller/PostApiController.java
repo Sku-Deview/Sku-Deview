@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class PostApiController {
      */
     @PostMapping("/post")
     public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @RequestBody @Valid PostRequestDto.CREATE createParams) {
+                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
         Long postId = postService.createPost(userDetails.getUsername(), createParams);
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
@@ -110,8 +111,6 @@ public class PostApiController {
     public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@RequestBody @Valid PostRequestDto.CONDITION condition, Pageable pageable) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(condition, pageable));
     }
-
-
 
 
 }
