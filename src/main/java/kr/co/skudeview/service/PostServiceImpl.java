@@ -2,21 +2,25 @@ package kr.co.skudeview.service;
 
 import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Post;
+import kr.co.skudeview.domain.PostFile;
 import kr.co.skudeview.domain.enums.PostCategory;
 import kr.co.skudeview.infra.exception.NotFoundException;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.repository.MemberRepository;
+import kr.co.skudeview.repository.PostFileRepository;
 import kr.co.skudeview.repository.PostRepository;
 import kr.co.skudeview.repository.search.PostSearchRepository;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,20 +36,38 @@ public class PostServiceImpl implements PostService {
 
     private final PostSearchRepository postSearchRepository;
 
+    private final PostFileRepository postFileRepository;
+
     @Override
     @Transactional
-    public Long createPost(PostRequestDto.CREATE create) {
+    public Long createPost(PostRequestDto.CREATE create) throws IOException {
         Optional<Member> findMember = memberRepository.findMemberByEmailAndDeleteAtFalse(create.getMemberEmail());
 
         isMember(findMember);
 
         isPostCategory(String.valueOf(create.getPostCategory()));
 
-        Post post = toEntity(create, findMember.get());
+        if (create.getPostFile().isEmpty()) {
+            //첨부 파일 없음
+            Post post = toCreateEntity(create, findMember.get());
+            postRepository.save(post);
+            return post.getId();
+        } else {
+            //첨부 파일 있음
+            MultipartFile postFile = create.getPostFile();
+            String originalFilename = postFile.getOriginalFilename();
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
+            String savePath = "C:/deview_img/" + storedFileName;
+            postFile.transferTo(new File(savePath)); //IO Exception
+            Post postEntity = toCreateFileEntity(create, findMember.get());
+            Long savedId = postRepository.save(postEntity).getId();
+            Post post = postRepository.findById(savedId).get();
 
-        postRepository.save(post);
+            PostFile postFileEntity = toPostFileEntity(originalFilename, storedFileName, post);
+            postFileRepository.save(postFileEntity);
+            return post.getId();
+        }
 
-        return post.getId();
     }
 
     @Override
@@ -99,9 +121,7 @@ public class PostServiceImpl implements PostService {
 
         post.get().increaseViewCount();
 
-        PostResponseDto.READ dto = toDto(post.get());
-
-        return dto;
+        return toDto(post.get());
     }
 
     @Override
@@ -144,19 +164,48 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostResponseDto.READ toDto(Post post) {
-        PostResponseDto.READ dto = PostResponseDto.READ.builder()
-                .postId(post.getId())
-                .memberEmail(post.getMember().getEmail())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .postCategory(post.getPostCategory())
-                .viewCount(post.getViewCount())
-                .likeCount(post.getLikeCount())
-                .build();
-        return dto;
+        if (post.getFileAttached() == 0) {
+            return PostResponseDto.READ.builder()
+                    .postId(post.getId())
+                    .memberEmail(post.getMember().getEmail())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postCategory(post.getPostCategory())
+                    .viewCount(post.getViewCount())
+                    .likeCount(post.getLikeCount())
+                    .fileAttached(post.getFileAttached())
+                    .build();
+
+        } else {
+            return PostResponseDto.READ.builder()
+                    .postId(post.getId())
+                    .memberEmail(post.getMember().getEmail())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .postCategory(post.getPostCategory())
+                    .viewCount(post.getViewCount())
+                    .likeCount(post.getLikeCount())
+                    .fileAttached(post.getFileAttached())
+                    .originalFileName(post.getPostFileList().get(0).getOriginalFileName())
+                    .storedFileName(post.getPostFileList().get(0).getStoredFileName())
+                    .build();
+        }
+
     }
 
-    private static Post toEntity(PostRequestDto.CREATE create, Member member) {
+//    private static Post toEntity(PostRequestDto.CREATE create, Member member) {
+//        Post post = Post.builder()
+//                .member(member)
+//                .title(create.getTitle())
+//                .content(create.getContent())
+//                .likeCount(create.getLikeCount())
+//                .viewCount(create.getViewCount())
+//                .postCategory(create.getPostCategory())
+//                .build();
+//        return post;
+//    }
+
+    private static Post toCreateEntity(PostRequestDto.CREATE create, Member member) {
         Post post = Post.builder()
                 .member(member)
                 .title(create.getTitle())
@@ -164,7 +213,31 @@ public class PostServiceImpl implements PostService {
                 .likeCount(create.getLikeCount())
                 .viewCount(create.getViewCount())
                 .postCategory(create.getPostCategory())
+                .fileAttached(0)
                 .build();
         return post;
+
+    }
+
+    private static Post toCreateFileEntity(PostRequestDto.CREATE create, Member member) {
+        Post post = Post.builder()
+                .member(member)
+                .title(create.getTitle())
+                .content(create.getContent())
+                .likeCount(create.getLikeCount())
+                .viewCount(create.getViewCount())
+                .postCategory(create.getPostCategory())
+                .fileAttached(1)
+                .build();
+        return post;
+
+    }
+
+    private static PostFile toPostFileEntity(String originalFileName, String storedFileName, Post post) {
+        return PostFile.builder()
+                .originalFileName(originalFileName)
+                .storedFileName(storedFileName)
+                .post(post)
+                .build();
     }
 }

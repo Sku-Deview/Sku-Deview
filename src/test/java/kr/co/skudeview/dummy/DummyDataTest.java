@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -192,7 +193,7 @@ public class DummyDataTest {
     }
 
     @Test
-    void createPost() {
+    void createPost() throws IOException {
         for (int i = 1; i < 100; i++) {
             PostRequestDto.CREATE create = PostRequestDto.CREATE.builder()
                     .memberEmail("test" + (i % 10 + 1) + "@test.com")

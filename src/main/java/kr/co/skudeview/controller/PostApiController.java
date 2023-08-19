@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-    public ResponseFormat<Long> createPost(@RequestBody @Valid PostRequestDto.CREATE createParams) {
+    public ResponseFormat<Long> createPost(@RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
         Long postId = postService.createPost(createParams);
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
