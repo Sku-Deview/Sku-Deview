@@ -12,12 +12,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class PostApiController {
@@ -37,6 +40,7 @@ public class PostApiController {
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }
+
 
     /**
      * Update Post API
@@ -72,10 +76,17 @@ public class PostApiController {
      *
      * @return ResponseStatus.SUCCESS_OK + List<PostResponseDto.READ>
      */
+//    @GetMapping("/post")
+//    public ResponseFormat<List<PostResponseDto.READ>> getAllPosts() {
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getAllPosts());
+//    }
     @GetMapping("/post")
-    public ResponseFormat<List<PostResponseDto.READ>> getAllPosts() {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getAllPosts());
+    public String getAllPosts(Model model) {
+        List<PostResponseDto.READ> allPosts = postService.getAllPosts();
+        model.addAttribute("postList",allPosts);
+        return "list";
     }
+
 
     /**
      * Read Post API - postId 값으로 단일 조회

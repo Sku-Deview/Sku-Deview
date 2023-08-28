@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
 
         isPostCategory(String.valueOf(create.getPostCategory()));
 
-        if (create.getPostFile().isEmpty()) {
+        if (create.getPostFile()==null) {
             //첨부 파일 없음
             Post post = toCreateEntity(create, findMember.get());
             postRepository.save(post);
