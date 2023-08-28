@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 //@RestController
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class PostApiController {
@@ -81,10 +81,8 @@ public class PostApiController {
 //        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getAllPosts());
 //    }
     @GetMapping("/post")
-    public String getAllPosts(Model model) {
-        List<PostResponseDto.READ> allPosts = postService.getAllPosts();
-        model.addAttribute("postList",allPosts);
-        return "list";
+    public List<PostResponseDto.READ> getAllPosts() {
+        return  postService.getAllPosts();
     }
 
 
