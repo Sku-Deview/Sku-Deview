@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
 
         isPostCategory(String.valueOf(create.getPostCategory()));
 
-        if (create.getPostFile().isEmpty()) {
+        if (create.getPostFile()==null) {
             //첨부 파일 없음
             Post post = toCreateEntity(create, findMember.get());
             postRepository.save(post);
@@ -253,6 +253,7 @@ public class PostServiceImpl implements PostService {
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
                     .fileAttached(post.getFileAttached())
+                    .regDate(post.getRegDate())
                     .build();
 
         } else {
@@ -267,6 +268,7 @@ public class PostServiceImpl implements PostService {
                     .fileAttached(post.getFileAttached())
                     .originalFileName(post.getPostFileList().get(0).getOriginalFileName())
                     .storedFileName(post.getPostFileList().get(0).getStoredFileName())
+                    .regDate(post.getRegDate())
                     .build();
         }
 
