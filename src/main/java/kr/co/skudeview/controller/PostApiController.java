@@ -92,9 +92,13 @@ public class PostApiController {
      * @param id
      * @return ResponseStatus.SUCCESS_OK + PostResponseDto.READ
      */
+//    @GetMapping("/post/{id}")
+//    public ResponseFormat<PostResponseDto.READ> getPostDetail(@PathVariable Long id) {
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostDetail(id));
+//    }
     @GetMapping("/post/{id}")
-    public ResponseFormat<PostResponseDto.READ> getPostDetail(@PathVariable Long id) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostDetail(id));
+    public PostResponseDto.READ getPostDetail(@PathVariable Long id) {
+        return postService.getPostDetail(id);
     }
 
     /**
