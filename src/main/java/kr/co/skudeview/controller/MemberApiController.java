@@ -40,9 +40,13 @@ public class MemberApiController {
      * @param login
      * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
      */
+//    @PostMapping("/login")
+//    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
+//    }
     @PostMapping("/login")
-    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
+    public MemberResponseDto.READ loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
+        return memberService.loginMember(login);
     }
 
     /**
