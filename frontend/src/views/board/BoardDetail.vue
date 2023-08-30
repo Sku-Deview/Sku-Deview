@@ -3,7 +3,10 @@
     <div class="common-buttons">
       <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnUpdate">수정</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-red" v-on:click="fnDelete">삭제</button>&nbsp;
-      <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnList">목록</button>
+      <button type="button" class="w3-button w3-round w3-green" v-on:click="fnList">목록</button>
+    </div>
+    <div class="board-category">
+      <h2>[{{ category }}]</h2>
     </div>
     <div class="board-contents">
       <h3>{{ title }}</h3>
@@ -25,7 +28,7 @@ export default {
     return {
       requestBody: this.$route.query,
       idx: this.$route.query.idx,
-
+      category:'',
       title: '',
       author: '',
       contents: '',
@@ -41,9 +44,10 @@ export default {
         params: this.requestBody
       }).then((res) => {
         this.title = res.data.title
-        this.author = res.data.memberEmail
+        this.author = res.data.memberNickname
         this.contents = res.data.content
         this.created_at = res.data.regDate
+        this.category = res.data.postCategory
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
