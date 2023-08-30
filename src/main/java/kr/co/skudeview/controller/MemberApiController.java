@@ -10,8 +10,9 @@ import kr.co.skudeview.service.dto.response.MemberResponseDto;
 import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,10 +31,15 @@ public class MemberApiController {
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
+//    @PostMapping("/member")
+//    public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
+//        memberService.createMember(create);
+//        return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
+//    }
     @PostMapping("/member")
-    public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
+    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
         memberService.createMember(create);
-        return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
+        return  new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

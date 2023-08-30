@@ -42,7 +42,7 @@ export default {
             params: this.requestBody
         }).then((res) => {
           this.title = res.data.title
-          this.author = res.data.memberEmail
+          this.author = res.data.memberNickname
           this.contents = res.data.content
           this.created_at = res.data.regDate
         }).catch((err) => {

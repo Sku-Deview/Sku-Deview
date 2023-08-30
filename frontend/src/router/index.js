@@ -4,6 +4,7 @@ import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from "@/views/board/BoardDetail.vue";
 import BoardWrite from "@/views/board/BoardWrite.vue";
 import Login from "@/views/common/Login.vue";
+import Signup from "@/views/common/Signup.vue";
 
 const routes = [
     {
@@ -15,6 +16,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login  //로그인 컴포넌트 추가
+    },
+    {
+        path: '/signup',
+        name: 'Signup',
+        component: Signup  //로그인 컴포넌트 추가
     },
     {
         path: '/about',
