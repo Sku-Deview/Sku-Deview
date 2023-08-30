@@ -21,6 +21,8 @@ public class PostResponseDto {
 
         private String memberEmail;
 
+        private String memberNickname;
+
         private String title;
 
         private String content;

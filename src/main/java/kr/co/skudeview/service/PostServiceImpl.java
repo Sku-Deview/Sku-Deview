@@ -246,7 +246,8 @@ public class PostServiceImpl implements PostService {
         if (post.getFileAttached() == 0) {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
-                    .memberEmail(post.getMember().getNickname())
+                    .memberEmail(post.getMember().getEmail())
+                    .memberNickname(post.getMember().getNickname())
                     .title(post.getTitle())
                     .content(post.getContent())
                     .postCategory(post.getPostCategory())
@@ -260,6 +261,7 @@ public class PostServiceImpl implements PostService {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
                     .memberEmail(post.getMember().getNickname())
+                    .memberNickname(post.getMember().getNickname())
                     .title(post.getTitle())
                     .content(post.getContent())
                     .postCategory(post.getPostCategory())

@@ -16,7 +16,7 @@
       <tr v-for="(item, idx) in list" :key="idx">
         <td>{{ item.postId }}</td>
         <td><a v-on:click="fnView(`${item.postId}`)">{{ item.title }}</a></td>
-        <td>{{ item.memberEmail }}</td>
+        <td>{{ item.memberNickname }}</td>
         <td>{{ item.regDate }}</td>
       </tr>
       </tbody>
