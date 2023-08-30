@@ -1,5 +1,8 @@
 # Sku-Deview
 
+- 회의록 -> https://www.notion.so/adcdbd464b774a20b51f38f624f7fb14
+
+
 - 개발 환경
     - Java 17
     - Springboot 3.0.6
