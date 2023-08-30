@@ -4,12 +4,18 @@
       <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnList">목록</button>
     </div>
-    <div class="board-contents">
-      <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
-      <input type="text" v-model="author" class="w3-input w3-border" placeholder="작성자를 입력해주세요." v-if="idx === undefined">
+    <div>
+      <hr>
+      <label>Category</label>
+      <b-form-select v-model="postCategory" :options="options" size="sm" class="mt-3" ></b-form-select>
+      <hr>
+
     </div>
     <div class="board-contents">
-      <textarea id="" cols="30" rows="10" v-model="contents" class="w3-input w3-border" style="resize: none;">
+      <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
+    </div>
+    <div class="board-contents">
+      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;">
       </textarea>
     </div>
     <div class="common-buttons">
@@ -27,9 +33,15 @@ export default {
       idx: this.$route.query.idx,
 
       title: '',
-      author: '',
-      contents: '',
-      created_at: ''
+      content: '',
+      created_at: '',
+      postCategory:'',
+      options: [
+        { value: 'NOTICE', text: '공지사항' },
+        { value: 'QNA', text: '질문' },
+        { value: 'FREE', text: '자유' },
+        { value: 'INFO', text: '정보' },
+          ]
     }
   },
   mounted() {
@@ -40,6 +52,7 @@ export default {
       if (this.idx !== undefined) {
         this.$axios.get('/api/v1/post/' + this.idx,{
             params: this.requestBody
+
         }).then((res) => {
           this.title = res.data.title
           this.author = res.data.memberNickname
@@ -65,20 +78,23 @@ export default {
       })
     },
     fnSave() {
-      let apiUrl = '/api/v1/post'
+      // let apiUrl = '/api/v1/post'
       this.form = {
-        "idx": this.idx,
         "title": this.title,
-        "contents": this.contents,
-        "author": this.author
+        "content": this.content,
+        "postCategory": this.postCategory,
       }
 
       if (this.idx === undefined) {
         //INSERT
-        this.$axios.post(apiUrl, this.form)
+        this.$axios.post("/api/v1/post",this.form, {
+          headers:{
+            Authorization :`Bearer ${ localStorage.getItem('user_token')}`
+          }
+        })
             .then((res) => {
               alert('글이 저장되었습니다.')
-              this.fnView(res.data.postId)
+              this.fnView(res.data)
             }).catch((err) => {
           if (err.message.indexOf('Network Error') > -1) {
             alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')

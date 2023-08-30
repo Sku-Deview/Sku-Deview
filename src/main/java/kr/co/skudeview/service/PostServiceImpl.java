@@ -292,8 +292,8 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .title(create.getTitle())
                 .content(create.getContent())
-                .likeCount(create.getLikeCount())
-                .viewCount(create.getViewCount())
+                .likeCount(0)
+                .viewCount(0)
                 .postCategory(create.getPostCategory())
                 .fileAttached(0)
                 .build();
@@ -304,8 +304,8 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .title(create.getTitle())
                 .content(create.getContent())
-                .likeCount(create.getLikeCount())
-                .viewCount(create.getViewCount())
+                .likeCount(0)
+                .viewCount(0)
                 .postCategory(create.getPostCategory())
                 .fileAttached(1)
                 .build();

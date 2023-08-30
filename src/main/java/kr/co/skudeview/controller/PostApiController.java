@@ -34,11 +34,17 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+//        Long postId = postService.createPost(userDetails.getUsername(), createParams);
+//
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
+//    }
+    public Long createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                            @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-        Long postId = postService.createPost(userDetails.getUsername(), createParams);
+        return   postService.createPost(userDetails.getUsername(), createParams);
 
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
+
     }
 
 
