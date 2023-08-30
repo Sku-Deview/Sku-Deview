@@ -106,6 +106,12 @@ public class MemberServiceImpl implements MemberService {
 
         isPassword(login.getPassword(), member.get().getPassword());
 
+        TokenDto tokenDto = TokenDto.builder()
+                .accessToken(jwtProvider.createToken(member.get().getEmail(),
+                        String.valueOf(member.get().getRole())))
+                .refreshToken(createRefreshToken(member.get()))
+                .build();
+
         return MemberResponseDto.READ.builder()
                 .memberId(member.get().getId())
                 .email(member.get().getEmail())
@@ -115,15 +121,10 @@ public class MemberServiceImpl implements MemberService {
                 .address(member.get().getAddress())
                 .birthDate(member.get().getBirthDate())
                 .gender(String.valueOf(member.get().getGender()))
-                .role(String.valueOf(member.get().getGender()))
+                .role(String.valueOf(member.get().getRole()))
                 .skillName(getSkillsNameByMember(member.get()))
-                .token(TokenDto.builder()
-                        .accessToken(jwtProvider.createToken(member.get().getEmail(),
-                                String.valueOf(member.get().getRole())))
-                        .refreshToken(createRefreshToken(member.get()))
-                        .build())
+                .accessToken(tokenDto.getAccessToken())
                 .build();
-
     }
 
     @Override
