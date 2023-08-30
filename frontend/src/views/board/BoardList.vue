@@ -7,6 +7,7 @@
       <thead>
       <tr>
         <th>No</th>
+        <th>Category</th>
         <th>제목</th>
         <th>작성자</th>
         <th>등록일시</th>
@@ -15,6 +16,7 @@
       <tbody>
       <tr v-for="(item, idx) in list" :key="idx">
         <td>{{ item.postId }}</td>
+        <td>{{item.postCategory}}</td>
         <td><a v-on:click="fnView(`${item.postId}`)">{{ item.title }}</a></td>
         <td>{{ item.memberNickname }}</td>
         <td>{{ item.regDate }}</td>
