@@ -260,7 +260,7 @@ public class PostServiceImpl implements PostService {
         } else {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
-                    .memberEmail(post.getMember().getNickname())
+                    .memberEmail(post.getMember().getEmail())
                     .memberNickname(post.getMember().getNickname())
                     .title(post.getTitle())
                     .content(post.getContent())

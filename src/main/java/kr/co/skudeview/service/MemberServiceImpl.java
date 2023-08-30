@@ -265,7 +265,7 @@ public class MemberServiceImpl implements MemberService {
                 .address(create.getAddress())
                 .birthDate(create.getBirthDate())
                 .gender(Gender.valueOf(create.getGender()))
-                .role(Role.valueOf(create.getRole()))
+                .role(Role.ROLE_USER)
                 .memberSkills(Collections.emptyList())
                 .build();
     }
