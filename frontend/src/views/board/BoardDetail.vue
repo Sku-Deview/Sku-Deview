@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="board-contents">
-      <span>{{ contents }}</span>
+      <span>{{ content }}</span>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
       category:'',
       title: '',
       author: '',
-      contents: '',
+      content: '',
       created_at: ''
     }
   },
@@ -45,7 +45,7 @@ export default {
       }).then((res) => {
         this.title = res.data.title
         this.author = res.data.memberNickname
-        this.contents = res.data.content
+        this.content = res.data.content
         this.created_at = res.data.regDate
         this.category = res.data.postCategory
       }).catch((err) => {

@@ -1,11 +1,6 @@
 <template>
   <div class="board-detail">
-    <div class="common-buttons">
-      <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;
-      <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnList">목록</button>
-    </div>
     <div>
-      <hr>
       <label>Category</label>
       <b-form-select v-model="postCategory" :options="options" size="sm" class="mt-3" ></b-form-select>
       <hr>
@@ -56,7 +51,7 @@ export default {
         }).then((res) => {
           this.title = res.data.title
           this.author = res.data.memberNickname
-          this.contents = res.data.content
+          this.content = res.data.content
           this.created_at = res.data.regDate
         }).catch((err) => {
           console.log(err)
@@ -102,10 +97,14 @@ export default {
         })
       } else {
         //UPDATE
-        this.$axios.patch(apiUrl, this.form)
+        this.$axios.patch("/api/v1/post/"+this.idx, this.form,{
+          headers:{
+            Authorization :`Bearer ${ localStorage.getItem('user_token')}`
+          }
+        })
             .then((res) => {
               alert('글이 저장되었습니다.')
-              this.fnView(res.data.idx)
+              this.fnView(res.data)
             }).catch((err) => {
           if (err.message.indexOf('Network Error') > -1) {
             alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')

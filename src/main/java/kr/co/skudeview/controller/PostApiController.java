@@ -8,6 +8,7 @@ import kr.co.skudeview.service.dto.request.PostRequestDto;
 import kr.co.skudeview.service.dto.response.PostResponseDto;
 import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-//@RestController
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -41,8 +42,8 @@ public class PostApiController {
 //        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
 //    }
     public Long createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-        return   postService.createPost(userDetails.getUsername(), createParams);
+                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+        return postService.createPost(userDetails.getUsername(), createParams);
 
 
     }
@@ -55,13 +56,20 @@ public class PostApiController {
      * @param updateParams
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
+//    @PatchMapping("/post/{id}")
+//    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                                           @PathVariable Long id,
+//                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+//        Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);
+//
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
+//    }
     @PatchMapping("/post/{id}")
-    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @PathVariable Long id,
-                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
-        Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);
+    public Long updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
+                           @PathVariable Long id,
+                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
 
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
+        return postService.updatePost(userDetails.getUsername(), id, updateParams);
     }
 
     /**
@@ -88,7 +96,7 @@ public class PostApiController {
 //    }
     @GetMapping("/post")
     public List<PostResponseDto.READ> getAllPosts() {
-        return  postService.getAllPosts();
+        return postService.getAllPosts();
     }
 
 
