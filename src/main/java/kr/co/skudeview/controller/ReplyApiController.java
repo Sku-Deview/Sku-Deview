@@ -75,9 +75,13 @@ public class ReplyApiController {
      * @param postId 게시글 PK
      * @return List<ReplyResponseDto.READ>
      */
+//    @GetMapping("/reply/{postId}")
+//    public ResponseFormat<List<ReplyResponseDto.READ>> getReplies(@PathVariable Long postId) {
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
+//    }
     @GetMapping("/reply/{postId}")
-    public ResponseFormat<List<ReplyResponseDto.READ>> getReplies(@PathVariable Long postId) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
+    public List<ReplyResponseDto.READ> getReplies(@PathVariable Long postId) {
+        return  replyService.getAllReplies(postId);
     }
 
     /**

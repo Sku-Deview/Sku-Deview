@@ -128,9 +128,10 @@ public class ReplyServiceImpl implements ReplyService {
     private ReplyResponseDto.READ toDto(Reply reply) {
         ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
                 .replyId(reply.getId())
-                .memberEmail(reply.getMember().getEmail())
+                .memberNickname(reply.getMember().getNickname())
                 .postId(reply.getPost().getId())
                 .content(reply.getContent())
+                .regDate(reply.getRegDate())
                 .likeCount(reply.getLikeCount())
                 .build();
         return dto;

@@ -12,10 +12,25 @@
 
 .board-contents {
     padding: 12px 8px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid black;
+}
+.board-category{
+    display: inline;
 }
 
 .common-buttons {
     padding: 8px;
     text-align: right;
+}
+.create-at{
+    padding: 4px;
+    text-align: right;
+}
+
+.reply-detail{
+
+    padding: 20px;
+    border: 1px solid black;
+    width: 100%;
+    margin-top: 8px;
 }
