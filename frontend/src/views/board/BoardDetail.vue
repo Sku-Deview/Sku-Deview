@@ -16,10 +16,12 @@
     <hr>
 
     <div v-for="(reply, idx) in replyList" :key="idx">
+      <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
       <div class="reply-detail">
         [{{ reply.memberNickname }}]
         <div class="create-at">
-          <span><td>{{ reply.regDate }}</td></span>
+
+          <span>{{ reply.regDate }}</span>
         </div>
         <p>
           {{ reply.content }}
@@ -65,23 +67,17 @@ export default {
         }
       })
     },
-    fnGetReply() {
-      this.$axios.get('/api/v1/reply/' + this.idx, {
-        params: this.requestBody
-      }).then((res) => {
-        this.replyList = res.data
-      }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-        }
-      })
-    },
+
     fnList() {
       delete this.requestBody.idx
       this.$router.push({
         path: './list',
         query: this.requestBody
       })
+    },
+    fnPost(postId) {
+      this.requestBody.idx = postId
+      this.$router.go(this.$router.currentRoute)
     },
     fnUpdate() {
       this.$router.push({
@@ -99,11 +95,35 @@ export default {
           }).catch((err) => {
         console.log(err);
       })
-    }
+    },
+    fnGetReply() {
+      this.$axios.get('/api/v1/reply/' + this.idx, {
+        params: this.requestBody
+      }).then((res) => {
+        this.replyList = res.data
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        }
+      })
+    },
+    removeReply(replyId, postId) {
+      this.$axios.delete(`/api/v1/reply/${postId}/${replyId}`, {
+        headers:{
+          Authorization :`Bearer ${ localStorage.getItem('user_token')}`
+        }
+      }).then(() => {
+        alert('삭제되었습니다.')
+        this.fnPost(postId);
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        }
+      })
+    },
   }
 }
 </script>
 <style scoped>
-
 
 </style>
