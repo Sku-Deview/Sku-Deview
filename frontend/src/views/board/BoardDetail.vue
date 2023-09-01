@@ -15,6 +15,15 @@
     </div>
     <hr>
 
+    <div class="reply-contents">
+      <textarea id="" cols="30" rows="10" v-model="reply" class="w3-input w3-border" style="resize: none;">
+      </textarea>
+      <div class="common-buttons">
+        <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="replySave()">댓글 저장</button>&nbsp;
+      </div>
+    </div>
+
+
     <div v-for="(reply, idx) in replyList" :key="idx">
       <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
       <div class="reply-detail">
@@ -44,6 +53,7 @@ export default {
       created_at: '',
       //댓글
       replyList: [],
+      reply: '',
 
     }
   },
@@ -110,13 +120,33 @@ export default {
     removeReply(replyId, postId) {
       if (!confirm("댓글을 삭제하시겠습니까?")) return
       this.$axios.delete(`/api/v1/reply/${postId}/${replyId}`, {
-        headers:{
-          Authorization :`Bearer ${ localStorage.getItem('user_token')}`
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user_token')}`
         }
       }).then(() => {
         alert('삭제되었습니다.')
         this.fnPost(postId);
       }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        }
+      })
+    },
+    replySave() {
+      this.form = {
+        "content": this.reply
+      }
+      console.log(this.form.content)
+      //INSERT
+      this.$axios.post(`/api/v1/reply/` + this.idx, this.form, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user_token')}`
+        }
+      })
+          .then(() => {
+            alert('댓글이 저장되었습니다.')
+            this.fnPost(this.idx);
+          }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
         }
