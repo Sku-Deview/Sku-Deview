@@ -5,7 +5,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
+import axios from './utils/axios'
 import store from "./vuex/store"
 import  {BootstrapVue3} from "bootstrap-vue-3";
 

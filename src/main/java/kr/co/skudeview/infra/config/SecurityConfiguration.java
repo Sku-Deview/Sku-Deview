@@ -42,11 +42,11 @@ public class SecurityConfiguration {
         //authorization
         http
                 .authorizeHttpRequests()
-//                .requestMatchers("/api/v1/login", "api/v1/refresh").permitAll()
-//                .requestMatchers("/api/v1/member").permitAll()
-//                .requestMatchers("/api/v1/post/**").hasAnyRole("USER", "ADMIN", "MANAGER")
-//                .requestMatchers("/api/v1/reply/**").hasAnyRole("USER", "ADMIN", "MANAGER")
-//                .requestMatchers("/api/v1/message/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/login", "api/v1/refresh").permitAll()
+                .requestMatchers("/api/v1/member").permitAll()
+                .requestMatchers("/api/v1/post/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/reply/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/message/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 //.requestMatchers("/api/load").permitAll() //university data
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated();
