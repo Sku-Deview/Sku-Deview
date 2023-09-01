@@ -86,7 +86,7 @@ export default {
       })
     },
     fnDelete() {
-      if (!confirm("삭제하시겠습니까?")) return
+      if (!confirm("게시글을 삭제하시겠습니까?")) return
 
       this.$axios.delete('/api/v1/post/' + this.idx, {})
           .then(() => {
@@ -108,6 +108,7 @@ export default {
       })
     },
     removeReply(replyId, postId) {
+      if (!confirm("댓글을 삭제하시겠습니까?")) return
       this.$axios.delete(`/api/v1/reply/${postId}/${replyId}`, {
         headers:{
           Authorization :`Bearer ${ localStorage.getItem('user_token')}`
