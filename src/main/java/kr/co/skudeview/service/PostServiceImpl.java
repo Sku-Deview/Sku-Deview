@@ -96,7 +96,7 @@ public class PostServiceImpl implements PostService {
 
         post.get().updatePost(update.getTitle(), update.getContent(), update.getPostCategory());
 
-        return postId;
+        return post.get().getId();
     }
 
     @Override

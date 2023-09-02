@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class ReplyResponseDto {
 
     @AllArgsConstructor
@@ -14,13 +16,15 @@ public class ReplyResponseDto {
     public static class READ {
         private Long replyId;
 
-        private String memberEmail;
+        private String memberNickname;
 
         private Long postId;
 
         private String content;
 
         private int likeCount;
+
+        private LocalDateTime regDate;
     }
 
 }

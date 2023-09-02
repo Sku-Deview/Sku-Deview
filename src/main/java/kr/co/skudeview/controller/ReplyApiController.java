@@ -29,12 +29,18 @@ public class ReplyApiController {
      * @param create ReplyRequestDto.Create
      * @return replyId
      */
+//    @PostMapping("/reply/{postId}")
+//    public ResponseFormat<Long> createReply(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                                            @PathVariable Long postId,
+//                                            @RequestBody @Valid ReplyRequestDto.CREATE create) {
+//        Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, replyId);
+//    }
     @PostMapping("/reply/{postId}")
-    public ResponseFormat<Long> createReply(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public Long createReply(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable Long postId,
                                             @RequestBody @Valid ReplyRequestDto.CREATE create) {
-        Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, replyId);
+        return replyService.createReply(userDetails.getUsername(), postId, create);
     }
 
     /**
@@ -75,9 +81,13 @@ public class ReplyApiController {
      * @param postId 게시글 PK
      * @return List<ReplyResponseDto.READ>
      */
+//    @GetMapping("/reply/{postId}")
+//    public ResponseFormat<List<ReplyResponseDto.READ>> getReplies(@PathVariable Long postId) {
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
+//    }
     @GetMapping("/reply/{postId}")
-    public ResponseFormat<List<ReplyResponseDto.READ>> getReplies(@PathVariable Long postId) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
+    public List<ReplyResponseDto.READ> getReplies(@PathVariable Long postId) {
+        return  replyService.getAllReplies(postId);
     }
 
     /**
