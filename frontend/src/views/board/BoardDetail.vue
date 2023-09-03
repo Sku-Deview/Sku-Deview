@@ -30,9 +30,11 @@
       <div class="reply-detail">
         [{{ reply.memberNickname }}]
         <div class="create-at">
-
           <span>{{ reply.regDate }}</span>
         </div>
+        <p>
+          {{ reply.content }}
+        </p>
       </div>
     </div>
   </div>
