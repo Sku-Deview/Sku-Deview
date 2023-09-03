@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,7 +57,7 @@ public class ReplyServiceImpl implements ReplyService {
         List<Reply> list = replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId);
 
         return list.stream()
-                .map(this::toDto)
+                .map(this::toReadDto)
                 .collect(Collectors.toList());
     }
 
@@ -67,20 +66,8 @@ public class ReplyServiceImpl implements ReplyService {
         final List<Reply> posts = replySearchRepository.find(condition);
 
         return posts.stream()
-                .map(this::toDto)
+                .map(this::toReadDto)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public Long updateReply(String email, Long replyId, ReplyRequestDto.UPDATE update) {
-        Optional<Reply> reply = replyRepository.findReplyByIdAndDeleteAtFalse(replyId);
-
-        isReply(reply);
-
-        reply.get().updateReply(update.getContent());
-
-        return reply.get().getId();
     }
 
     @Override
@@ -125,7 +112,7 @@ public class ReplyServiceImpl implements ReplyService {
         return reply;
     }
 
-    private ReplyResponseDto.READ toDto(Reply reply) {
+    private ReplyResponseDto.READ toReadDto(Reply reply) {
         ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
                 .replyId(reply.getId())
                 .memberNickname(reply.getMember().getNickname())

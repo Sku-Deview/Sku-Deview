@@ -52,6 +52,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<ReportResponseDto.READ> getAllReportsByPost(Long postId) {
         List<Report> reports = reportRepository.findReportsByPostIdAndDeleteAtFalse(postId);
+
         return reports.stream()
                 .map(this::toReadDto)
                 .collect(Collectors.toList());
@@ -113,4 +114,27 @@ public class ReportServiceImpl implements ReportService {
         ReportCategory.of(reportCategory);
     }
 
+    private Report toEntity(ReportRequestDto.CREATE create, Member reporter, Post reportPost) {
+        return Report.builder()
+                .member(reporter)
+                .post(reportPost)
+                .reportCategory(ReportCategory.valueOf(create.getReportCategory()))
+                .title(create.getTitle())
+                .description(create.getDescription())
+                .build();
+    }
+
+    private ReportResponseDto.READ toReadDto(Report report) {
+        return ReportResponseDto.READ.builder()
+                .reportId(report.getId())
+                .postId(report.getPost().getId())
+                .memberEmail(report.getMember().getEmail())
+                .memberName(report.getMember().getName())
+                .reportCategory(String.valueOf(report.getReportCategory()))
+                .postTitle(report.getPost().getTitle())
+                .title(report.getTitle())
+                .description(report.getDescription())
+                .build();
+
+    }
 }

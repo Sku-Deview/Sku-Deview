@@ -24,7 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,9 +53,9 @@ public class PostServiceImpl implements PostService {
 
         isPostCategory(String.valueOf(create.getPostCategory()));
 
-        if (create.getPostFile()==null) {
+        if (create.getPostFile() == null) {
             //첨부 파일 없음
-            Post post = toCreateEntity(create, findMember.get());
+            Post post = toEntity(create, findMember.get());
             postRepository.save(post);
             return post.getId();
         } else {
@@ -62,7 +65,7 @@ public class PostServiceImpl implements PostService {
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
             String savePath = "C:/deview_img/" + storedFileName;
             postFile.transferTo(new File(savePath)); //IO Exception
-            Post postEntity = toCreateFileEntity(create, findMember.get());
+            Post postEntity = toEntity(create, findMember.get());
             Long savedId = postRepository.save(postEntity).getId();
             Post post = postRepository.findById(savedId).get();
 
@@ -75,14 +78,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponseDto.READ> getAllPosts() {
         List<Post> list = postRepository.findAllByDeleteAtFalse(); //추후 삭제 여부에 따른 동적쿼리로 변경
-        List<PostResponseDto.READ> posts = new ArrayList<>();
 
-        for (Post post : list) {
-            PostResponseDto.READ dto = toDto(post);
-
-            posts.add(dto);
-        }
-        return posts;
+        return list.stream()
+                .map(this::toReadDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -125,7 +124,7 @@ public class PostServiceImpl implements PostService {
 
         updateCntToRedis(postId, "views");
 
-        PostResponseDto.READ dto = toDto(post.get());
+        PostResponseDto.READ dto = toReadDto(post.get());
 
         return dto;
     }
@@ -135,13 +134,13 @@ public class PostServiceImpl implements PostService {
         final List<Post> posts = postSearchRepository.find(condition);
 
         return posts.stream()
-                .map(this::toDto)
+                .map(this::toReadDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
-        return postSearchRepository.findWithPaging(condition, pageable).map(this::toDto);
+        return postSearchRepository.findWithPaging(condition, pageable).map(this::toReadDto);
     }
 
     /*
@@ -173,7 +172,7 @@ public class PostServiceImpl implements PostService {
     Spring Scheduled를 사용하여 일정 시간마다 실행이 되도록 설정
      */
     @Transactional
-    @Scheduled(fixedDelay = 1000L * 18L)
+    @Scheduled(fixedDelay = 1000L * 180L) // 18초에서 -> 180 초로 변경
     @Override
     public void deleteCntToRedis() {
         String viewKey = "views";
@@ -209,7 +208,6 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-//        post.get().addViewCount(post.get().getViewCount() + viewCnt);
         post.get().addViewCount(viewCnt);
 
         postRepository.save(post.get());
@@ -220,7 +218,6 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-//        post.get().addLikeCount(post.get().getLikeCount() + likeCnt);
         post.get().addLikeCount(likeCnt);
 
         postRepository.save(post.get());
@@ -242,7 +239,7 @@ public class PostServiceImpl implements PostService {
         PostCategory.of(category);
     }
 
-    private PostResponseDto.READ toDto(Post post) {
+    private PostResponseDto.READ toReadDto(Post post) {
         if (post.getFileAttached() == 0) {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
@@ -276,44 +273,43 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    //    private static Post toEntity(PostRequestDto.CREATE create, Member member) {
-//        Post post = Post.builder()
+    private Post toEntity(PostRequestDto.CREATE create, Member member) {
+        if (create.getPostFile() == null) {
+            return Post.builder()
+                    .member(member)
+                    .title(create.getTitle())
+                    .content(create.getContent())
+                    .likeCount(0)
+                    .viewCount(0)
+                    .postCategory(create.getPostCategory())
+                    .fileAttached(0)
+                    .build();
+        } else {
+            return Post.builder()
+                    .member(member)
+                    .title(create.getTitle())
+                    .content(create.getContent())
+                    .likeCount(0)
+                    .viewCount(0)
+                    .postCategory(create.getPostCategory())
+                    .fileAttached(1)
+                    .build();
+        }
+    }
+
+//    private Post toCreateFileEntity(PostRequestDto.CREATE create, Member member) {
+//        return Post.builder()
 //                .member(member)
 //                .title(create.getTitle())
 //                .content(create.getContent())
-//                .likeCount(create.getLikeCount())
-//                .viewCount(create.getViewCount())
+//                .likeCount(0)
+//                .viewCount(0)
 //                .postCategory(create.getPostCategory())
+//                .fileAttached(1)
 //                .build();
-//        return post;
 //    }
-    private static Post toCreateEntity(PostRequestDto.CREATE create, Member member) {
-        return Post.builder()
-                .member(member)
-                .title(create.getTitle())
-                .content(create.getContent())
-                .likeCount(0)
-                .viewCount(0)
-                .postCategory(create.getPostCategory())
-                .fileAttached(0)
-                .build();
-    }
 
-    private static Post toCreateFileEntity(PostRequestDto.CREATE create, Member member) {
-        return Post.builder()
-                .member(member)
-                .title(create.getTitle())
-                .content(create.getContent())
-                .likeCount(0)
-                .viewCount(0)
-                .postCategory(create.getPostCategory())
-                .fileAttached(1)
-                .build();
-
-
-    }
-
-    private static PostFile toPostFileEntity(String originalFileName, String storedFileName, Post post) {
+    private PostFile toPostFileEntity(String originalFileName, String storedFileName, Post post) {
         return PostFile.builder()
                 .originalFileName(originalFileName)
                 .storedFileName(storedFileName)

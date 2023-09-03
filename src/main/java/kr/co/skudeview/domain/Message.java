@@ -35,6 +35,7 @@ public class Message extends BaseEntity {
 
     @Column(nullable = false)
     private boolean deletedByReceiver;
+
     @Column(name = "content")
     @NotNull
     private String content;
