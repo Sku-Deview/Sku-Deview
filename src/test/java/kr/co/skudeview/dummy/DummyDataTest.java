@@ -243,7 +243,7 @@ public class DummyDataTest {
     @Test
     void createMessage() {
         for (int i = 1; i < 10; i++) {
-            MessageRequestDto.CREATE build = MessageRequestDto.CREATE.builder()
+            MessageDto build = MessageDto.builder()
                     .title("닉네임2")
                     .content("안녕 닉네임2")
                     .senderName("닉네임1")
@@ -254,7 +254,7 @@ public class DummyDataTest {
 
 
         for (int i = 1; i < 10; i++) {
-            MessageRequestDto.CREATE build2 = MessageRequestDto.CREATE.builder()
+            MessageDto build2 = MessageDto.builder()
                     .title("닉네임1")
                     .content("안녕 닉네임1")
                     .senderName("닉네임2")
