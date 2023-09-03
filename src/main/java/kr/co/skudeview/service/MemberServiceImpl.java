@@ -42,7 +42,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberSkillRepository memberSkillRepository;
 
-
     private final PasswordEncoder passwordEncoder;
 
     private final JwtProvider jwtProvider;
@@ -57,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
         isEmail(create.getEmail());
         isNickname(create.getNickname());
 
-        Member member = createMemberBuilder(create);
+        Member member = toEntity(create);
 
         final List<MemberSkill> memberSkills = getSkills(create.getSkillName(), member);
 
@@ -66,65 +65,20 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-    /*
-    member를 생성할 때 입력한 skill을 string -> memberSkill로 변환
-     */
-    private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
-
-        List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
-
-        List<MemberSkill> memberSkills = skills.stream()
-                .map(skill -> MemberSkill.builder()
-                        .member(member)
-                        .skill(skill)
-                        .build())
-                .collect(Collectors.toList());
-
-        return memberSkills;
-    }
-
-    /*
-    MemberSkill -> String으로 변환
-     */
-    @Override
-    public Set<String> getSkillsNameByMember(Member member) {
-        List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
-
-        Set<String> skillNames = memberSkills
-                .stream()
-                .map(MemberSkill::getSkill)
-                .map(Skill::getName)
-                .collect(Collectors.toSet());
-
-        return skillNames;
-    }
-
     @Override
     public MemberResponseDto.READ loginMember(MemberRequestDto.LOGIN login) {
         Optional<Member> member = memberRepository.findMemberByEmailAndDeleteAtFalse(login.getEmail());
+
         isMember(member);
 
         isPassword(login.getPassword(), member.get().getPassword());
 
         TokenDto tokenDto = TokenDto.builder()
-                .accessToken(jwtProvider.createToken(member.get().getEmail(),
-                        String.valueOf(member.get().getRole())))
+                .accessToken(jwtProvider.createToken(member.get().getEmail(), String.valueOf(member.get().getRole())))
                 .refreshToken(createRefreshToken(member.get()))
                 .build();
 
-        return MemberResponseDto.READ.builder()
-                .memberId(member.get().getId())
-                .email(member.get().getEmail())
-                .name(member.get().getName())
-                .nickname(member.get().getNickname())
-                .telephone(member.get().getTelephone())
-                .address(member.get().getAddress())
-                .birthDate(member.get().getBirthDate())
-                .gender(String.valueOf(member.get().getGender()))
-                .role(String.valueOf(member.get().getRole()))
-                .skillName(getSkillsNameByMember(member.get()))
-                .accessToken(tokenDto.getAccessToken())
-                .build();
+        return toReadTokenDto(member.get(), tokenDto);
     }
 
     @Override
@@ -166,12 +120,11 @@ public class MemberServiceImpl implements MemberService {
 
         final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());
 
-        member.get().updateMember(encodingPasswordBuild(update));
+        member.get().updateMember(toUpdateDto(update));
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
     }
-
 
 
     /*
@@ -192,7 +145,6 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
 
-
     @Transactional
     @Override
     public void deleteMember(Long id) {
@@ -212,62 +164,37 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member.get());
     }
 
-    private void isMember(Optional<Member> member) {
-        if (member.isEmpty()) {
-            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
-        }
+    /*
+    member를 생성할 때 입력한 skill을 string -> memberSkill로 변환
+     */
+    private List<MemberSkill> getSkills(List<String> skillNames, Member member) {
+
+        List<Skill> skills = skillRepository.findAllByNameInAndDeleteAtFalse(skillNames);
+
+        List<MemberSkill> memberSkills = skills.stream()
+                .map(skill -> MemberSkill.builder()
+                        .member(member)
+                        .skill(skill)
+                        .build())
+                .collect(Collectors.toList());
+
+        return memberSkills;
     }
 
-    private void isTelephone(String telephone) {
-        if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
-            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_TELEPHONE_DUPLICATED);
-        }
-    }
+    /*
+    MemberSkill -> String으로 변환
+     */
+    @Override
+    public Set<String> getSkillsNameByMember(Member member) {
+        List<MemberSkill> memberSkills = memberSkillRepository.findMemberSkillByMember_IdAndDeleteAtFalse(member.getId());
 
-    private void isNickname(String nickname) {
-        if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
-            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_NICKNAME_DUPLICATED);
-        }
-    }
+        Set<String> skillNames = memberSkills
+                .stream()
+                .map(MemberSkill::getSkill)
+                .map(Skill::getName)
+                .collect(Collectors.toSet());
 
-    private void isEmail(String email) {
-        if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
-            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
-        }
-    }
-
-    private void isPassword(String requestPassword, String getPassword) {
-        if (!passwordEncoder.matches(requestPassword, getPassword)) {
-            throw new WrongPasswordException(ResponseStatus.FAIL_MEMBER_PASSWORD_NOT_MATCHED);
-        }
-    }
-
-    private void isToken(Optional<Token> token) {
-        if (token.isEmpty()) {
-            throw new NotFoundException(ResponseStatus.FAIL_TOKEN_NOT_FOUND);
-        }
-    }
-
-    private void isRefreshToken(Token refreshToken) {
-        if (refreshToken == null) {
-            throw new InvalidRequestException(ResponseStatus.FAIL_LOGIN_NOT_SUCCESS);
-        }
-    }
-
-
-    private Member createMemberBuilder(MemberRequestDto.CREATE create) {
-        return Member.builder()
-                .email(create.getEmail())
-                .password(passwordEncoder.encode(create.getPassword()))
-                .name(create.getName())
-                .nickname(create.getNickname())
-                .telephone(create.getTelephone())
-                .address(create.getAddress())
-                .birthDate(create.getBirthDate())
-                .gender(Gender.valueOf(create.getGender()))
-                .role(Role.ROLE_USER)
-                .memberSkills(Collections.emptyList())
-                .build();
+        return skillNames;
     }
 
     public String createRefreshToken(Member member) {
@@ -319,7 +246,81 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
     }
-    private MemberRequestDto.UPDATE encodingPasswordBuild(MemberRequestDto.UPDATE update) {
+
+    private void isMember(Optional<Member> member) {
+        if (member.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_MEMBER_NOT_FOUND);
+        }
+    }
+
+    private void isTelephone(String telephone) {
+        if (memberRepository.existsMemberByTelephoneAndDeleteAtFalse(telephone)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_TELEPHONE_DUPLICATED);
+        }
+    }
+
+    private void isNickname(String nickname) {
+        if (memberRepository.existsMemberByNicknameAndDeleteAtFalse(nickname)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_NICKNAME_DUPLICATED);
+        }
+    }
+
+    private void isEmail(String email) {
+        if (memberRepository.existsMemberByEmailAndDeleteAtFalse(email)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_MEMBER_EMAIL_DUPLICATED);
+        }
+    }
+
+    private void isPassword(String requestPassword, String getPassword) {
+        if (!passwordEncoder.matches(requestPassword, getPassword)) {
+            throw new WrongPasswordException(ResponseStatus.FAIL_MEMBER_PASSWORD_NOT_MATCHED);
+        }
+    }
+
+    private void isToken(Optional<Token> token) {
+        if (token.isEmpty()) {
+            throw new NotFoundException(ResponseStatus.FAIL_TOKEN_NOT_FOUND);
+        }
+    }
+
+    private void isRefreshToken(Token refreshToken) {
+        if (refreshToken == null) {
+            throw new InvalidRequestException(ResponseStatus.FAIL_LOGIN_NOT_SUCCESS);
+        }
+    }
+
+    private MemberResponseDto.READ toReadTokenDto(Member member, TokenDto tokenDto) {
+        return MemberResponseDto.READ.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .telephone(member.getTelephone())
+                .address(member.getAddress())
+                .birthDate(member.getBirthDate())
+                .gender(String.valueOf(member.getGender()))
+                .role(String.valueOf(member.getRole()))
+                .skillName(getSkillsNameByMember(member))
+                .accessToken(tokenDto.getAccessToken())
+                .build();
+    }
+
+    private MemberResponseDto.READ toReadDto(Member member) {
+        return MemberResponseDto.READ.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .telephone(member.getTelephone())
+                .address(member.getAddress())
+                .birthDate(member.getBirthDate())
+                .gender(String.valueOf(member.getGender()))
+                .role(String.valueOf(member.getGender()))
+                .skillName(getSkillsNameByMember(member))
+                .build();
+    }
+
+    private MemberRequestDto.UPDATE toUpdateDto(MemberRequestDto.UPDATE update) {
         MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
                 .password(passwordEncoder.encode(update.getPassword()))
                 .address(update.getAddress())
@@ -331,6 +332,21 @@ public class MemberServiceImpl implements MemberService {
                 .gender(update.getGender())
                 .build();
         return encoding;
+    }
+
+    private Member toEntity(MemberRequestDto.CREATE create) {
+        return Member.builder()
+                .email(create.getEmail())
+                .password(passwordEncoder.encode(create.getPassword()))
+                .name(create.getName())
+                .nickname(create.getNickname())
+                .telephone(create.getTelephone())
+                .address(create.getAddress())
+                .birthDate(create.getBirthDate())
+                .gender(Gender.valueOf(create.getGender()))
+                .role(Role.ROLE_USER)
+                .memberSkills(Collections.emptyList())
+                .build();
     }
 
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-
 public class PostFile extends BaseEntity {
 
     @Id
@@ -24,7 +23,6 @@ public class PostFile extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
-
 
     @Builder
     public PostFile(String originalFileName, String storedFileName, Post post) {

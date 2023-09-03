@@ -30,7 +30,7 @@ public class Post extends BaseEntity {
     @NotNull
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     @NotNull
     private String content;
 

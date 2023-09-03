@@ -43,22 +43,22 @@ public class ReplyApiController {
         return replyService.createReply(userDetails.getUsername(), postId, create);
     }
 
-    /**
-     * 댓글 수정
-     *
-     * @param @PathVariable postId
-     * @param @PathVariable replyId
-     * @param update        ReplyRequestDto.UPDATE
-     * @return updateReplyId
-     */
-    @PatchMapping("/reply/{postId}/{replyId}")
-    public ResponseFormat<Long> updateReply(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable Long postId,
-                                            @PathVariable Long replyId,
-                                            @RequestBody @Valid ReplyRequestDto.UPDATE update) {
-        Long updateReplyId = replyService.updateReply(userDetails.getUsername(), replyId, update);
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, updateReplyId);
-    }
+//    /**
+//     * 댓글 수정
+//     *
+//     * @param @PathVariable postId
+//     * @param @PathVariable replyId
+//     * @param update        ReplyRequestDto.UPDATE
+//     * @return updateReplyId
+//     */
+//    @PatchMapping("/reply/{postId}/{replyId}")
+//    public ResponseFormat<Long> updateReply(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                                            @PathVariable Long postId,
+//                                            @PathVariable Long replyId,
+//                                            @RequestBody @Valid ReplyRequestDto.UPDATE update) {
+//        Long updateReplyId = replyService.updateReply(userDetails.getUsername(), replyId, update);
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, updateReplyId);
+//    }
 
     /**
      * 댓글 삭제

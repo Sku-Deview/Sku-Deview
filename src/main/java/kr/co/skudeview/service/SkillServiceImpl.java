@@ -78,4 +78,16 @@ public class SkillServiceImpl implements SkillService {
         }
     }
 
+    private Skill toEntity(SkillRequestDto.CREATE create) {
+        return Skill.builder()
+                .name(create.getName())
+                .build();
+    }
+
+    private SkillResponseDto.READ toReadDto(Skill skill) {
+        return SkillResponseDto.READ.builder()
+                .skillId(skill.getId())
+                .name(skill.getName())
+                .build();
+    }
 }
