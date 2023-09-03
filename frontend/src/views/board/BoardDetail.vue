@@ -33,9 +33,6 @@
 
           <span>{{ reply.regDate }}</span>
         </div>
-        <p>
-          {{ reply.content }}
-        </p>
       </div>
     </div>
   </div>

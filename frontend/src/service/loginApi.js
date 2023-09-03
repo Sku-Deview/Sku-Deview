@@ -1,5 +1,6 @@
 // src/service/loginAPI.js
 import axios from "axios"
+
 const getUserInfo = (userId, userPw) => {
     const reqData = {
         'email': userId,
