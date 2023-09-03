@@ -19,13 +19,14 @@
       <textarea id="" cols="30" rows="10" v-model="reply" class="w3-input w3-border" style="resize: none;">
       </textarea>
       <div class="common-buttons">
-        <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="replySave()">댓글 저장</button>&nbsp;
+        <button type="button" class="w3-button w3-round w3-blue" v-on:click="replySave()">댓글 저장</button>&nbsp;
       </div>
     </div>
 
 
     <div v-for="(reply, idx) in replyList" :key="idx">
       <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
+      <i class="fa-solid fa-comment"></i>
       <div class="reply-detail">
         [{{ reply.memberNickname }}]
         <div class="create-at">
