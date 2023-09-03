@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import PageHome from '@/views/PageHome.vue'
 import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from "@/views/board/BoardDetail.vue";
@@ -15,7 +15,6 @@ const requireAuth = () => (from, to, next) => {
     } // isLogin === true면 페이지 이동
     next('/login') // isLogin === false면 다시 로그인 화면으로 이동
 }
-
 
 
 const routes = [

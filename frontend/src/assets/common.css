@@ -14,7 +14,8 @@
     padding: 12px 8px;
     border-bottom: 2px solid black;
 }
-.board-category{
+
+.board-category {
     display: inline;
 }
 
@@ -22,25 +23,28 @@
     padding: 8px;
     text-align: right;
 }
-.create-at{
+
+.create-at {
     padding: 4px;
     text-align: right;
 }
 
-.reply-detail{
+.reply-detail {
 
     padding: 20px;
     border: 1px solid black;
     width: 100%;
     margin-top: 8px;
 }
+
 .reply-contents {
     padding: 2px 2px;
     width: 768px;
     height: 300px;
     border-bottom: 2px solid black;
 }
-i{
+
+i {
     float: right;
     font-size: 20px;
     margin-top: 20px;
