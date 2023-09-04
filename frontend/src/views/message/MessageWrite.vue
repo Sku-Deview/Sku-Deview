@@ -1,10 +1,13 @@
 <template>
+  <h2>쪽지 보내기</h2>
+  <hr>
   <h3> 받는 사람 : {{ receiverName }}</h3>
   <div class="board-contents">
     <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
   </div>
   <div class="board-contents">
-      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;">
+      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;"
+                placeholder="내용을 입력해주세요.">
       </textarea>
   </div>
   <div class="common-buttons">
