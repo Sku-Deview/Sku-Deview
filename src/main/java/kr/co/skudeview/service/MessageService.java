@@ -6,16 +6,16 @@ import java.util.List;
 
 public interface MessageService {
 
-    MessageDto createMessage(MessageDto create);
+    MessageDto.READ createMessage(String email, MessageDto.CREATE create);
 
     // 받은 편지함 불러오기
-    List<MessageDto> getReceivedMessages(String email);
+    List<MessageDto.READ> getReceivedMessages(String email);
 
     //받은 편지 삭제
     Long deleteMessageByReceiver(Long messageId, String email);
 
     //보낸 편지함 불러오기
-    List<MessageDto> getSendMessages(String email);
+    List<MessageDto.READ> getSendMessages(String email);
 
     //보낸 편지 삭제
     Long deleteMessageBySender(Long messageId, String email);
