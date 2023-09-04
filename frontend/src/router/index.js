@@ -6,6 +6,10 @@ import BoardWrite from "@/views/board/BoardWrite.vue";
 import Login from "@/views/common/Login.vue";
 import Signup from "@/views/common/Signup.vue";
 import store from "@/vuex/store";
+import MessageWrite from "@/views/message/MessageWrite.vue";
+import MessageReceiveList from "@/views/message/MessageReceiveList.vue";
+import MessageSendList from "@/views/message/MessageSendList.vue";
+
 
 const requireAuth = () => (from, to, next) => {
     const token = localStorage.getItem('user_token')
@@ -57,6 +61,24 @@ const routes = [
         path: '/board/write',
         name: 'BoardWrite',
         component: BoardWrite,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/message/write',
+        name: 'MessageWrite',
+        component: MessageWrite,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/message/received',
+        name: 'MessageReceiveList',
+        component: MessageReceiveList,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/message/send',
+        name: 'MessageSendList',
+        component: MessageSendList,
         beforeEnter: requireAuth()
     },
 ]
