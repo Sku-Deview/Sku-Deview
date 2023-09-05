@@ -4,6 +4,7 @@
     <div class="white-bg">
       <h1>(보낸 메세지) {{ modalList.title }}</h1>
       <h3 class="receiverName">수신자 :{{ modalList.receiverName }}</h3>
+      <h5 class="create-at">{{modalList.regDate}}</h5>
       <hr>
       <h2>{{ modalList.content }}</h2>
       <h3 class="sendName">발신자 :{{ modalList.senderName }}</h3>

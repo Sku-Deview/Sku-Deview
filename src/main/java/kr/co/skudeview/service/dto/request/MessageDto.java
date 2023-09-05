@@ -2,6 +2,8 @@ package kr.co.skudeview.service.dto.request;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 public class MessageDto {
     @Getter
@@ -29,6 +31,8 @@ public class MessageDto {
         private String content;
 
         private String senderName;
+
+        private LocalDateTime regDate;
 
 
     }

@@ -109,6 +109,7 @@ public class MessageServiceImpl implements MessageService {
                 .senderName(message.getSender().getNickname())
                 .content(message.getContent())
                 .title(message.getTitle())
+                .regDate(message.getRegDate())
                 .build();
     }
 
