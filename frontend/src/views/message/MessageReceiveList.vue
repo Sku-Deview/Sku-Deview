@@ -32,7 +32,8 @@
       <td>{{ idx }}</td>
       <td>{{ item.receiverName }}</td>
       <td @click="modalOpen = true">
-        <b-button v-on:click="clickModel(item)">{{ item.title }}</b-button>
+        <b-button v-if="item.title.length<20" v-on:click="clickModel(item)">{{ item.title }}</b-button>
+        <b-button v-else v-on:click="clickModel(item)">{{ item.title.substring(0,20) + "..." }}</b-button>
       </td>
       <td>{{ item.senderName }}</td>
     </tr>
