@@ -1,4 +1,21 @@
 <template>
+
+  <div class="black-bg" v-if="modalOpen === true">
+    <div class="white-bg">
+      <h1>(받은 메세지) {{ modalList.title }}</h1>
+      <h3 class="sendName">발신자 :{{ modalList.senderName }}</h3>
+      <hr>
+      <h2>{{ modalList.content }}</h2>
+      <h3 class="receiverName">수신자 :{{ modalList.receiverName }}</h3>
+      <b-button @click="modalOpen = false" class="modal-exit-btn " >
+        닫기
+      </b-button>
+      <b-button @click="[modalOpen = false,toMessageWrite(modalList.senderName)]" class="modal-exit-btn button-button">
+        답장
+      </b-button>
+    </div>
+  </div>
+
   <table class="w3-table-all">
     <thead>
     <tr>
@@ -13,7 +30,9 @@
     <tr v-for="(item, idx) in list" :key="idx">
       <td>{{ idx }}</td>
       <td>{{ item.receiverName }}</td>
-      <td>{{ item.title }}</td>
+      <td @click="modalOpen = true">
+        <b-button v-on:click="clickModel(item)">{{ item.title }}</b-button>
+      </td>
       <td>{{ item.senderName }}</td>
     </tr>
     </tbody>
@@ -24,7 +43,9 @@
 export default {
   data() {
     return{
-      list:{}
+      list:{},
+      modalOpen:false,
+      modalList: {},
     }
   },
   mounted() {
@@ -45,7 +66,23 @@ export default {
         }
       })
     },
+    clickModel(item) {
+      this.modalList = item
+    },
 
+    toMessageWrite(receiverNickname) {
+      this.$router.push({
+        path:'/message/write',
+        query:{name: receiverNickname}
+      })
+    },
   }
 }
 </script>
+
+<style>
+.button-button{
+  margin-left: 10px;
+  background-color: #42b983;
+}
+</style>
