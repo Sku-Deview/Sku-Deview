@@ -17,8 +17,10 @@
       <tr v-for="(item, idx) in list" :key="idx">
         <td>{{ item.postId }}</td>
         <td>{{ item.postCategory }}</td>
-        <td v-if="item.title.length<20"><a v-on:click="fnView(`${item.postId}`)">{{ item.title }}</a></td>
-        <td v-else><a v-on:click="fnView(`${item.postId}`)">{{ item.title.substring(0,20)+"..." }}</a></td>
+        <td>
+          <b-button v-if="item.title.length<15"><a v-on:click="fnView(`${item.postId}`)">{{ item.title }}</a></b-button>
+          <b-button v-else><a v-on:click="fnView(`${item.postId}`)">{{ item.title.substring(0,15)+"..." }}</a></b-button>
+        </td>
         <td>{{ item.memberNickname }}</td>
         <td>{{ item.regDate }}</td>
       </tr>
