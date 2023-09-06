@@ -26,7 +26,7 @@
 
     <div v-for="(reply, idx) in replyList" :key="idx">
       <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
-      <i class="fa-solid fa-comment"></i>
+      <i class="fa-solid fa-comment" @click="toMessageWrite(reply.memberNickname)"></i>
       <div class="reply-detail">
         [{{ reply.memberNickname }}]
         <div class="create-at">
@@ -150,6 +150,12 @@ export default {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
         }
+      })
+    },
+    toMessageWrite(receiverNickname) {
+      this.$router.push({
+        path:'/message/write',
+        query:{name: receiverNickname}
       })
     },
   }

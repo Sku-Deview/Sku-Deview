@@ -27,15 +27,14 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
-    public MessageDto createMessage(MessageDto create) {
+    public MessageDto.READ createMessage(String email,MessageDto.CREATE create) {
         Optional<Member> receiver = memberRepository.findMemberByNicknameAndDeleteAtFalse(create.getReceiverName());
-        Optional<Member> sender = memberRepository.findMemberByNicknameAndDeleteAtFalse(create.getSenderName());
+        Optional<Member> sender = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
         Message message = toEntity(create, receiver.get(), sender.get());
         messageRepository.save(message);
 
-        MessageDto resultDto = toDto(message);
-        return resultDto;
+        return toDto(message);
     }
 
 
@@ -43,7 +42,7 @@ public class MessageServiceImpl implements MessageService {
     // 한 명의 유저가 받은 모든 메시지
     @Transactional(readOnly = true)
     @Override
-    public List<MessageDto> getReceivedMessages(String email) {
+    public List<MessageDto.READ> getReceivedMessages(String email) {
         return memberRepository.findMemberByEmailAndDeleteAtFalse(email)
                 .map(findMember -> messageRepository.findAllByReceiver_Nickname(findMember.getNickname()))
                 .orElse(Collections.emptyList())
@@ -70,7 +69,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MessageDto> getSendMessages(String email) {
+    public List<MessageDto.READ> getSendMessages(String email) {
         return memberRepository.findMemberByEmailAndDeleteAtFalse(email)
                 .map(findMember -> messageRepository.findAllBySender_Nickname(findMember.getNickname()))
                 .orElse(Collections.emptyList())
@@ -93,7 +92,7 @@ public class MessageServiceImpl implements MessageService {
         return message.get().getId();
     }
 
-    private static Message toEntity(MessageDto create, Member receiver, Member sender) {
+    private static Message toEntity(MessageDto.CREATE create, Member receiver, Member sender) {
         return Message.builder()
                 .receiver(receiver)
                 .sender(sender)
@@ -104,12 +103,13 @@ public class MessageServiceImpl implements MessageService {
                 .build();
     }
 
-    private MessageDto toDto(Message message) {
-        return MessageDto.builder()
+    private MessageDto.READ toDto(Message message) {
+        return MessageDto.READ.builder()
                 .receiverName(message.getReceiver().getNickname())
                 .senderName(message.getSender().getNickname())
                 .content(message.getContent())
                 .title(message.getTitle())
+                .regDate(message.getRegDate())
                 .build();
     }
 

@@ -2,18 +2,41 @@ package kr.co.skudeview.service.dto.request;
 
 import lombok.*;
 
-@Getter
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
+import java.time.LocalDateTime;
+
+
 public class MessageDto {
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class CREATE {
+        private String receiverName;
 
-    private String title;
+        private String title;
 
-    private String content;
+        private String content;
 
-    private String senderName;
 
-    private String receiverName;
+    }
+    @Getter
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
+    public static class READ {
+        private String receiverName;
+
+        private String title;
+
+        private String content;
+
+        private String senderName;
+
+        private LocalDateTime regDate;
+
+
+    }
+
+
 
 }

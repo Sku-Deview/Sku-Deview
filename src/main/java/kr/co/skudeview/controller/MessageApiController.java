@@ -21,19 +21,19 @@ public class MessageApiController {
     private final MessageService messageService;
 
     @PostMapping("/message")
-    public ResponseFormat<MessageDto> createMessage(@RequestBody MessageDto create) {
-        log.info("create.receiveNickName ={}", create.getReceiverName());
-        log.info("create.sendNickName ={}", create.getSenderName());
-        MessageDto message = messageService.createMessage(create);
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, message);
+    public MessageDto.READ createMessage(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                    @RequestBody MessageDto.CREATE create) {
+
+        MessageDto.READ message = messageService.createMessage(userDetails.getUsername(), create);
+        return  message;
     }
 
     //받은 편지함 확인
     @GetMapping("/message/received")
-    public ResponseFormat<List<MessageDto>> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<MessageDto> result = messageService.getReceivedMessages(userDetails.getUsername());
+    public List<MessageDto.READ> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<MessageDto.READ> result = messageService.getReceivedMessages(userDetails.getUsername());
 
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, result);
+        return  result;
     }
 
     //받은 쪽지 삭제
@@ -47,9 +47,9 @@ public class MessageApiController {
 
     //보낸 편지함 확인
     @GetMapping("/message/send")
-    public ResponseFormat<List<MessageDto>> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<MessageDto> result = messageService.getSendMessages(userDetails.getUsername());
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, result);
+    public List<MessageDto.READ> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<MessageDto.READ> result = messageService.getSendMessages(userDetails.getUsername());
+        return result;
     }
 
     //보낸 쪽지 삭제

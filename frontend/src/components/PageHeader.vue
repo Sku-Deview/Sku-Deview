@@ -1,32 +1,36 @@
 !-- PageHeader.vue -->
 <template>
-    <header>
-        <div id="nav">
-            <router-link to="/">Home</router-link>
-            |
-            <router-link to="/about">About</router-link>
-            |
-            <router-link to="/board/list">게시판</router-link>
-            |
-            <router-link to="/signup">회원 가입</router-link>
-            |
-            <router-link to="/login" v-if="!this.$store.state.isLogin">로그인</router-link>
-            <a v-if="this.$store.state.isLogin" @click="fnLogout">로그아웃</a>
+  <header>
+    <div id="nav">
+      <router-link to="/">Home</router-link>
+      |
+      <router-link to="/about">About</router-link>
+      |
+      <router-link to="/board/list">게시판</router-link>
+      |
+      <router-link to="/signup">회원 가입</router-link>
+      |
+      <router-link to="/message/received">받은 메세지</router-link>
+      |
+      <router-link to="/message/send">보낸 메세지</router-link>
+      |
+      <router-link to="/login" v-if="!this.$store.state.isLogin">로그인</router-link>
+      <a v-if="this.$store.state.isLogin" @click="fnLogout">로그아웃</a>
 
-        </div>
-    </header>
-    <hr/>
+    </div>
+  </header>
+  <hr/>
 </template>
 
 <script>
 export default {
-    methods: {
-        fnLogout() {
-            localStorage.removeItem("user_token")
-            localStorage.removeItem("user_role")
-            location.reload()
-        }
+  methods: {
+    fnLogout() {
+      localStorage.removeItem("user_token")
+      localStorage.removeItem("user_role")
+      location.reload()
     }
+  }
 }
 </script>
 
