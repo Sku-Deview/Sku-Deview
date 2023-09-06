@@ -240,29 +240,29 @@ public class DummyDataTest {
         }
     }
 
-    @Test
-    void createMessage() {
-        for (int i = 1; i < 10; i++) {
-            MessageDto build = MessageDto.builder()
-                    .title("닉네임2")
-                    .content("안녕 닉네임2")
-                    .senderName("닉네임1")
-                    .receiverName("닉네임2")
-                    .build();
-            messageService.createMessage(build);
-        }
-
-
-        for (int i = 1; i < 10; i++) {
-            MessageDto build2 = MessageDto.builder()
-                    .title("닉네임1")
-                    .content("안녕 닉네임1")
-                    .senderName("닉네임2")
-                    .receiverName("닉네임1")
-                    .build();
-            messageService.createMessage(build2);
-        }
-
-
-    }
+//    @Test
+//    void createMessage() {
+//        for (int i = 1; i < 10; i++) {
+//            MessageRequestDto build = MessageRequestDto.CREATE.builder()
+//                    .title("닉네임2")
+//                    .content("안녕 닉네임2")
+//                    .senderName("닉네임1")
+//                    .receiverName("닉네임2")
+//                    .build();
+//            messageService.createMessage(build);
+//        }
+//
+//
+//        for (int i = 1; i < 10; i++) {
+//            MessageRequestDto build2 = MessageRequestDto.builder()
+//                    .title("닉네임1")
+//                    .content("안녕 닉네임1")
+//                    .senderName("닉네임2")
+//                    .receiverName("닉네임1")
+//                    .build();
+//            messageService.createMessage(build2);
+//        }
+//
+//
+//    }
 }

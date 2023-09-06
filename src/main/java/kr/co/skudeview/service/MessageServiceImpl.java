@@ -4,13 +4,12 @@ import kr.co.skudeview.domain.Member;
 import kr.co.skudeview.domain.Message;
 import kr.co.skudeview.repository.MemberRepository;
 import kr.co.skudeview.repository.MessageRepository;
-import kr.co.skudeview.service.dto.request.MessageDto;
+import kr.co.skudeview.service.dto.request.MessageRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
-    public MessageDto.READ createMessage(String email,MessageDto.CREATE create) {
+    public MessageRequestDto.READ createMessage(String email, MessageRequestDto.CREATE create) {
         Optional<Member> receiver = memberRepository.findMemberByNicknameAndDeleteAtFalse(create.getReceiverName());
         Optional<Member> sender = memberRepository.findMemberByEmailAndDeleteAtFalse(email);
 
@@ -42,7 +41,7 @@ public class MessageServiceImpl implements MessageService {
     // 한 명의 유저가 받은 모든 메시지
     @Transactional(readOnly = true)
     @Override
-    public List<MessageDto.READ> getReceivedMessages(String email) {
+    public List<MessageRequestDto.READ> getReceivedMessages(String email) {
         return memberRepository.findMemberByEmailAndDeleteAtFalse(email)
                 .map(findMember -> messageRepository.findAllByReceiver_Nickname(findMember.getNickname()))
                 .orElse(Collections.emptyList())
@@ -69,7 +68,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MessageDto.READ> getSendMessages(String email) {
+    public List<MessageRequestDto.READ> getSendMessages(String email) {
         return memberRepository.findMemberByEmailAndDeleteAtFalse(email)
                 .map(findMember -> messageRepository.findAllBySender_Nickname(findMember.getNickname()))
                 .orElse(Collections.emptyList())
@@ -92,7 +91,7 @@ public class MessageServiceImpl implements MessageService {
         return message.get().getId();
     }
 
-    private static Message toEntity(MessageDto.CREATE create, Member receiver, Member sender) {
+    private static Message toEntity(MessageRequestDto.CREATE create, Member receiver, Member sender) {
         return Message.builder()
                 .receiver(receiver)
                 .sender(sender)
@@ -103,8 +102,8 @@ public class MessageServiceImpl implements MessageService {
                 .build();
     }
 
-    private MessageDto.READ toDto(Message message) {
-        return MessageDto.READ.builder()
+    private MessageRequestDto.READ toDto(Message message) {
+        return MessageRequestDto.READ.builder()
                 .receiverName(message.getReceiver().getNickname())
                 .senderName(message.getSender().getNickname())
                 .content(message.getContent())

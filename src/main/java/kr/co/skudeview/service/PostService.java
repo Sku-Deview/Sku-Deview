@@ -13,26 +13,26 @@ public interface PostService {
     /**
      * 새로운 포스트를 생성.
      *
-     * @param email   포스트를 생성한 회원의 이메일
-     * @param create  생성할 포스트 정보를 담고 있는 DTO
+     * @param email  포스트를 생성한 회원의 이메일
+     * @param create 생성할 포스트 정보를 담고 있는 DTO
      * @return 생성된 포스트의 ID
      * @throws IOException 포스트 생성 중 발생한 예외 처리
      */
     Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
 
-    /**
-     * 모든 포스트 목록을 조회.
-     *
-     * @return 모든 포스트 목록을 담은 DTO 리스트 (List<PostResponseDto.READ>)
-     */
-    List<PostResponseDto.READ> getAllPosts();
+//    /**
+//     * 모든 포스트 목록을 조회.
+//     *
+//     * @return 모든 포스트 목록을 담은 DTO 리스트 (List<PostResponseDto.READ>)
+//     */
+//    List<PostResponseDto.READ> getAllPosts();
 
     /**
      * 특정 포스트를 수정.
      *
-     * @param email   포스트를 업데이트할 회원의 이메일
-     * @param postId  업데이트할 포스트의 ID
-     * @param update  업데이트할 포스트 정보를 담고 있는 DTO
+     * @param email  포스트를 업데이트할 회원의 이메일
+     * @param postId 업데이트할 포스트의 ID
+     * @param update 업데이트할 포스트 정보를 담고 있는 DTO
      * @return 업데이트된 포스트의 ID
      */
     Long updatePost(String email, final Long postId, final PostRequestDto.UPDATE update);
@@ -64,11 +64,10 @@ public interface PostService {
     /**
      * 페이징을 사용하여 조건에 맞는 포스트 목록을 검색.
      *
-     * @param condition 검색 조건을 담고 있는 DTO
-     * @param pageable  페이징 정보
+     * @param pageable 페이징 정보
      * @return 페이징된 포스트 목록을 담은 DTO 페이지 (Page<PostResponseDto.READ>)
      */
-    Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable);
+    Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable);
 
     /**
      * Redis에 포스트 조회수를 업데이트.

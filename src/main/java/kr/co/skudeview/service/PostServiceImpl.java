@@ -75,13 +75,27 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @Override
-    public List<PostResponseDto.READ> getAllPosts() {
-        List<Post> list = postRepository.findAllByDeleteAtFalse(); //추후 삭제 여부에 따른 동적쿼리로 변경
+//    @Override
+//    public List<PostResponseDto.READ> getAllPosts() {
+//        List<Post> list = postRepository.findAllByDeleteAtFalse(); //추후 삭제 여부에 따른 동적쿼리로 변경
+//
+//        return list.stream()
+//                .map(this::toReadDto)
+//                .collect(Collectors.toList());
+//    }
 
-        return list.stream()
+    @Override
+    public List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition) {
+        final List<Post> posts = postSearchRepository.find(condition);
+
+        return posts.stream()
                 .map(this::toReadDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable) {
+        return postSearchRepository.findWithPaging(pageable).map(this::toReadDto);
     }
 
     @Override
@@ -129,19 +143,6 @@ public class PostServiceImpl implements PostService {
         return dto;
     }
 
-    @Override
-    public List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition) {
-        final List<Post> posts = postSearchRepository.find(condition);
-
-        return posts.stream()
-                .map(this::toReadDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Page<PostResponseDto.READ> searchPostWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
-        return postSearchRepository.findWithPaging(condition, pageable).map(this::toReadDto);
-    }
 
     /*
     게시글 상세조회 요청 시, 해당 postId에 해당하는 viewCnt를 +1 해준 값을 Redis에 저장

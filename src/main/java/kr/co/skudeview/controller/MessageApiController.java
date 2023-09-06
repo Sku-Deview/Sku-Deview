@@ -3,7 +3,7 @@ package kr.co.skudeview.controller;
 import kr.co.skudeview.infra.model.ResponseFormat;
 import kr.co.skudeview.infra.model.ResponseStatus;
 import kr.co.skudeview.service.MessageService;
-import kr.co.skudeview.service.dto.request.MessageDto;
+import kr.co.skudeview.service.dto.request.MessageRequestDto;
 import kr.co.skudeview.service.model.custom.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,17 +21,17 @@ public class MessageApiController {
     private final MessageService messageService;
 
     @PostMapping("/message")
-    public MessageDto.READ createMessage(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                    @RequestBody MessageDto.CREATE create) {
+    public MessageRequestDto.READ createMessage(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                @RequestBody MessageRequestDto.CREATE create) {
 
-        MessageDto.READ message = messageService.createMessage(userDetails.getUsername(), create);
+        MessageRequestDto.READ message = messageService.createMessage(userDetails.getUsername(), create);
         return  message;
     }
 
     //받은 편지함 확인
     @GetMapping("/message/received")
-    public List<MessageDto.READ> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<MessageDto.READ> result = messageService.getReceivedMessages(userDetails.getUsername());
+    public List<MessageRequestDto.READ> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<MessageRequestDto.READ> result = messageService.getReceivedMessages(userDetails.getUsername());
 
         return  result;
     }
@@ -47,8 +47,8 @@ public class MessageApiController {
 
     //보낸 편지함 확인
     @GetMapping("/message/send")
-    public List<MessageDto.READ> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<MessageDto.READ> result = messageService.getSendMessages(userDetails.getUsername());
+    public List<MessageRequestDto.READ> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<MessageRequestDto.READ> result = messageService.getSendMessages(userDetails.getUsername());
         return result;
     }
 

@@ -94,10 +94,10 @@ public class PostApiController {
 //    public ResponseFormat<List<PostResponseDto.READ>> getAllPosts() {
 //        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getAllPosts());
 //    }
-    @GetMapping("/post")
-    public List<PostResponseDto.READ> getAllPosts() {
-        return postService.getAllPosts();
-    }
+//    @GetMapping("/post")
+//    public List<PostResponseDto.READ> getAllPosts() {
+//        return postService.getAllPosts();
+//    }
 
 
     /**
@@ -130,14 +130,13 @@ public class PostApiController {
      * Search Post API + Paging default page=0, size=20
      * http://localhost:8080/api/v1/posts?page=0&size=10 -> 이런식으로 지정해서 사용도 가능
      *
-     * @param condition
      * @param pageable
      * @return
      */
-    @GetMapping("/posts")
-    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@RequestBody @Valid PostRequestDto.CONDITION condition, Pageable pageable) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(condition, pageable));
-    }
 
+    @GetMapping("/posts")
+    public Page<PostResponseDto.READ> getPagedPosts(Pageable pageable) {
+        return postService.searchPostWithPaging(pageable);
+    }
 
 }

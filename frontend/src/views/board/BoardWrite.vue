@@ -10,8 +10,7 @@
             <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
         </div>
         <div class="board-contents">
-      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;">
-      </textarea>
+            <ck-editor v-model="content" :editor="editor" :config="editorConfig"/>
         </div>
         <div class="common-buttons">
             <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;
@@ -21,9 +20,26 @@
 </template>
 
 <script>
+import CKEditor from '@ckeditor/ckeditor5-vue';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default {
+    components: {'ck-editor': CKEditor.component},
+
     data() { //변수생성
         return {
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: ['heading', '|', 'fontBackgroundColor', 'fontColor', 'fontSize', 'bold', 'italic', '|', 'alignment', 'bulletedList', 'numberedList', 'indent', 'outdent', '|', 'imageUpload', 'insertTable', 'link', '|', 'undo', 'redo'],
+                table: {
+                    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
+                },
+                image: {
+                    resize: true,
+                    toolbar: ['imageStyle:alignLeft', 'imageStyle:alignRight', 'imageStyle:inline', 'imageStyle:side']
+                },
+            },
+
             requestBody: this.$route.query,
             idx: this.$route.query.idx,
 

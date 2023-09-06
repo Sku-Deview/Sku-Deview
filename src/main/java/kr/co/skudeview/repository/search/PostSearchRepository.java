@@ -11,6 +11,7 @@ import kr.co.skudeview.domain.QMember;
 import kr.co.skudeview.domain.QPost;
 import kr.co.skudeview.infra.util.DynamicQueryUtils;
 import kr.co.skudeview.service.dto.request.PostRequestDto;
+import kr.co.skudeview.service.dto.response.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -49,20 +50,38 @@ public class PostSearchRepository {
                 .fetch();
     }
 
-    public Page<Post> findWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
+//    public Page<Post> findWithPaging(PostRequestDto.CONDITION condition, Pageable pageable) {
+//
+//        // 조건에 맞는 쿼리 구성
+//        JPAQuery<Post> query = queryFactory
+//                .selectFrom(post)
+//                .leftJoin(post.member, member)
+//                .where(
+//                        DynamicQueryUtils.filter(condition.getPostIds(), post.id::in),
+//                        DynamicQueryUtils.filter(condition.getTitle(), post.title::like),
+//                        DynamicQueryUtils.filter(condition.getPostCategory(), post.postCategory::eq),
+//                        DynamicQueryUtils.filter(condition.getWriterEmail(), post.member.email::eq),
+//                        DynamicQueryUtils.filter(condition.getWriterName(), post.member.name::eq),
+//                        DynamicQueryUtils.filter(condition.getWriterNickname(), post.member.nickname::eq),
+//                        postDateBetween(condition.getFromPostDate(), condition.getToPostDate()),
+//                        post.deleteAt.eq(Boolean.FALSE)
+//                )
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize());
+//
+//        QueryResults<Post> results = query.fetchResults();
+//
+//        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+//    }
+
+    public Page<Post> findWithPaging(Pageable pageable) {
 
         // 조건에 맞는 쿼리 구성
         JPAQuery<Post> query = queryFactory
                 .selectFrom(post)
                 .leftJoin(post.member, member)
                 .where(
-                        DynamicQueryUtils.filter(condition.getPostIds(), post.id::in),
-                        DynamicQueryUtils.filter(condition.getTitle(), post.title::like),
-                        DynamicQueryUtils.filter(condition.getPostCategory(), post.postCategory::eq),
-                        DynamicQueryUtils.filter(condition.getWriterEmail(), post.member.email::eq),
-                        DynamicQueryUtils.filter(condition.getWriterName(), post.member.name::eq),
-                        DynamicQueryUtils.filter(condition.getWriterNickname(), post.member.nickname::eq),
-                        postDateBetween(condition.getFromPostDate(), condition.getToPostDate()),
+
                         post.deleteAt.eq(Boolean.FALSE)
                 )
                 .offset(pageable.getOffset())

@@ -73,4 +73,5 @@ public class PostRequestDto {
         private Pageable pageable;
 
     }
+
 }
