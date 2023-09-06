@@ -9,10 +9,10 @@
         <div class="board-contents">
             <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
         </div>
-        <div class="board-contents">
-            <ck-editor v-model="content" :editor="editor" :config="editorConfig"/>
+        <div class=" ck-editor__editable ">
+            <ck-editor  v-model="content" :editor="editor" :config="editorConfig"/>
         </div>
-        <div class="common-buttons">
+        <div class="board-contents post-button">
             <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;
             <button type="button" class="w3-button w3-round w3-gray" v-on:click="fnList">목록</button>
         </div>
