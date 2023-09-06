@@ -1,10 +1,25 @@
 
 package kr.co.skudeview.dummy;
 
-import kr.co.skudeview.domain.enums.PostCategory;
-import kr.co.skudeview.repository.*;
-import kr.co.skudeview.service.*;
-import kr.co.skudeview.service.dto.request.*;
+import kr.co.skudeview.global.common.PostCategory;
+import kr.co.skudeview.domain.career.repository.CompanyRepository;
+import kr.co.skudeview.domain.career.service.CompanyService;
+import kr.co.skudeview.domain.member.dto.MemberRequestDto;
+import kr.co.skudeview.domain.member.repository.MemberRepository;
+import kr.co.skudeview.domain.member.service.MemberService;
+import kr.co.skudeview.domain.message.repository.MessageRepository;
+import kr.co.skudeview.domain.message.service.MessageService;
+import kr.co.skudeview.domain.post.dto.PostRequestDto;
+import kr.co.skudeview.domain.post.repository.PostRepository;
+import kr.co.skudeview.domain.post.service.PostService;
+import kr.co.skudeview.domain.reply.dto.ReplyRequestDto;
+import kr.co.skudeview.domain.reply.repository.ReplyRepository;
+import kr.co.skudeview.domain.reply.service.ReplyService;
+import kr.co.skudeview.domain.report.repository.ReportRepository;
+import kr.co.skudeview.domain.report.service.ReportService;
+import kr.co.skudeview.domain.skill.dto.SkillRequestDto;
+import kr.co.skudeview.domain.skill.repository.SkillRepository;
+import kr.co.skudeview.domain.skill.service.SkillService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
