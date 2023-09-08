@@ -110,8 +110,7 @@ export default {
       this.$axios.get('/api/v1/reply/' + this.idx, {
         params: this.requestBody
       }).then((res) => {
-        console.log(res.data)
-        this.replyList = res.data
+        this.replyList = res.data.data
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -124,8 +123,8 @@ export default {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('user_token')}`
         }
-      }).then(() => {
-        alert('삭제되었습니다.')
+      }).then((res) => {
+        alert(res.data.message)
         this.fnPost(postId);
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
@@ -144,8 +143,8 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('user_token')}`
         }
       })
-          .then(() => {
-            alert('댓글이 저장되었습니다.')
+          .then((res) => {
+            alert(res.data.message)
             this.fnPost(this.idx);
           }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
