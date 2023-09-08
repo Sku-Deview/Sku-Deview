@@ -11,7 +11,7 @@
       <span class="create-at">{{ created_at }}</span>
     </div>
     <div class="board-contents">
-      <span>{{ content }}</span>
+      <span v-html="content"></span>
     </div>
     <hr>
 
