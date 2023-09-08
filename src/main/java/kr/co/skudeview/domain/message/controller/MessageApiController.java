@@ -21,19 +21,19 @@ public class MessageApiController {
     private final MessageService messageService;
 
     @PostMapping("/message")
-    public MessageRequestDto.READ createMessage(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseFormat<MessageRequestDto.READ>  createMessage(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                 @RequestBody MessageRequestDto.CREATE create) {
 
         MessageRequestDto.READ message = messageService.createMessage(userDetails.getUsername(), create);
-        return  message;
+        return  ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,message);
     }
 
     //받은 편지함 확인
     @GetMapping("/message/received")
-    public List<MessageRequestDto.READ> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseFormat<List<MessageRequestDto.READ>> getReceivedMessages(@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<MessageRequestDto.READ> result = messageService.getReceivedMessages(userDetails.getUsername());
 
-        return  result;
+        return  ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,result);
     }
 
     //받은 쪽지 삭제
@@ -47,9 +47,9 @@ public class MessageApiController {
 
     //보낸 편지함 확인
     @GetMapping("/message/send")
-    public List<MessageRequestDto.READ> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseFormat<List<MessageRequestDto.READ>> getSendMessage(@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<MessageRequestDto.READ> result = messageService.getSendMessages(userDetails.getUsername());
-        return result;
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,result);
     }
 
     //보낸 쪽지 삭제
