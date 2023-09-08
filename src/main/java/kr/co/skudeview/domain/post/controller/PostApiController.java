@@ -32,18 +32,18 @@ public class PostApiController {
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
     @PostMapping("/post")
-//    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-//        Long postId = postService.createPost(userDetails.getUsername(), createParams);
-//
-//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
-//    }
-    public Long createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-        return postService.createPost(userDetails.getUsername(), createParams);
+    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+        Long postId = postService.createPost(userDetails.getUsername(), createParams);
 
-
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }
+//    public Long createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+//        return postService.createPost(userDetails.getUsername(), createParams);
+//
+//
+//    }
 
 
     /**
@@ -53,21 +53,21 @@ public class PostApiController {
      * @param updateParams
      * @return ResponseStatus.SUCCESS_OK + Long postId
      */
-//    @PatchMapping("/post/{id}")
-//    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                                           @PathVariable Long id,
-//                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
-//        Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);
-//
-//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
-//    }
     @PatchMapping("/post/{id}")
-    public Long updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                           @PathVariable Long id,
-                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+    public ResponseFormat<Long> updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @PathVariable Long id,
+                                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+        Long postId = postService.updatePost(userDetails.getUsername(), id, updateParams);
 
-        return postService.updatePost(userDetails.getUsername(), id, updateParams);
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
     }
+//    @PatchMapping("/post/{id}")
+//    public Long updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                           @PathVariable Long id,
+//                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
+//
+//        return postService.updatePost(userDetails.getUsername(), id, updateParams);
+//    }
 
     /**
      * Delete Post API
@@ -103,14 +103,14 @@ public class PostApiController {
      * @param id
      * @return ResponseStatus.SUCCESS_OK + PostResponseDto.READ
      */
-//    @GetMapping("/post/{id}")
-//    public ResponseFormat<PostResponseDto.READ> getPostDetail(@PathVariable Long id) {
-//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostDetail(id));
-//    }
     @GetMapping("/post/{id}")
-    public PostResponseDto.READ getPostDetail(@PathVariable Long id) {
-        return postService.getPostDetail(id);
+    public ResponseFormat<PostResponseDto.READ> getPostDetail(@PathVariable Long id) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostDetail(id));
     }
+//    @GetMapping("/post/{id}")
+//    public PostResponseDto.READ getPostDetail(@PathVariable Long id) {
+//        return postService.getPostDetail(id);
+//    }
 
     /**
      * Search Post API - 검색 조건에 맞는 post 다중 조회
@@ -132,8 +132,10 @@ public class PostApiController {
      */
 
     @GetMapping("/posts")
-    public Page<PostResponseDto.READ> getPagedPosts(Pageable pageable) {
-        return postService.searchPostWithPaging(pageable);
+    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(Pageable pageable) {
+        log.info("test={}",postService.searchPostWithPaging(pageable));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,postService.searchPostWithPaging(pageable));
+
     }
 
 }
