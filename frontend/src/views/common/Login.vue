@@ -1,24 +1,84 @@
+<!--<template>-->
+<!--    <div>-->
+<!--        <div>-->
+<!--            <h2>Please Log In</h2>-->
+<!--            <div id="loginForm">-->
+<!--                <form @submit.prevent="fnLogin">-->
+<!--                    <p>-->
+<!--                        <input class="w3-input" name="uid" placeholder="Enter your ID" v-model="user_id"><br>-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        <input name="password" class="w3-input" placeholder="Enter your password" v-model="user_pw"-->
+<!--                               type="password">-->
+<!--                    </p>-->
+<!--                    <p>-->
+<!--                        <button type="submit" class="w3-button w3-green w3-round">Login</button>-->
+<!--                    </p>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</template>-->
+
 <template>
     <div>
-        <div>
-            <h2>Please Log In</h2>
-            <div id="loginForm">
-                <form @submit.prevent="fnLogin">
-                    <p>
-                        <input class="w3-input" name="uid" placeholder="Enter your ID" v-model="user_id"><br>
-                    </p>
-                    <p>
-                        <input name="password" class="w3-input" placeholder="Enter your password" v-model="user_pw"
-                               type="password">
-                    </p>
-                    <p>
-                        <button type="submit" class="w3-button w3-green w3-round">Login</button>
-                    </p>
-                </form>
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title text-center"><strong>로그인</strong></h2>
+                            <hr>
+
+                            <form @submit.prevent="fnLogin">
+                                <div class="form-group row mb-3">
+                                    <label for="uid" class="col-md-4 col-form-label text-md-right">아이디</label>
+                                    <div class="col-md-8">
+                                        <input id="uid" class="form-control" name="uid" placeholder="아이디를 입력해주세요." v-model="user_id">
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <label for="password" class="col-md-4 col-form-label text-md-right">비밀번호</label>
+                                    <div class="col-md-8">
+                                        <input id="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요." v-model="user_pw" type="password">
+                                    </div>
+                                </div>
+                                <hr>
+
+                                <div class="form-group text-center mt-3">
+                                    <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                                </div>
+
+                                <div class="form-group text-center mt-3">
+                                    <router-link to="/signup">아직 회원이 아니신가요?</router-link>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
+
+
+<style scoped>
+.card {
+    border: none;
+}
+
+.card-title {
+    font-size: 24px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+</style>
+
+
 
 <script>
 import {mapActions, mapGetters} from 'vuex'   //vuex 추가
