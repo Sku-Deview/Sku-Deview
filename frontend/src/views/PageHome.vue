@@ -1,8 +1,10 @@
 <!-- PageHome.vue -->
 <template>
     <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js App"/>
+<!--        <img alt="Vue logo" src="../assets/logo.png">-->
+<!--        <HelloWorld msg="Welcome to Your Vue.js App"/>-->
+
+        HOME 입니다.
     </div>
 </template>
 
