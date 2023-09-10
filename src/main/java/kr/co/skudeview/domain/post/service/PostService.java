@@ -75,10 +75,10 @@ public interface PostService {
      * @param postId  포스트의 ID
      * @param hashKey Redis에서 사용할 해시 키
      */
-    //void updateCntToRedis(final Long postId, String hashKey);
+    void updateCntToRedis(final Long postId, String hashKey);
 
     /**
      * updateCntToRedis이후, Redis에서 포스트 조회수를 삭제.
      */
-   // void deleteCntToRedis();
+    void deleteCntToRedis();
 }
