@@ -22,6 +22,7 @@
 
 <template>
     <div class="board-detail mt-5">
+        <h4 class="text-center mb-4"><strong>게시판</strong></h4>
         <div class="row">
             <div class="col-sm-2 d-flex flex-column align-items-center">
                 <label for="postCategory" class="mt-3"><strong>카테고리</strong></label>

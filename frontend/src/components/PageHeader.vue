@@ -21,7 +21,7 @@
 <!--</template>-->
 
 <template>
-    <header>
+    <header class="header">
         <div id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <router-link to="/" class="navbar-brand">홈</router-link>
@@ -62,9 +62,7 @@
 </template>
 
 <style scoped>
-/* 추가적인 CSS 스타일링을 여기에 적용하세요. */
 
-/* 밑줄 스타일 제거 */
 .no-underline {
     text-decoration: none !important;
 }

@@ -93,95 +93,103 @@
 <!--</template>-->
 
 <template>
-<div>
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h4 class="text-center mb-4"><strong>회원가입</strong></h4>
-            <hr/>
-            <b-form @submit.prevent="onSubmit">
-                <div class="form-group row mb-3">
-                    <label for="input-1" class="col-md-4 col-form-label text-md-right">이메일</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-2" class="col-md-4 col-form-label text-md-right">이름</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.name" type="text" id="input-2" placeholder="이름을 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-3" class="col-md-4 col-form-label text-md-right">비밀번호</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.password" type="password" id="input-3" placeholder="비밀번호를 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-4" class="col-md-4 col-form-label text-md-right">닉네임</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요"
-                                      required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-5" class="col-md-4 col-form-label text-md-right">전화번호</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.telephone" type="tel" id="input-5" placeholder="전화번호를 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-6" class="col-md-4 col-form-label text-md-right">주소</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.address" type="text" id="input-6" placeholder="주소를 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-3">
-                    <label for="input-7" class="col-md-4 col-form-label text-md-right">생년 월일</label>
-                    <div class="col-md-8">
-                        <b-form-input v-model="form.birthDate" type="date" id="input-7" placeholder="생년 월일을 입력해주세요" required></b-form-input>
-                    </div>
-                </div>
-
-                <div class="form-group row mb-4">
-                    <label for="input-8" class="col-md-4 col-form-label text-md-right">성별</label>
-                    <div class="col-md-8 d-flex align-items-center">
-                        <div class="mr-3">
-                            <b-form-radio v-model="form.gender" name="userGender" value="MALE">남성</b-form-radio>
+    <div>
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h4 class="text-center mb-4"><strong>회원가입</strong></h4>
+                    <hr/>
+                    <b-form @submit.prevent="onSubmit">
+                        <div class="form-group row mb-3">
+                            <label for="input-1" class="col-md-4 col-form-label text-md-right">이메일</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요"
+                                              required></b-form-input>
+                            </div>
                         </div>
-                        <div>
-                            <b-form-radio v-model="form.gender" name="userGender" value="FEMALE">여성</b-form-radio>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-2" class="col-md-4 col-form-label text-md-right">이름</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.name" type="text" id="input-2" placeholder="이름을 입력해주세요"
+                                              required></b-form-input>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-3" class="col-md-4 col-form-label text-md-right">비밀번호</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.password" type="password" id="input-3"
+                                              placeholder="비밀번호를 입력해주세요" required></b-form-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-4" class="col-md-4 col-form-label text-md-right">닉네임</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요"
+                                              required></b-form-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-5" class="col-md-4 col-form-label text-md-right">전화번호</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.telephone" type="tel" id="input-5"
+                                              placeholder="전화번호를 입력해주세요" required></b-form-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-6" class="col-md-4 col-form-label text-md-right">주소</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.address" type="text" id="input-6" placeholder="주소를 입력해주세요"
+                                              required></b-form-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="input-7" class="col-md-4 col-form-label text-md-right">생년 월일</label>
+                            <div class="col-md-8">
+                                <b-form-input v-model="form.birthDate" type="date" id="input-7"
+                                              placeholder="생년 월일을 입력해주세요" required></b-form-input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-4">
+                            <label for="input-8" class="col-md-4 col-form-label text-md-right">성별</label>
+                            <div class="col-md-8 d-flex align-items-center">
+                                <div class="mr-3">
+                                    <b-form-radio v-model="form.gender" name="userGender" value="MALE">남성</b-form-radio>
+                                </div>
+                                <div>
+                                    <b-form-radio v-model="form.gender" name="userGender" value="FEMALE">여성
+                                    </b-form-radio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group mb-4">
+                            <label>보유 기술</label>
+                            <b-form-select v-model="form.skillName" :options="form.options" multiple
+                                           :select-size="4"></b-form-select>
+                            <div class="mt-3">Selected: <strong>{{ form.skillName }}</strong></div>
+                        </div>
+
+                        <hr>
+
+                        <div class="text-center">
+                            <b-button type="submit" variant="primary" style="margin-right: 10px;">가입하기</b-button>
+                            <b-button type="reset" variant="danger">초기화</b-button>
+                        </div>
+
+                    </b-form>
                 </div>
-
-                <hr>
-
-                <div class="form-group mb-4">
-                    <label>보유 기술</label>
-                    <b-form-select v-model="form.skillName" :options="form.options" multiple :select-size="4"></b-form-select>
-                    <div class="mt-3">Selected: <strong>{{ form.skillName }}</strong></div>
-                </div>
-
-                <hr>
-
-                <div class="text-center">
-                    <b-button type="submit" variant="primary" style="margin-right: 10px;">가입하기</b-button>
-                    <b-button type="reset" variant="danger">초기화</b-button>
-                </div>
-
-            </b-form>
+            </div>
         </div>
     </div>
-</div>
-</div>
 
 </template>
 

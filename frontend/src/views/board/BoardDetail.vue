@@ -1,49 +1,3 @@
-<!--<template>-->
-<!--    <div class="board-detail">-->
-<!--        <div class="common-buttons">-->
-<!--            <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnUpdate">수정</button>&nbsp;-->
-<!--            <button type="button" class="w3-button w3-round w3-red" v-on:click="fnDelete">삭제</button>&nbsp;-->
-<!--            <button type="button" class="w3-button w3-round w3-green" v-on:click="fnList">목록</button>-->
-<!--        </div>-->
-<!--        <br>-->
-
-<!--        <h2>[{{ category }}] {{ title }}</h2>-->
-
-<!--        <div class="board-contents">-->
-<!--            <span class=" w3-large">{{ author }}</span>-->
-<!--            <span class="create-at">{{ created_at }}</span>-->
-<!--        </div>-->
-
-<!--        <div class="board-contents">-->
-<!--            <span v-html="content"></span>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <label for="postTitle" class="mt-3"><strong>댓글</strong></label>-->
-<!--            <textarea id="" rows="5" v-model="reply" class="w3-input w3-border" style="resize: none;" />-->
-<!--            <div class="common-buttons">-->
-<!--                <button type="button" class="w3-button w3-round w3-blue" v-on:click="replySave()">댓글 저장</button>&nbsp;-->
-<!--            </div>-->
-<!--        </div>-->
-
-
-<!--        <div v-for="(reply, idx) in replyList" :key="idx">-->
-<!--            <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>-->
-<!--            <i class="fa-solid fa-comment" @click="toMessageWrite(reply.memberNickname)"></i>-->
-<!--            <div class="reply-detail">-->
-<!--                [{{ reply.memberNickname }}]-->
-<!--                <div class="create-at">-->
-<!--                    <span>{{ reply.regDate }}</span>-->
-<!--                </div>-->
-<!--                <p>-->
-<!--                    {{ reply.content }}-->
-<!--                </p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</template>-->
-
-
 <template>
     <div class="board-detail mt-5">
         <div class="common-buttons mb-3">
@@ -54,8 +8,13 @@
 
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>
-            <p class="w3-large mb-3 mt-3">{{ author }} <span class="create-at">{{ created_at }}</span></p>
+            <p class="w3-large mb-3 mt-3">
+                {{ author }}
+                <span class="small-font">&nbsp {{ created_at }}</span>
+                <span class="small-font">&nbsp&nbsp 조회수: {{view_count}}</span>
+            </p>
         </div>
+
         <hr>
 
         <div class="board-contents" v-html="content"></div>
@@ -90,7 +49,7 @@
 
 
 <style scoped>
-.create-at {
+.small-font {
     font-size: 0.8rem;
     color: gray;
 }
@@ -108,6 +67,7 @@ export default {
             author: '',
             content: '',
             created_at: '',
+            view_count:'',
             //댓글
             replyList: [],
             reply: '',
@@ -119,6 +79,11 @@ export default {
         this.fnGetReply()
     },
     methods: {
+        formatDate(dateString) {
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            return new Date(dateString).toLocaleString(undefined, options);
+        },
+
         fnGetView() {
             this.$axios.get('/api/v1/post/' + this.idx, {
                 params: this.requestBody
@@ -126,8 +91,9 @@ export default {
                 this.title = res.data.data.title
                 this.author = res.data.data.memberNickname
                 this.content = res.data.data.content
-                this.created_at = res.data.data.regDate
+                this.created_at = this.formatDate(res.data.data.regDate)
                 this.category = res.data.data.postCategory
+                this.view_count = res.data.data.viewCount
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
