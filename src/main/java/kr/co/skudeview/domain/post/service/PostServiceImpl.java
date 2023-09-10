@@ -136,7 +136,7 @@ public class PostServiceImpl implements PostService {
 
         isPost(post);
 
-        updateCntToRedis(postId, "views");
+        //updateCntToRedis(postId, "views");
 
         PostResponseDto.READ dto = toReadDto(post.get());
 
@@ -147,82 +147,82 @@ public class PostServiceImpl implements PostService {
     /*
     게시글 상세조회 요청 시, 해당 postId에 해당하는 viewCnt를 +1 해준 값을 Redis에 저장
      */
-    @Transactional
-    @Override
-    public void updateCntToRedis(Long postId, String hashKey) {
-        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
-
-        String key = "postId::" + postId;
-
-        if (hashOperations.get(key, hashKey) == null) {
-            if (hashKey.equals("views")) {
-                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
-            } else {
-                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getLikeCount());
-            }
-            hashOperations.increment(key, hashKey, 1L);
-            System.out.println("hashOperations.get is null ---- " + hashOperations.get(key, hashKey));
-        } else {
-            hashOperations.increment(key, hashKey, 1L);
-            System.out.println("hashOperations.get is not null ---- " + hashOperations.get(key, hashKey));
-        }
-    }
+//    @Transactional
+//    @Override
+//    public void updateCntToRedis(Long postId, String hashKey) {
+//        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+//
+//        String key = "postId::" + postId;
+//
+//        if (hashOperations.get(key, hashKey) == null) {
+//            if (hashKey.equals("views")) {
+//                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
+//            } else {
+//                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getLikeCount());
+//            }
+//            hashOperations.increment(key, hashKey, 1L);
+//            System.out.println("hashOperations.get is null ---- " + hashOperations.get(key, hashKey));
+//        } else {
+//            hashOperations.increment(key, hashKey, 1L);
+//            System.out.println("hashOperations.get is not null ---- " + hashOperations.get(key, hashKey));
+//        }
+//    }
 
     /*
     Redis에 기록된 정보들을 DB에 업데이트를 진행하면서 데이터의 일관성을 유지하고, Redis의 저장된 정보들을 초기화
     Spring Scheduled를 사용하여 일정 시간마다 실행이 되도록 설정
      */
-    @Transactional
-    @Scheduled(fixedDelay = 1000L * 180L) // 18초에서 -> 180 초로 변경
-    @Override
-    public void deleteCntToRedis() {
-        String viewKey = "views";
-        String likeKey = "likes";
-        Set<String> redisKey = redisTemplate.keys("postId*");
-        Iterator<String> it = redisKey.iterator();
+//    @Transactional
+//    @Scheduled(fixedDelay = 1000L * 180L) // 18초에서 -> 180 초로 변경
+//    @Override
+//    public void deleteCntToRedis() {
+//        String viewKey = "views";
+//        String likeKey = "likes";
+//        Set<String> redisKey = redisTemplate.keys("postId*");
+//        Iterator<String> it = redisKey.iterator();
+//
+//        while (it.hasNext()) {
+//            String data = it.next();
+//            Long postId = Long.parseLong(data.split("::")[1]);
+//
+//            if (redisTemplate.opsForHash().get(data, viewKey) == null) {
+//                break;
+//            } else {
+//                Long viewCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data, viewKey)));
+//                addViewCntFromRedis(postId, viewCnt);
+//                redisTemplate.opsForHash().delete(data, viewKey);
+//            }
+//
+//            if (redisTemplate.opsForHash().get(data, likeKey) == null) {
+//                break;
+//            } else {
+//                Long likeCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data, likeKey)));
+//                addLikeCntFromRedis(postId, likeCnt);
+//                redisTemplate.opsForHash().delete(data, likeKey);
+//            }
+//        }
+//        System.out.println("Update Complete From Redis");
+//    }
 
-        while (it.hasNext()) {
-            String data = it.next();
-            Long postId = Long.parseLong(data.split("::")[1]);
+//    private void addViewCntFromRedis(Long postId, Long viewCnt) {
+//        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+//
+//        isPost(post);
+//
+//        post.get().addViewCount(viewCnt);
+//
+//        postRepository.save(post.get());
+//    }
 
-            if (redisTemplate.opsForHash().get(data, viewKey) == null) {
-                break;
-            } else {
-                Long viewCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data, viewKey)));
-                addViewCntFromRedis(postId, viewCnt);
-                redisTemplate.opsForHash().delete(data, viewKey);
-            }
-
-            if (redisTemplate.opsForHash().get(data, likeKey) == null) {
-                break;
-            } else {
-                Long likeCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data, likeKey)));
-                addLikeCntFromRedis(postId, likeCnt);
-                redisTemplate.opsForHash().delete(data, likeKey);
-            }
-        }
-        System.out.println("Update Complete From Redis");
-    }
-
-    private void addViewCntFromRedis(Long postId, Long viewCnt) {
-        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
-
-        isPost(post);
-
-        post.get().addViewCount(viewCnt);
-
-        postRepository.save(post.get());
-    }
-
-    private void addLikeCntFromRedis(Long postId, Long likeCnt) {
-        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
-
-        isPost(post);
-
-        post.get().addLikeCount(likeCnt);
-
-        postRepository.save(post.get());
-    }
+//    private void addLikeCntFromRedis(Long postId, Long likeCnt) {
+//        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+//
+//        isPost(post);
+//
+//        post.get().addLikeCount(likeCnt);
+//
+//        postRepository.save(post.get());
+//    }
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {

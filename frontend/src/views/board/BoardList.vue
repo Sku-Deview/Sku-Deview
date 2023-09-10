@@ -122,13 +122,13 @@ export default {
                 page: this.page,
                 size: this.size
             }
-            console.log(this.requestBody);
+
             this.$axios.get("/api/v1/posts", {
                 params: this.requestBody,
 
             }).then((res) => {
-                console.log(res.data.content)
-                this.list = res.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+
+                this.list = res.data.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')

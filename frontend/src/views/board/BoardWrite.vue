@@ -60,15 +60,16 @@ export default {
     },
     methods: {
         fnGetView() {
-            if (this.idx !== undefined) {
+            if (this.idx !== undefined) {``
                 this.$axios.get('/api/v1/post/' + this.idx, {
                     params: this.requestBody
 
                 }).then((res) => {
-                    this.title = res.data.title
-                    this.author = res.data.memberNickname
-                    this.content = res.data.content
-                    this.created_at = res.data.regDate
+                  console.log(res.data.data)
+                    this.title = res.data.data.title
+                    this.author = res.data.data.memberNickname
+                    this.content = res.data.data.content
+                    this.created_at = res.data.data.regDate
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -105,7 +106,7 @@ export default {
                 })
                     .then((res) => {
                         alert('글이 저장되었습니다.')
-                        this.fnView(res.data)
+                        this.fnView(res.data.data)
                     }).catch((err) => {
                     if (err.message.indexOf('Network Error') > -1) {
                         alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -120,7 +121,7 @@ export default {
                 })
                     .then((res) => {
                         alert('글이 저장되었습니다.')
-                        this.fnView(res.data)
+                        this.fnView(res.data.data)
                     }).catch((err) => {
                     if (err.message.indexOf('Network Error') > -1) {
                         alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
