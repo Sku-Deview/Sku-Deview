@@ -232,6 +232,7 @@ export default {
         async onSubmit() {
             try {
                 await axios.post('/api/v1/member', this.form);
+                alert('회원 가입이 되었습니다!')
                 await this.$router.push({name: 'Login'})
             } catch (err) {
                 throw new Error(err);
