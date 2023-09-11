@@ -26,7 +26,7 @@
             <div class="reply-detail">
                 <strong>[{{ reply.memberNickname }}]</strong>
                 <div class="create-at">
-                    <span>{{ reply.regDate }}</span>
+                    <span>{{ formatDate(reply.regDate) }}</span>
                 </div>
                 <p>
                     {{ reply.content }}
