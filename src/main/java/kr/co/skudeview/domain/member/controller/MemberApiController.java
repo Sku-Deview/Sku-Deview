@@ -31,16 +31,16 @@ public class MemberApiController {
      * @param create
      * @return ResponseStatus.SUCCESS_CREATE + Void
      */
-//    @PostMapping("/member")
-//    public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
-//        memberService.createMember(create);
-//        return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
-//    }
     @PostMapping("/member")
-    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
+    public ResponseFormat<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
         memberService.createMember(create);
-        return  new ResponseEntity<>(HttpStatus.OK);
+        return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
+//    @PostMapping("/member")
+//    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
+//        memberService.createMember(create);
+//        return  new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * @param login
@@ -51,8 +51,8 @@ public class MemberApiController {
 //        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
 //    }
     @PostMapping("/login")
-    public MemberResponseDto.READ loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
-        return memberService.loginMember(login);
+    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,memberService.loginMember(login));
     }
 
     /**
