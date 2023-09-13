@@ -5,10 +5,10 @@
             <button type="button" class="btn btn-danger btn-rounded" @click="fnDelete">삭제</button>
             <button type="button" class="btn btn-success btn-rounded" @click="fnList">목록</button>
         </div>
-
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>
             <p class="w3-large mb-3 mt-3">
+              <i class="fa-solid fa-comment" @click="toMessageWrite(author)"></i>
                 {{ author }}
                 <span class="small-font">&nbsp {{ created_at }}</span>
                 <span class="small-font">&nbsp&nbsp 조회수: {{view_count}}</span>
