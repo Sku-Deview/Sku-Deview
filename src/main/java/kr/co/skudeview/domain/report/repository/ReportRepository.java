@@ -21,4 +21,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     // postId, memberId를 이용하여 이미 신고한 것인지 체크
     boolean existsReportByPost_IdAndMember_IdAndDeleteAtFalse(Long postId, Long memberId);
+
+    Optional<Report> findReportById(Long reportId);
+
 }

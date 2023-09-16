@@ -22,4 +22,7 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     // skillName 검증 + 삭제되지 않은 skill
     boolean existsSkillByNameAndDeleteAtFalse(String name);
 
+    boolean existsSkillByName(String name);
+
+    Optional<Skill> findSkillById(Long skillId);
 }

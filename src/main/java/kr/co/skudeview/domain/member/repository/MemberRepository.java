@@ -34,4 +34,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // nickname 검증 + 삭제되지 않은 member
     boolean existsMemberByNicknameAndDeleteAtFalse(String nickname);
 
+    Optional<Member> findMemberById(Long memberId);
+
+    Optional<Member> findMemberByEmail(String email);
 }

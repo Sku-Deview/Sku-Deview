@@ -22,4 +22,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     // memberEmail 값으로 reply 다중 조회 (작성자) + 삭제되지 않은 reply
     List<Reply> findRepliesByMemberEmailAndDeleteAtFalse(String memberEmail);
 
+    // memberEmail 값으로 reply 다중 조회 (작성자)
+    List<Reply> findRepliesByMemberEmail(String memberEmail);
+
+    Optional<Reply> findReplyById(Long replyId);
 }
