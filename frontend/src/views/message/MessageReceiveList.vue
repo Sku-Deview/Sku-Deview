@@ -5,11 +5,11 @@
             <b-button @click="modalOpen = false" class="modal-exit-btn ">
                 닫기
             </b-button>
-            <h1>(받은 메세지) {{ modalList.title }}</h1>
+            <h1>{{ modalList.title }}</h1>
 
             <div class="info-row">
                 <div class="info">
-                    <span class="sendName">{{ modalList.senderName }}</span>
+                    <span class="sendName">보낸사람 :{{ modalList.senderName }}</span>
                     <span class="create-at">&nbsp&nbsp 날짜: {{ formatDateTime(modalList.regDate) }}</span>
                 </div>
             </div>
