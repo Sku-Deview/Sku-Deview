@@ -9,7 +9,7 @@
 
             <div class="info-row">
                 <div class="info">
-                    <span class="sendName">보낸사람 :{{ modalList.senderName }}</span>
+                    <span class="sendName">{{ modalList.senderName }}</span>
                     <span class="create-at">&nbsp&nbsp 날짜: {{ formatDateTime(modalList.regDate) }}</span>
                 </div>
             </div>
