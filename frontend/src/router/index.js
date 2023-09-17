@@ -9,6 +9,7 @@ import store from "@/vuex/store";
 import MessageWrite from "@/views/message/MessageWrite.vue";
 import MessageReceiveList from "@/views/message/MessageReceiveList.vue";
 import MessageSendList from "@/views/message/MessageSendList.vue";
+import AdminMain from "@/views/admin/AdminMain.vue";
 
 
 const requireAuth = () => (from, to, next) => {
@@ -19,6 +20,7 @@ const requireAuth = () => (from, to, next) => {
     } // isLogin === true면 페이지 이동
     next('/login') // isLogin === false면 다시 로그인 화면으로 이동
 }
+
 
 
 const routes = [
@@ -79,6 +81,12 @@ const routes = [
         path: '/message/send',
         name: 'MessageSendList',
         component: MessageSendList,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/main',
+        name: 'AdminMain',
+        component: AdminMain,
         beforeEnter: requireAuth()
     },
 ]

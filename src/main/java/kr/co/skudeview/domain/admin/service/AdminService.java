@@ -12,12 +12,12 @@ import java.util.List;
 
 public interface AdminService {
     //Member
-    List<MemberResponseDto.READ> getAllMember();
+    List<MemberResponseDto.adminREAD> getAllMember();
 
     Long updateMember(Long memberId, MemberRequestDto.UPDATE update);
 
 
-    MemberResponseDto.READ getMemberDetail(Long memberId);
+    MemberResponseDto.adminREAD getMemberDetail(Long memberId);
 
     //Post
     List<PostResponseDto.READ> getAllMemberPost(Long memberId);

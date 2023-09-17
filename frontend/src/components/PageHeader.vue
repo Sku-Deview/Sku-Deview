@@ -50,6 +50,9 @@
                         <li class="nav-item">
                             <router-link to="/message/send" class="nav-link">보낸 메세지</router-link>
                         </li>
+                      <li class="nav-item">
+                        <router-link to="/admin/main" v-if="Role()" class="nav-link">관리자 페이지</router-link>
+                      </li>
                     </ul>
                 </div>
                 <div class="ml-auto">
@@ -69,13 +72,31 @@
 </style>
 
 <script>
+
+
+
+
 export default {
+  data() {
+    return {
+      role:localStorage.getItem("user_role")
+
+    }
+
+  },
     methods: {
         fnLogout() {
             localStorage.removeItem("user_token")
             localStorage.removeItem("user_role")
             location.reload()
+        },
+      Role() {
+        if (localStorage.getItem("user_role") === "ROLE_ADMIN") {
+          return true;
         }
+        else return false;
+      },
+
     }
 }
 </script>

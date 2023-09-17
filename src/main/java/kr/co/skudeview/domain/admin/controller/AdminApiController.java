@@ -24,7 +24,7 @@ public class AdminApiController {
     private final AdminService adminService;
 
     @GetMapping("/member")
-    public ResponseFormat<List<MemberResponseDto.READ>> getAllMember() {
+    public ResponseFormat<List<MemberResponseDto.adminREAD>> getAllMember() {
         return ResponseFormat.successWithData(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_OK, adminService.getAllMember());
     }
 
@@ -35,7 +35,7 @@ public class AdminApiController {
     }
 
     @GetMapping("/member-detail/{memberId}")
-    public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name = "memberId") Long memberId) {
+    public ResponseFormat<MemberResponseDto.adminREAD> getMemberDetail(@PathVariable(name = "memberId") Long memberId) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, adminService.getMemberDetail(memberId));
     }
 

@@ -1,15 +1,14 @@
 <template>
-
-    <div class="black-bg" v-if="modalOpen === true">
-        <div class="white-bg">
-            <b-button @click="modalOpen = false" class="modal-exit-btn ">
+    <div class="m-black-bg" v-if="modalOpen === true">
+        <div class="m-white-bg">
+            <b-button @click="modalOpen = false" class="m-modal-exit-btn ">
                 닫기
             </b-button>
             <h1>{{ modalList.title }}</h1>
 
             <div class="info-row">
                 <div class="info">
-                    <span class="sendName">보낸사람 :{{ modalList.senderName }}</span>
+                    <span class="m-sendName">보낸사람 :{{ modalList.senderName }}</span>
                     <span class="create-at">&nbsp&nbsp 날짜: {{ formatDateTime(modalList.regDate) }}</span>
                 </div>
             </div>
@@ -17,7 +16,7 @@
             <hr>
             <h2>{{ modalList.content }}</h2>
 
-            <b-button @click="[modalOpen = false,toMessageWrite(modalList.senderName)]" class="modal-exit-btn button-button">
+            <b-button @click="[modalOpen = false,toMessageWrite(modalList.senderName)]" class="m-modal-exit-btn button-button">
                 답장
             </b-button>
         </div>
@@ -103,7 +102,7 @@ export default {
 </script>
 
 <style>
-.sendName {
+.m-sendName {
     color: #ff2b1d;
 }
 
@@ -111,7 +110,7 @@ export default {
     color: #204bff;
 }
 
-.black-bg {
+.m-black-bg {
     display: flex;
     align-items: center;
     width: 100%;
@@ -121,7 +120,7 @@ export default {
     padding: 5px;
 }
 
-.white-bg {
+.m-white-bg {
     width: 60%;
     height: 50%;
     background-color: white;
@@ -134,23 +133,23 @@ export default {
     text-align: left; /* 왼쪽 정렬로 변경 */
 }
 
-.button-container {
+.m-button-container {
     text-align: right; /* 버튼을 오른쪽 정렬 */
 }
 
-.modal-exit-btn {
+.m-modal-exit-btn {
     margin-top: 0; /* 마진 값 제거 */
     margin-right: 0; /* 마진 값 제거 */
     float: right; /* 버튼을 오른쪽으로 띄움 */
 }
 
-.button-button {
+.m-button-button {
     position: absolute;
     bottom: 20px; /* 하단과의 간격 조절 */
     right: 20px; /* 오른쪽과의 간격 조절 */
 }
 
-.modal-exit-btn:hover {
+.m-modal-exit-btn:hover {
     cursor: pointer;
 }
 </style>
