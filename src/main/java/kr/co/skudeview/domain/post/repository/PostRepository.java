@@ -20,7 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByMemberEmailAndDeleteAtFalse(String memberEmail);
 
     // memberEmail 로 member 가 작성한 post 다중 조회
-    List<Post> findPostsByMemberEmail(String memberEmail);
+    List<Post> findPostsByMemberId(Long memberId);
 
     Optional<Post> findPostById(Long postId);
 }

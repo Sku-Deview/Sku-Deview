@@ -14,13 +14,13 @@ public interface AdminService {
     //Member
     List<MemberResponseDto.READ> getAllMember();
 
-    void updateMember(String email, MemberRequestDto.UPDATE update);
+    Long updateMember(Long memberId, MemberRequestDto.UPDATE update);
 
 
     MemberResponseDto.READ getMemberDetail(Long memberId);
 
     //Post
-    List<PostResponseDto.READ> getAllMemberPost(String memberEmail);
+    List<PostResponseDto.READ> getAllMemberPost(Long memberId);
 
     PostResponseDto.READ getPostDetail(final Long postId);
 
@@ -28,9 +28,9 @@ public interface AdminService {
 
     //Reply
 
-    List<ReplyResponseDto.READ> getAllReplies(String memberEmail);
+    List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId);
 
-    Long deleteReply(String email, Long postId, Long replyId);
+    Long deleteReply(Long replyId);
 
 
     //Skill

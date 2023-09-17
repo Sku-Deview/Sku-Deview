@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.admin.service;
 
+import kr.co.skudeview.domain.admin.service.AdminService;
 import kr.co.skudeview.domain.member.dto.MemberRequestDto;
 import kr.co.skudeview.domain.member.dto.MemberResponseDto;
 import kr.co.skudeview.domain.member.entity.Member;
@@ -63,9 +64,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateMember(String email, MemberRequestDto.UPDATE update) {
+    public Long updateMember(Long memberId, MemberRequestDto.UPDATE update) {
 
-        final Optional<Member> member = memberRepository.findMemberByEmail(email);
+        final Optional<Member> member = memberRepository.findMemberById(memberId);
 
         isMember(member);
         //isTelephone(update.getTelephone());
@@ -77,6 +78,7 @@ public class AdminServiceImpl implements AdminService {
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
+        return member.get().getId();
     }
 
     @Override
@@ -89,8 +91,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<PostResponseDto.READ> getAllMemberPost(String memberEmail) {
-        List<Post> posts = postRepository.findPostsByMemberEmail(memberEmail);
+    public List<PostResponseDto.READ> getAllMemberPost(Long memberId) {
+        List<Post> posts = postRepository.findPostsByMemberId(memberId);
 
         return posts.stream().map(this::toReadDto)
                 .collect(Collectors.toList());
@@ -122,8 +124,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ReplyResponseDto.READ> getAllReplies(String memberEmail) {
-        List<Reply> list = replyRepository.findRepliesByMemberEmail(memberEmail);
+    public List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId) {
+        List<Reply> list = replyRepository.findRepliesByMemberId(memberId);
 
         return list.stream()
                 .map(this::toReadDto)
@@ -131,7 +133,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Long deleteReply(String email, Long postId, Long replyId) {
+    public Long deleteReply(Long replyId) {
         Optional<Reply> reply = replyRepository.findReplyById(replyId);
 
         isReply(reply);

@@ -244,7 +244,7 @@ public class DummyDataTest {
 
     @Test
     void createReply() {
-        for (int i = 1; i < 300; i++) {
+        for (int i = 1; i < 10; i++) {
             ReplyRequestDto.CREATE create = ReplyRequestDto.CREATE.builder()
                     .content("댓글 내용..." + i)
                     .likeCount(1)
@@ -253,6 +253,16 @@ public class DummyDataTest {
             Long postId = 1L;
             replyService.createReply(email,postId, create);
         }
+        for (int i = 11; i < 20; i++) {
+            ReplyRequestDto.CREATE create = ReplyRequestDto.CREATE.builder()
+                    .content("댓글 내용..." + i)
+                    .likeCount(1)
+                    .build();
+            String email  = "test2@test.com";
+            Long postId = 2L;
+            replyService.createReply(email,postId, create);
+        }
+
     }
 
 //    @Test

@@ -23,7 +23,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     List<Reply> findRepliesByMemberEmailAndDeleteAtFalse(String memberEmail);
 
     // memberEmail 값으로 reply 다중 조회 (작성자)
-    List<Reply> findRepliesByMemberEmail(String memberEmail);
+    List<Reply> findRepliesByMemberId(Long memberId);
 
     Optional<Reply> findReplyById(Long replyId);
 }
