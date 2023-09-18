@@ -225,6 +225,7 @@ public class AdminServiceImpl implements AdminService {
                     .memberNickname(post.getMember().getNickname())
                     .title(post.getTitle())
                     .content(post.getContent())
+                    .deleteAt(post.isDeleteAt())
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())

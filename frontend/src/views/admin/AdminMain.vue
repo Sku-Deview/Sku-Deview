@@ -120,10 +120,10 @@
         <table class="table table-striped">
           <colgroup>
             <col style="width: 5%;"/> <!-- No 열의 너비 -->
-            <col style="width: 10%;"/> <!-- 카테고리 열의 너비 -->
-            <col style="width: auto;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
-            <col style="width: 15%;"/> <!-- 작성자 열의 너비 -->
-            <col style="width: 20%;"/> <!-- 등록일시 열의 너비 -->
+            <col style="width: auto;"/> <!-- 카테고리 열의 너비 -->
+            <col style="width: 15%;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
+            <col style="width: 20%;"/> <!-- 게시글 열의 너비 -->
+            <col style="width: 20%;"/> <!-- 댓글 열의 너비 -->
           </colgroup>
           <thead>
           <tr>
@@ -144,10 +144,10 @@
             </td>
             <td>{{ item.role }}</td>
             <td>
-              <b-button>작성 게시물 보기</b-button>
+              <b-button v-on:click="toMemberPost(item.memberId)">작성 게시물 보기</b-button>
             </td>
             <td>
-              <b-button>작성 게시물 보기</b-button>
+              <b-button >작성 댓글 보기</b-button>
             </td>
           </tr>
           </tbody>
@@ -163,6 +163,7 @@
 export default {
   data() { //변수생성
     return {
+      requestBody:{},
       modalOpen: false,
       updateMemberId: '',
       MemberRequestDto: {
@@ -232,6 +233,13 @@ export default {
         path: '/admin/main',
       })
       location.reload()
+    },
+    toMemberPost(memberId) {
+      this.requestBody.idx = memberId
+      this.$router.push({
+        path: '/admin/member/post',
+        query: this.requestBody
+      })
     },
   }
 }
