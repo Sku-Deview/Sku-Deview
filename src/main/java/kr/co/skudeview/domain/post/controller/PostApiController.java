@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -132,7 +133,7 @@ public class PostApiController {
      */
 
     @GetMapping("/posts")
-    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(Pageable pageable) {
+    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         log.info("test={}",postService.searchPostWithPaging(pageable));
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,postService.searchPostWithPaging(pageable));
 
