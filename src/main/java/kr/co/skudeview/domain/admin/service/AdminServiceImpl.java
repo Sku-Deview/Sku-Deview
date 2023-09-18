@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.admin.service;
 
+import kr.co.skudeview.domain.admin.service.AdminService;
 import kr.co.skudeview.domain.member.dto.MemberRequestDto;
 import kr.co.skudeview.domain.member.dto.MemberResponseDto;
 import kr.co.skudeview.domain.member.entity.Member;
@@ -20,6 +21,7 @@ import kr.co.skudeview.domain.skill.dto.SkillResponseDto;
 import kr.co.skudeview.domain.skill.entity.Skill;
 import kr.co.skudeview.domain.skill.repository.SkillRepository;
 import kr.co.skudeview.global.common.PostCategory;
+import kr.co.skudeview.global.common.Role;
 import kr.co.skudeview.global.exception.DuplicatedException;
 import kr.co.skudeview.global.exception.NotFoundException;
 import kr.co.skudeview.global.exception.WrongPasswordException;
@@ -54,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<MemberResponseDto.READ> getAllMember() {
+    public List<MemberResponseDto.adminREAD> getAllMember() {
         List<Member> members = memberRepository.findAll();
 
         return members.stream()
@@ -63,13 +65,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateMember(String email, MemberRequestDto.UPDATE update) {
+    public Long updateMember(Long memberId, MemberRequestDto.UPDATE update) {
 
-        final Optional<Member> member = memberRepository.findMemberByEmail(email);
+        final Optional<Member> member = memberRepository.findMemberById(memberId);
 
         isMember(member);
         //isTelephone(update.getTelephone());
-        isNickname(update.getNickname());
+        //isNickname(update.getNickname());
 
         final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());
 
@@ -77,10 +79,11 @@ public class AdminServiceImpl implements AdminService {
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
+        return member.get().getId();
     }
 
     @Override
-    public MemberResponseDto.READ getMemberDetail(Long memberId) {
+    public MemberResponseDto.adminREAD getMemberDetail(Long memberId) {
         final Optional<Member> member = memberRepository.findMemberById(memberId);
 
         isMember(member);
@@ -89,8 +92,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<PostResponseDto.READ> getAllMemberPost(String memberEmail) {
-        List<Post> posts = postRepository.findPostsByMemberEmail(memberEmail);
+    public List<PostResponseDto.READ> getAllMemberPost(Long memberId) {
+        List<Post> posts = postRepository.findPostsByMemberId(memberId);
 
         return posts.stream().map(this::toReadDto)
                 .collect(Collectors.toList());
@@ -122,8 +125,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ReplyResponseDto.READ> getAllReplies(String memberEmail) {
-        List<Reply> list = replyRepository.findRepliesByMemberEmail(memberEmail);
+    public List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId) {
+        List<Reply> list = replyRepository.findRepliesByMemberId(memberId);
 
         return list.stream()
                 .map(this::toReadDto)
@@ -131,7 +134,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Long deleteReply(String email, Long postId, Long replyId) {
+    public Long deleteReply(Long replyId) {
         Optional<Reply> reply = replyRepository.findReplyById(replyId);
 
         isReply(reply);
@@ -184,17 +187,18 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    private MemberResponseDto.READ toReadDto(Member member) {
-        return MemberResponseDto.READ.builder()
+    private MemberResponseDto.adminREAD toReadDto(Member member) {
+        return MemberResponseDto.adminREAD.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
+                .password(member.getPassword())
                 .nickname(member.getNickname())
                 .telephone(member.getTelephone())
                 .address(member.getAddress())
                 .birthDate(member.getBirthDate())
                 .gender(String.valueOf(member.getGender()))
-                .role(String.valueOf(member.getGender()))
+                .role(String.valueOf(member.getRole()))
                 .skillName(getSkillsNameByMember(member))
                 .build();
     }
@@ -203,7 +207,7 @@ public class AdminServiceImpl implements AdminService {
         MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
                 .password(passwordEncoder.encode(update.getPassword()))
                 .address(update.getAddress())
-                .role(update.getRole())
+                .role(Role.of(update.getRole()).toString()) //이렇게 해도 되나..?
                 .name(update.getName())
                 .nickname(update.getNickname())
                 .telephone(update.getTelephone())

@@ -1,15 +1,15 @@
 <template>
 
-    <div class="black-bg" v-if="modalOpen === true">
-        <div class="white-bg">
-            <div class="button-container">
-                <b-button @click="modalOpen = false" class="modal-exit-btn">닫기</b-button>
+    <div class="m-black-bg" v-if="modalOpen === true">
+        <div class="m-white-bg">
+            <div class="m-button-container">
+                <b-button @click="modalOpen = false" class="m-modal-exit-btn">닫기</b-button>
             </div>
-            <h1>(보낸 메세지) {{ modalList.title }}</h1>
+            <h1>{{ modalList.title }}</h1>
 
             <div class="info-row">
                 <div class="info">
-                    <span class="sendName">받는사람: {{ modalList.receiverName }}</span>
+                    <span class="m-sendName">받는사람: {{ modalList.receiverName }}</span>
                     <span class="create-at">&nbsp&nbsp 날짜: {{ formatDateTime(modalList.regDate) }}</span>
                 </div>
             </div>
@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style>
-.sendName {
+.m-sendName {
     color: #ff2b1d;
 }
 
@@ -100,7 +100,7 @@ export default {
     color: #204bff;
 }
 
-.black-bg {
+.m-black-bg {
     display: flex;
     align-items: center;
     width: 100%;
@@ -110,7 +110,7 @@ export default {
     padding: 5px;
 }
 
-.white-bg {
+.m-white-bg {
     width: 60%;
     height: 50%;
     background-color: white;
@@ -123,17 +123,17 @@ export default {
     text-align: left; /* 왼쪽 정렬로 변경 */
 }
 
-.button-container {
+.m-button-container {
     text-align: right; /* 버튼을 오른쪽 정렬 */
 }
 
-.modal-exit-btn {
+.m-modal-exit-btn {
     margin-top: 0; /* 마진 값 제거 */
     margin-right: 0; /* 마진 값 제거 */
     float: right; /* 버튼을 오른쪽으로 띄움 */
 }
 
-.modal-exit-btn:hover {
+.m-modal-exit-btn:hover {
     cursor: pointer;
 }
 </style>

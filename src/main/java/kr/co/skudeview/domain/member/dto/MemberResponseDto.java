@@ -40,4 +40,35 @@ public class MemberResponseDto {
         private String accessToken;
     }
 
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class adminREAD {
+
+        private Long memberId;
+
+        private String password;
+
+        private String email;
+
+        private String name;
+
+        private String nickname;
+
+        private String telephone;
+
+        private String address;
+
+        private LocalDate birthDate;
+
+        private String gender;
+
+        private String role;
+
+        private Set<String> skillName;
+
+    }
+
 }

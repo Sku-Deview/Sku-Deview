@@ -24,7 +24,7 @@ export default {
                 return 'notFound'
             } else {
                 localStorage.setItem('user_token', userInfoResponse.data.data.accessToken)
-                //LocalStorage.setItem('user_role', userInfoResponse.data.role)
+                localStorage.setItem('user_role', userInfoResponse.data.data.role)
                 return userInfoResponse
             }
         } catch (err) {

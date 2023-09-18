@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/post/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 .requestMatchers("/api/v1/reply/**").hasAnyRole("USER", "ADMIN", "MANAGER")
                 .requestMatchers("/api/v1/message/**").hasAnyRole("USER", "ADMIN", "MANAGER")
+                .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN")
                 //.requestMatchers("/api/load").permitAll() //university data
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated();
