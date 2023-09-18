@@ -205,7 +205,7 @@ public class AdminServiceImpl implements AdminService {
 
     private MemberRequestDto.UPDATE toUpdateDto(MemberRequestDto.UPDATE update) {
         MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
-                .password(passwordEncoder.encode(update.getPassword()))
+                .password(update.getPassword())
                 .address(update.getAddress())
                 .role(Role.of(update.getRole()).toString()) //이렇게 해도 되나..?
                 .name(update.getName())
