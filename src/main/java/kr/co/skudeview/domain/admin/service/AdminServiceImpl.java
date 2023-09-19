@@ -125,7 +125,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId) {
+    public List<ReplyResponseDto.adminREAD> getAllRepliesByMember(Long memberId) {
         List<Reply> list = replyRepository.findRepliesByMemberId(memberId);
 
         return list.stream()
@@ -252,11 +252,12 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    private ReplyResponseDto.READ toReadDto(Reply reply) {
-        ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
+    private ReplyResponseDto.adminREAD toReadDto(Reply reply) {
+        ReplyResponseDto.adminREAD dto = ReplyResponseDto.adminREAD.builder()
                 .replyId(reply.getId())
                 .memberNickname(reply.getMember().getNickname())
                 .postId(reply.getPost().getId())
+                .deleteAt(reply.isDeleteAt())
                 .content(reply.getContent())
                 .regDate(reply.getRegDate())
                 .likeCount(reply.getLikeCount())

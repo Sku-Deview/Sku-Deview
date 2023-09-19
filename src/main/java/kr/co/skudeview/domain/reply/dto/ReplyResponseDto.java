@@ -27,4 +27,24 @@ public class ReplyResponseDto {
         private LocalDateTime regDate;
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Builder
+    public static class adminREAD {
+        private Long replyId;
+
+        private String memberNickname;
+
+        private Long postId;
+
+        private String content;
+
+        private int likeCount;
+
+        private boolean deleteAt;
+
+        private LocalDateTime regDate;
+    }
+
 }

@@ -147,7 +147,7 @@
               <b-button v-on:click="toMemberPost(item.memberId)">작성 게시물 보기</b-button>
             </td>
             <td>
-              <b-button >작성 댓글 보기</b-button>
+              <b-button v-on:click="toMemberReply(item.memberId)">작성 댓글 보기</b-button>
             </td>
           </tr>
           </tbody>
@@ -238,6 +238,13 @@ export default {
       this.requestBody.idx = memberId
       this.$router.push({
         path: '/admin/member/post',
+        query: this.requestBody
+      })
+    },
+    toMemberReply(memberId) {
+      this.requestBody.idx = memberId
+      this.$router.push({
+        path: '/admin/member/reply',
         query: this.requestBody
       })
     },

@@ -12,6 +12,8 @@ import MessageSendList from "@/views/message/MessageSendList.vue";
 import AdminMain from "@/views/admin/AdminMain.vue";
 import AdminMemberPost from "@/views/admin/AdminMemberPost.vue";
 import AdminMemberPostDetail from "@/views/admin/AdminMemberPostDetail.vue";
+import AdminMemberReply from "@/views/admin/AdminMemberReply.vue";
+
 
 
 const requireAuth = () => (from, to, next) => {
@@ -101,6 +103,12 @@ const routes = [
         path: '/admin/member/post/detail',
         name: 'AdminMemberPostDetail',
         component: AdminMemberPostDetail,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/member/reply',
+        name: 'AdminMemberReply',
+        component: AdminMemberReply,
         beforeEnter: requireAuth()
     },
 ]
