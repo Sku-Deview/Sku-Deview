@@ -1,15 +1,15 @@
 <template>
     <div class="board-detail mt-5">
         <div class="common-buttons mb-3">
-            <button type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate" style="margin-right: 3px;">수정</button>
-            <button type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete" style="margin-right: 3px;">삭제</button>
+            <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate" style="margin-right: 3px;">수정</button>
+            <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete" style="margin-right: 3px;">삭제</button>
             <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList" >목록</button>
         </div>
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>
             <p class="w3-large mb-3 mt-3">
-                <i class="fa-solid fa-comment" @click="toMessageWrite(author)"></i>
-                <i class="fa-solid" @click="toReportPost(postId, title)">신고</i>
+                <i class="fa-solid fa-comment" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
+                <i class="fa-solid" v-if="!isAuthor()" @click="toReportPost(postId, title)">신고</i>
                 {{ author }}
                 <span class="small-font">&nbsp {{ created_at }}</span>
                 <span class="small-font">&nbsp&nbsp 조회수: {{ view_count }}</span>
@@ -195,6 +195,12 @@ export default {
 
             })
         },
+      isAuthor() {
+        if (localStorage.getItem("user_nickname") === this.author) {
+          return true;
+        } else return false;
+      },
+
     }
 }
 </script>
