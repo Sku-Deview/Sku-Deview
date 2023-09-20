@@ -29,7 +29,7 @@
         <td>{{ item.postTitle }}</td>
         <td>{{ item.title }}</td>
         <td>
-          <span v-if="item.title.length < 15"><b-button on:click="fnView()">{{ item.title }}</b-button></span>
+          <span v-if="item.title.length < 15">{{ item.title }}</span>
           <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
         </td>
       </tr>
