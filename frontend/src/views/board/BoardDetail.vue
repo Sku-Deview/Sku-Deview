@@ -8,10 +8,11 @@
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>
             <p class="w3-large mb-3 mt-3">
-              <i class="fa-solid fa-comment" @click="toMessageWrite(author)"></i>
+                <i class="fa-solid fa-comment" @click="toMessageWrite(author)"></i>
+                <i class="fa-solid" @click="toReportPost(postId, title)">신고</i>
                 {{ author }}
                 <span class="small-font">&nbsp {{ created_at }}</span>
-                <span class="small-font">&nbsp&nbsp 조회수: {{view_count}}</span>
+                <span class="small-font">&nbsp&nbsp 조회수: {{ view_count }}</span>
             </p>
         </div>
 
@@ -62,12 +63,13 @@ export default {
         return {
             requestBody: this.$route.query,
             idx: this.$route.query.idx,
+            postId:'',
             category: '',
             title: '',
             author: '',
             content: '',
             created_at: '',
-            view_count:'',
+            view_count: '',
             //댓글
             replyList: [],
             reply: '',
@@ -80,7 +82,7 @@ export default {
     },
     methods: {
         formatDate(dateString) {
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+            const options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};
             return new Date(dateString).toLocaleString(undefined, options);
         },
 
@@ -88,6 +90,7 @@ export default {
             this.$axios.get('/api/v1/post/' + this.idx, {
                 params: this.requestBody
             }).then((res) => {
+                this.postId = res.data.data.postId
                 this.title = res.data.data.title
                 this.author = res.data.data.memberNickname
                 this.content = res.data.data.content
@@ -179,6 +182,17 @@ export default {
             this.$router.push({
                 path: '/message/write',
                 query: {name: receiverNickname}
+            })
+        },
+        toReportPost(postId, title) {
+            console.log("-----" + postId);
+            this.$router.push({
+                path: '/report/write',
+                query: {
+                    reportPost: postId,
+                    postTitle: title,
+                }
+
             })
         },
     }

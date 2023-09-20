@@ -1,0 +1,138 @@
+<template>
+    <div class="container my-5 col-8">
+        <div class="report-header">
+            <h2><strong>게시글 신고하기</strong></h2>
+        </div>
+        <hr class="report-divider">
+        <div class="report-input">
+            <div class="form-group row align-items-center">
+                <div class="row mb-3">
+                    <div class="col-sm-2 d-flex flex-column align-items-center">
+                        <label for="reportCategory" class="mt-3"><strong>신고 카테고리:</strong></label>
+                    </div>
+                    <div class="col">
+                        <b-form-select v-model="reportCategory" :options="options" size="sm" class="mt-3" id="reportCategory"></b-form-select>
+                    </div>
+                </div>
+                <label for="title" class="col-md-2 col-form-label"><strong>신고 제목:</strong></label>
+                <div class="col-md-4">
+                    <input
+                            type="text"
+                            id="title"
+                            v-model="title"
+                            class="form-control report-text-input"
+                            placeholder="제목을 입력해주세요."
+                            required
+                    >
+                </div>
+                <label for="reportPost" class="col-md-2 col-form-label"><strong>신고 게시물:</strong></label>
+                <div class="col-md-4">
+                    <input
+                            type="text"
+                            id="postTitle"
+                            v-model="postTitle"
+                            class="form-control report-text-input"
+                            readonly
+                    >
+                </div>
+                <label for="reportPost" class="col-md-2 col-form-label" hidden><strong>신고 게시물Id:</strong></label>
+                <div class="col-md-4" hidden>
+                    <input
+                        type="text"
+                        id="reportPost"
+                        v-model="postId"
+                        class="form-control report-text-input"
+                        readonly
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="report-input mt-3">
+            <div class="form-group row align-items-center">
+                <label for="description" class="col-md-2 col-form-label"><strong>신고 내용:</strong></label>
+                <div class="col-md-10">
+          <textarea
+                  id="description"
+                  cols="40"
+                  rows="10"
+                  v-model="description"
+                  class="form-control report-text-input"
+                  style="resize: none;"
+                  placeholder="내용을 입력해주세요."
+                  required
+          ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="report-buttons mt-3 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-rounded" @click="fnSave">보내기</button>
+        </div>
+    </div>
+</template>
+
+
+<script>
+export default {
+    name: "ReportWrite",
+    data() { //변수생성
+        return {
+            title: '',
+            description: '',
+            postId: this.$route.query.reportPost,
+            postTitle: this.$route.query.postTitle,
+            reportCategory: '',
+            options: [
+                {value: 'ABUSE', text: '욕설'},
+                {value: 'DEFAMATION', text: '명예훼손'},
+                {value: 'PORNOGRAPHY', text: '음란물'},
+                {value: 'ADVERTISEMENT', text: '광고'},
+                {value: 'SPAMMER', text: '도배'},
+            ]
+        }
+    },
+    methods: {
+        fnSave() {
+            if (!this.title) { // 제목 또는 내용이 입력되지 않은 경우
+                alert("제목을 입력해주세요.");
+                return;
+            }
+            if (!this.description) {
+                alert("내용을 입력해주세요.");
+                return;
+            }
+
+            this.form = {
+                "title": this.title,
+                "description": this.description,
+                "postId": this.postId,
+                "reportCategory": this.reportCategory,
+            }
+
+
+            // if (this.idx === undefined) {
+                console.log("-----------11-" + this.postId);
+                //INSERT
+                this.$axios.post(`/api/v1/report/${this.form.postId}`, this.form, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('user_token')}`
+                    }
+                })
+                    .then(() => {
+                        alert('게시글 신고가 완료 되었습니다.')
+                        this.fnBoardList()
+                    }).catch((err) => {
+                    if (err.message.indexOf('Network Error') > -1) {
+                        alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+                    }
+                })
+            // }
+        },
+        fnBoardList() {
+            this.$router.push({
+                path: '/board/list',
+            })
+        },
+    }
+}
+
+</script>

@@ -10,6 +10,7 @@ import MessageWrite from "@/views/message/MessageWrite.vue";
 import MessageReceiveList from "@/views/message/MessageReceiveList.vue";
 import MessageSendList from "@/views/message/MessageSendList.vue";
 import AdminMain from "@/views/admin/AdminMain.vue";
+import ReportWrite from "@/views/report/ReportWrite.vue";
 
 
 const requireAuth = () => (from, to, next) => {
@@ -87,6 +88,12 @@ const routes = [
         path: '/admin/main',
         name: 'AdminMain',
         component: AdminMain,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/report/write',
+        name: 'ReportWrite',
+        component: ReportWrite,
         beforeEnter: requireAuth()
     },
 ]
