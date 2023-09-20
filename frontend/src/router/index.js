@@ -100,6 +100,7 @@ const routes = [
         name: 'ReportWrite',
         component: ReportWrite,
     },
+    {
         path: '/admin/member/post',
         name: 'AdminMemberPost',
         component: AdminMemberPost,
