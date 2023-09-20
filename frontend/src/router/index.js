@@ -10,7 +10,12 @@ import MessageWrite from "@/views/message/MessageWrite.vue";
 import MessageReceiveList from "@/views/message/MessageReceiveList.vue";
 import MessageSendList from "@/views/message/MessageSendList.vue";
 import AdminMain from "@/views/admin/AdminMain.vue";
+
 import ReportWrite from "@/views/report/ReportWrite.vue";
+import AdminMemberPost from "@/views/admin/AdminMemberPost.vue";
+import AdminMemberPostDetail from "@/views/admin/AdminMemberPostDetail.vue";
+import AdminMemberReply from "@/views/admin/AdminMemberReply.vue";
+
 
 
 const requireAuth = () => (from, to, next) => {
@@ -94,6 +99,22 @@ const routes = [
         path: '/report/write',
         name: 'ReportWrite',
         component: ReportWrite,
+    },
+        path: '/admin/member/post',
+        name: 'AdminMemberPost',
+        component: AdminMemberPost,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/member/post/detail',
+        name: 'AdminMemberPostDetail',
+        component: AdminMemberPostDetail,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/member/reply',
+        name: 'AdminMemberReply',
+        component: AdminMemberReply,
         beforeEnter: requireAuth()
     },
 ]

@@ -28,7 +28,7 @@ public interface AdminService {
 
     //Reply
 
-    List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId);
+    List<ReplyResponseDto.adminREAD> getAllRepliesByMember(Long memberId);
 
     Long deleteReply(Long replyId);
 

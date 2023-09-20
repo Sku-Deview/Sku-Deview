@@ -55,7 +55,7 @@ public class AdminApiController {
     }
 
     @GetMapping("/reply/{memberId}")
-    public ResponseFormat<List<ReplyResponseDto.READ>> getAllRepliesByMember(@PathVariable(name = "memberId") Long memberId) {
+    public ResponseFormat<List<ReplyResponseDto.adminREAD>> getAllRepliesByMember(@PathVariable(name = "memberId") Long memberId) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, adminService.getAllRepliesByMember(memberId));
     }
 
