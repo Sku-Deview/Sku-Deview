@@ -1,19 +1,20 @@
 <template>
     <div class="board-list mt-5">
         <div class="nav-buttons mb-3">
-            <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="selectCategory('')">
+            <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="fnSelectCategory('')">
                 전체글
             </button>
-            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link" @click="selectCategory('NOTICE')">
+            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link"
+                    @click="fnSelectCategory('NOTICE')">
                 공지사항
             </button>
-            <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="selectCategory('QNA')">
+            <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="fnSelectCategory('QNA')">
                 질문
             </button>
-            <button :class="{ active: postCategory === 'INFO' }" class="btn btn-link" @click="selectCategory('INFO')">
+            <button :class="{ active: postCategory === 'INFO' }" class="btn btn-link" @click="fnSelectCategory('INFO')">
                 정보
             </button>
-            <button :class="{ active: postCategory === 'FREE' }" class="btn btn-link" @click="selectCategory('FREE')">
+            <button :class="{ active: postCategory === 'FREE' }" class="btn btn-link" @click="fnSelectCategory('FREE')">
                 자유
             </button>
         </div>
@@ -81,9 +82,9 @@
                 <li class="page-item">
                     <a class="page-link" @click="fnPage(page - 1)" href="javascript:;">&lt;</a>
                 </li>
-<!--                <li class="page-item" v-for="n in paginavigation()" :key="n">-->
-<!--                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ page }}</a>-->
-<!--                </li>-->
+                <!--                <li class="page-item" v-for="n in paginavigation()" :key="n">-->
+                <!--                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ page }}</a>-->
+                <!--                </li>-->
                 <li class="page-item" :key="n">
                     <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ page }}</a>
                 </li>
@@ -98,18 +99,20 @@
         <hr>
 
         <!--        TODO : 검색 폼만 추가. 아직 동작 X -->
-        <form @submit.prevent="fnSearch">
-            <div class="form-group row align-items-center">
-                <label for="searchText" class="col-md-2 col-form-label">검색:</label>
-                <div class="col-md-8">
-                    <input type="text" class="form-control" id="searchText" v-model="searchText"
-                           placeholder="검색어를 입력하세요"/>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-rounded">검색</button>
-                </div>
+        <!--        <form @submit.prevent="fnSearch">-->
+        <div class="form-group row align-items-center">
+            <label for="searchText" class="col-md-1 col-form-label">검색:</label>
+            <div class="col-md-2">
+                <b-form-select v-model="searchType" :options="selectedOption" size="sm" class="mt-3" id="searchType"></b-form-select>
             </div>
-        </form>
+            <div class="col-md">
+                <input type="text" class="form-control" id="searchText" v-model="searchText" placeholder="검색어를 입력하세요"/>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-rounded" @click="fnSearch(searchType, searchText)">검색</button>
+            </div>
+        </div>
+        <!--        </form>-->
     </div>
 </template>
 
@@ -208,32 +211,27 @@ export default {
         return {
             requestBody: {}, //리스트 페이지 데이터전송
             list: {}, //리스트 데이터
-            // selectedCategory: '', // 초기값으로 "전체글"을 선택
             postCategory: '',
+            searchType: '',
+            searchText: '',
+            selectedOption: [
+                {value: 'title', text: '제목' },
+                {value: 'writer', text: '작성자'},
+                {value: 'titleAndWriter', text: '제목 + 작성자'},
+            ],
 
             // URL에서 page, size 정보를 가져와서 저장
             page: this.$route.query.page ? this.$route.query.page : 0,
             size: this.$route.query.size ? this.$route.query.size : 10,
-            keyword: this.$route.query.keyword,
 
             paginavigation: function () { //페이징 처리 for문 커스텀
                 let pageNumber = [] //;
                 let start_page = this.page;
-                let end_page = this.page+5;
+                let end_page = this.page + 5;
                 for (let i = start_page; i <= end_page; i++) pageNumber.push(i);
                 return pageNumber;
             }
         }
-    },
-    computed: {
-        // 선택된 카테고리에 따라 글 목록을 필터링하여 반환
-        filteredList() {
-            // if (this.selectedCategory === "ALL") {
-                return this.list; // 전체글인 경우 필터링하지 않고 전체 목록 반환
-            // }
-            // 다른 카테고리인 경우 해당 카테고리에 맞는 글만 필터링하여 반환
-            // return this.list.filter((item) => item.postCategory === this.selectedCategory);
-        },
     },
     mounted() {
         this.fnGetList()
@@ -246,16 +244,16 @@ export default {
                 size: this.size,
                 totalPage: this.totalPage,
                 postCategory: this.postCategory,
+                searchText: this.searchText,
+                searchType: this.searchType,
             }
             this.$axios.get("/api/v1/posts", {
                 params: this.requestBody,
-
             }).then((res) => {
                 this.page = res.data.data.number;
                 this.size = res.data.data.size;
                 this.totalPage = res.data.data.totalPages;
                 this.list = res.data.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
-                // this.postCategory = res.data.data.postCategory
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -282,16 +280,24 @@ export default {
                 }
             }
         },
-        // selectCategory(category) {
-        //     this.selectedCategory = category;
-        //     this.page = 0; // 카테고리 변경 시 페이지를 0으로 리셋
-        //     this.fnGetList();
-        // },
-        selectCategory(postCategory) {
+        fnSelectCategory(postCategory) {
             this.postCategory = postCategory;
             this.page = 0; // 카테고리 변경 시 페이지를 0으로 리셋
             // URL을 업데이트하여 선택한 카테고리 정보를 서버로 전달
-            this.$router.push({ path: this.$route.path, query: { postCategory } });
+            this.$router.push({path: this.$route.path, query: {postCategory}});
+            this.fnGetList();
+        },
+        fnSearch(searchType, searchText) {
+            this.searchText = searchText;
+            this.searchType = searchType;
+            this.page = 0;
+            this.$router.push({
+                path: this.$route.path,
+                query: {
+                    searchType: searchType,
+                    searchText: searchText
+                }
+            });
             this.fnGetList();
         },
         // 등록일시를 원하는 형식으로 포맷팅하는 메서드
