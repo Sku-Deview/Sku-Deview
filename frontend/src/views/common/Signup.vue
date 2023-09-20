@@ -233,8 +233,8 @@ export default {
         options,
         onSubmit() {
             this.$axios.post("/api/v1/member", this.form)
-                .then(() => {
-                    alert('회원 가입이 되었습니다!');
+                .then((res) => {
+                  alert(res.data.message)
                     this.$router.push({name: 'Login'})
                 }).catch((err) => {
                     alert(err.response.data.message);

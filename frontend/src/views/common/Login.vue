@@ -109,11 +109,8 @@ export default {
                 let loginResult = await this.login({user_id: this.user_id, user_pw: this.user_pw})
                 if (loginResult) this.goToPages()
             } catch (err) {
-                if (err.message.indexOf('Network Error') > -1) {
-                    alert('서버에 접속할 수 없습니다. 상태를 확인해주세요.')
-                } else {
-                    alert('로그인 정보를 확인할 수 없습니다.')
-                }
+              alert("아이디와 패스워드를 다시 확인해주세요")
+              location.reload()
             }
         },
         goToPages() {
