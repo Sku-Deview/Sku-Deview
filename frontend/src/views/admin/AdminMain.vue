@@ -117,6 +117,7 @@
     </div>
   </div>
   <b-button v-on:click="toReportList">신고 리스트</b-button>
+  <b-button v-on:click="toSkillList">스킬 리스트</b-button>
       <div class="board-list mt-5">
         <table class="table table-striped">
           <colgroup>
@@ -252,6 +253,12 @@ export default {
     toReportList() {
       this.$router.push({
         path: '/admin/report/list',
+
+      })
+    },
+    toSkillList() {
+      this.$router.push({
+        path: '/admin/skill/list',
 
       })
     },
