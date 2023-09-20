@@ -85,8 +85,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable) {
-        return postSearchRepository.findWithPaging(pageable).map(this::toReadDto);
+    public Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory) {
+        return postSearchRepository.findWithPaging(pageable, postCategory).map(this::toReadDto);
     }
 
     @Override

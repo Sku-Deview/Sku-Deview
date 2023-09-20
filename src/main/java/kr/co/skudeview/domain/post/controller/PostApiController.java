@@ -133,9 +133,10 @@ public class PostApiController {
      */
 
     @GetMapping("/posts")
-    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-        log.info("test={}",postService.searchPostWithPaging(pageable));
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,postService.searchPostWithPaging(pageable));
+    public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@PageableDefault(page = 0, size = 10) Pageable pageable
+            , @RequestParam String postCategory) {
+//        log.info("test={}", postService.searchPostWithPaging(pageable));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(pageable, postCategory));
 
     }
 

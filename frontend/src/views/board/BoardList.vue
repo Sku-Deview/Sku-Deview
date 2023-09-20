@@ -1,5 +1,22 @@
 <template>
     <div class="board-list mt-5">
+        <div class="nav-buttons mb-3">
+            <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="selectCategory('')">
+                전체글
+            </button>
+            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link" @click="selectCategory('NOTICE')">
+                공지사항
+            </button>
+            <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="selectCategory('QNA')">
+                질문
+            </button>
+            <button :class="{ active: postCategory === 'INFO' }" class="btn btn-link" @click="selectCategory('INFO')">
+                정보
+            </button>
+            <button :class="{ active: postCategory === 'FREE' }" class="btn btn-link" @click="selectCategory('FREE')">
+                자유
+            </button>
+        </div>
         <table class="table table-striped">
             <colgroup>
                 <col style="width: 5%;"/> <!-- No 열의 너비 -->
@@ -107,6 +124,21 @@
     background-color: blue; /* 마우스 호버 시 원하는 배경색으로 변경하세요. */
 }
 
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    text-decoration: none;
+}
+
+/* 활성화된 버튼 스타일 */
+.btn.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
 </style>
 
 
@@ -176,6 +208,8 @@ export default {
         return {
             requestBody: {}, //리스트 페이지 데이터전송
             list: {}, //리스트 데이터
+            // selectedCategory: '', // 초기값으로 "전체글"을 선택
+            postCategory: '',
 
             // URL에서 page, size 정보를 가져와서 저장
             page: this.$route.query.page ? this.$route.query.page : 0,
@@ -191,6 +225,16 @@ export default {
             }
         }
     },
+    computed: {
+        // 선택된 카테고리에 따라 글 목록을 필터링하여 반환
+        filteredList() {
+            // if (this.selectedCategory === "ALL") {
+                return this.list; // 전체글인 경우 필터링하지 않고 전체 목록 반환
+            // }
+            // 다른 카테고리인 경우 해당 카테고리에 맞는 글만 필터링하여 반환
+            // return this.list.filter((item) => item.postCategory === this.selectedCategory);
+        },
+    },
     mounted() {
         this.fnGetList()
     },
@@ -201,6 +245,7 @@ export default {
                 page: this.page,
                 size: this.size,
                 totalPage: this.totalPage,
+                postCategory: this.postCategory,
             }
             this.$axios.get("/api/v1/posts", {
                 params: this.requestBody,
@@ -210,6 +255,7 @@ export default {
                 this.size = res.data.data.size;
                 this.totalPage = res.data.data.totalPages;
                 this.list = res.data.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+                // this.postCategory = res.data.data.postCategory
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -235,6 +281,18 @@ export default {
                     this.fnGetList()
                 }
             }
+        },
+        // selectCategory(category) {
+        //     this.selectedCategory = category;
+        //     this.page = 0; // 카테고리 변경 시 페이지를 0으로 리셋
+        //     this.fnGetList();
+        // },
+        selectCategory(postCategory) {
+            this.postCategory = postCategory;
+            this.page = 0; // 카테고리 변경 시 페이지를 0으로 리셋
+            // URL을 업데이트하여 선택한 카테고리 정보를 서버로 전달
+            this.$router.push({ path: this.$route.path, query: { postCategory } });
+            this.fnGetList();
         },
         // 등록일시를 원하는 형식으로 포맷팅하는 메서드
         formatDateTime(dateTimeStr) {

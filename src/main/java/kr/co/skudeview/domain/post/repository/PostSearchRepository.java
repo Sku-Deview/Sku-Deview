@@ -8,12 +8,15 @@ import kr.co.skudeview.domain.member.entity.QMember;
 import kr.co.skudeview.domain.post.dto.PostRequestDto;
 import kr.co.skudeview.domain.post.entity.Post;
 import kr.co.skudeview.domain.post.entity.QPost;
+import kr.co.skudeview.global.common.Gender;
+import kr.co.skudeview.global.common.PostCategory;
 import kr.co.skudeview.global.util.DynamicQueryUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -70,15 +73,16 @@ public class PostSearchRepository {
 //        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
 //    }
 
-    public Page<Post> findWithPaging(Pageable pageable) {
+    public Page<Post> findWithPaging(Pageable pageable, String postCategory) {
 
         // 조건에 맞는 쿼리 구성
         JPAQuery<Post> query = queryFactory
                 .selectFrom(post)
                 .leftJoin(post.member, member)
                 .where(
-
-                        post.deleteAt.eq(Boolean.FALSE)
+                        post.deleteAt.eq(Boolean.FALSE),
+                        postCategoryEq(postCategory)
+//                        post.postCategory.eq(PostCategory.valueOf(postCategory))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -86,6 +90,14 @@ public class PostSearchRepository {
         QueryResults<Post> results = query.fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
+    private BooleanExpression postCategoryEq(String category) {
+        if (!StringUtils.hasText(category)) {
+            return null;
+        }
+
+        return post.postCategory.eq(PostCategory.valueOf(category));
     }
 
     private BooleanExpression postDateBetween(LocalDate fromPostDate, LocalDate toPostDate) {
