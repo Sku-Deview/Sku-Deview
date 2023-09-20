@@ -25,6 +25,7 @@ export default {
             } else {
                 localStorage.setItem('user_token', userInfoResponse.data.data.accessToken)
                 localStorage.setItem('user_role', userInfoResponse.data.data.role)
+                localStorage.setItem('user_nickname', userInfoResponse.data.data.nickname)
                 return userInfoResponse
             }
         } catch (err) {
