@@ -67,7 +67,7 @@ public interface PostService {
      * @param pageable 페이징 정보
      * @return 페이징된 포스트 목록을 담은 DTO 페이지 (Page<PostResponseDto.READ>)
      */
-    Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory);
+    Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory, String searchType, String searchText);
 
     /**
      * Redis에 포스트 조회수를 업데이트.

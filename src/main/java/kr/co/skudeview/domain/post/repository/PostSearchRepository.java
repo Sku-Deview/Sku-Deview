@@ -73,7 +73,7 @@ public class PostSearchRepository {
 //        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
 //    }
 
-    public Page<Post> findWithPaging(Pageable pageable, String postCategory) {
+    public Page<Post> findWithPaging(Pageable pageable, String postCategory, String searchType, String searchText) {
 
         // 조건에 맞는 쿼리 구성
         JPAQuery<Post> query = queryFactory
@@ -81,8 +81,9 @@ public class PostSearchRepository {
                 .leftJoin(post.member, member)
                 .where(
                         post.deleteAt.eq(Boolean.FALSE),
-                        postCategoryEq(postCategory)
-//                        post.postCategory.eq(PostCategory.valueOf(postCategory))
+                        postCategoryEq(postCategory),
+                        postSearchText(searchType, searchText)
+//                        DynamicQueryUtils.filter(searchText, post.title::contains)
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
@@ -98,6 +99,19 @@ public class PostSearchRepository {
         }
 
         return post.postCategory.eq(PostCategory.valueOf(category));
+    }
+
+    private BooleanExpression postSearchText(String searchType, String searchText) {
+        if (!StringUtils.hasText(searchText)) {
+            return null;
+        } else if (searchType.equals("title")) {
+            return post.title.contains(searchText);
+        } else if (searchType.equals("writer")) {
+            return post.member.nickname.contains(searchText);
+        } else {
+            return post.title.contains(searchText).or(post.member.nickname.contains(searchText));
+        }
+
     }
 
     private BooleanExpression postDateBetween(LocalDate fromPostDate, LocalDate toPostDate) {
