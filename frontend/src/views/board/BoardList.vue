@@ -4,8 +4,7 @@
             <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="fnSelectCategory('')">
                 전체글
             </button>
-            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link"
-                    @click="fnSelectCategory('NOTICE')">
+            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link" @click="fnSelectCategory('NOTICE')">
                 공지사항
             </button>
             <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="fnSelectCategory('QNA')">
@@ -98,12 +97,9 @@
         </div>
         <hr>
 
-        <!--        TODO : 검색 폼만 추가. 아직 동작 X -->
-        <!--        <form @submit.prevent="fnSearch">-->
         <div class="form-group row align-items-center">
-            <label for="searchText" class="col-md-1 col-form-label">검색:</label>
             <div class="col-md-2">
-                <b-form-select v-model="searchType" :options="selectedOption" size="sm" class="mt-3" id="searchType"></b-form-select>
+                <b-form-select v-model="searchType" :options="selectedOption" id="searchType"></b-form-select>
             </div>
             <div class="col-md">
                 <input type="text" class="form-control" id="searchText" v-model="searchText" placeholder="검색어를 입력하세요"/>
@@ -112,7 +108,6 @@
                 <button type="submit" class="btn btn-primary btn-rounded" @click="fnSearch(searchType, searchText)">검색</button>
             </div>
         </div>
-        <!--        </form>-->
     </div>
 </template>
 
@@ -136,7 +131,6 @@
     text-decoration: none;
 }
 
-/* 활성화된 버튼 스타일 */
 .btn.active {
     background-color: #007bff;
     color: #fff;
@@ -212,7 +206,7 @@ export default {
             requestBody: {}, //리스트 페이지 데이터전송
             list: {}, //리스트 데이터
             postCategory: '',
-            searchType: '',
+            searchType: 'title',
             searchText: '',
             selectedOption: [
                 {value: 'title', text: '제목' },
@@ -264,7 +258,7 @@ export default {
             this.requestBody.idx = idx
             this.$router.push({
                 path: './detail',
-                query: this.requestBody
+                query: {idx}
             })
         },
         fnWrite() {

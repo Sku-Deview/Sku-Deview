@@ -1,9 +1,9 @@
 <template>
     <div class="board-detail mt-5">
         <div class="common-buttons mb-3">
-            <button type="button" class="btn btn-primary btn-rounded" @click="fnUpdate">수정</button>
-            <button type="button" class="btn btn-danger btn-rounded" @click="fnDelete">삭제</button>
-            <button type="button" class="btn btn-success btn-rounded" @click="fnList">목록</button>
+            <button type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate" style="margin-right: 3px;">수정</button>
+            <button type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete" style="margin-right: 3px;">삭제</button>
+            <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList" >목록</button>
         </div>
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>

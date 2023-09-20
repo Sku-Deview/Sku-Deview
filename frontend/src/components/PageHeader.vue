@@ -26,13 +26,13 @@
             <div class="container">
                 <router-link to="/" class="navbar-brand">홈</router-link>
                 <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarNav"
-                    aria-controls="navbarNav"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
+                        class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
                 >
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -42,23 +42,27 @@
                             <router-link to="/board/list" class="nav-link">게시판</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/signup" class="nav-link">회원 가입</router-link>
-                        </li>
-                        <li class="nav-item">
                             <router-link to="/message/received" class="nav-link">받은 메세지</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link to="/message/send" class="nav-link">보낸 메세지</router-link>
                         </li>
-                      <li class="nav-item">
-                        <router-link to="/admin/main" v-if="Role()" class="nav-link">관리자 페이지</router-link>
-                      </li>
+                        <li class="nav-item">
+                            <router-link to="/admin/main" v-if="Role()" class="nav-link">관리자 페이지</router-link>
+                        </li>
                     </ul>
                 </div>
-                <div class="ml-auto">
-                    <router-link to="/login" v-if="!this.$store.state.isLogin" class="no-underline">로그인</router-link>
-                    <a v-if="this.$store.state.isLogin" @click="fnLogout" >로그아웃</a>
+
+                <div class="d-flex">
+                    <router-link to="/signup" v-if="!this.$store.state.isLogin" class="nav-link" style="margin-right: 10px;">회원 가입
+                    </router-link>
+                    <router-link to="/login" v-if="!this.$store.state.isLogin" class="no-underline" style="margin-right: 10px;">로그인
+                    </router-link>
+                    <router-link to="/login" v-if="this.$store.state.isLogin" @click="fnLogout" class="no-underline">로그아웃
+                    </router-link>
                 </div>
+
+
             </div>
         </div>
     </header>
@@ -73,29 +77,25 @@
 
 <script>
 
-
-
-
 export default {
-  data() {
-    return {
-      role:localStorage.getItem("user_role")
+    data() {
+        return {
+            role: localStorage.getItem("user_role")
 
-    }
+        }
 
-  },
+    },
     methods: {
         fnLogout() {
             localStorage.removeItem("user_token")
             localStorage.removeItem("user_role")
             location.reload()
         },
-      Role() {
-        if (localStorage.getItem("user_role") === "ROLE_ADMIN") {
-          return true;
-        }
-        else return false;
-      },
+        Role() {
+            if (localStorage.getItem("user_role") === "ROLE_ADMIN") {
+                return true;
+            } else return false;
+        },
 
     }
 }

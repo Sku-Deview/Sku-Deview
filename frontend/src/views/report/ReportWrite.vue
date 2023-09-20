@@ -7,42 +7,44 @@
         <div class="report-input">
             <div class="form-group row align-items-center">
                 <div class="row mb-3">
-                    <div class="col-sm-2 d-flex flex-column align-items-center">
-                        <label for="reportCategory" class="mt-3"><strong>신고 카테고리:</strong></label>
+                    <label for="reportPost" class="col-md-2 col-form-label"><strong>신고 게시물 제목:</strong></label>
+                    <div class="col-md-10">
+                        <input
+                                type="text"
+                                id="postTitle"
+                                v-model="postTitle"
+                                class="form-control report-text-input"
+                                readonly
+                        >
                     </div>
-                    <div class="col">
-                        <b-form-select v-model="reportCategory" :options="options" size="sm" class="mt-3" id="reportCategory"></b-form-select>
+                </div>
+                <div class="row">
+                    <label for="title" class="col-md-2 col-form-label"><strong>신고 제목:</strong></label>
+                    <div class="col-md-4">
+                        <input
+                                type="text"
+                                id="title"
+                                v-model="title"
+                                class="form-control report-text-input"
+                                placeholder="제목을 입력해주세요."
+                                required
+                        >
+                    </div>
+
+                    <label for="reportCategory" class="col-md-2 col-form-label"><strong>신고 카테고리:</strong></label>
+                    <div class="col-md-4">
+                        <b-form-select v-model="reportCategory" :options="options" id="reportCategory"></b-form-select>
                     </div>
                 </div>
-                <label for="title" class="col-md-2 col-form-label"><strong>신고 제목:</strong></label>
-                <div class="col-md-4">
-                    <input
-                            type="text"
-                            id="title"
-                            v-model="title"
-                            class="form-control report-text-input"
-                            placeholder="제목을 입력해주세요."
-                            required
-                    >
-                </div>
-                <label for="reportPost" class="col-md-2 col-form-label"><strong>신고 게시물:</strong></label>
-                <div class="col-md-4">
-                    <input
-                            type="text"
-                            id="postTitle"
-                            v-model="postTitle"
-                            class="form-control report-text-input"
-                            readonly
-                    >
-                </div>
-                <label for="reportPost" class="col-md-2 col-form-label" hidden><strong>신고 게시물Id:</strong></label>
+
+                <label for="reportPost" class="col-md-2 col-form-label" hidden><strong>신고 게시물 Id:</strong></label>
                 <div class="col-md-4" hidden>
                     <input
-                        type="text"
-                        id="reportPost"
-                        v-model="postId"
-                        class="form-control report-text-input"
-                        readonly
+                            type="text"
+                            id="reportPost"
+                            v-model="postId"
+                            class="form-control report-text-input"
+                            readonly
                     >
                 </div>
             </div>
@@ -80,7 +82,7 @@ export default {
             description: '',
             postId: this.$route.query.reportPost,
             postTitle: this.$route.query.postTitle,
-            reportCategory: '',
+            reportCategory: 'ABUSE',
             options: [
                 {value: 'ABUSE', text: '욕설'},
                 {value: 'DEFAMATION', text: '명예훼손'},
@@ -110,21 +112,21 @@ export default {
 
 
             // if (this.idx === undefined) {
-                console.log("-----------11-" + this.postId);
-                //INSERT
-                this.$axios.post(`/api/v1/report/${this.form.postId}`, this.form, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('user_token')}`
-                    }
-                })
-                    .then(() => {
-                        alert('게시글 신고가 완료 되었습니다.')
-                        this.fnBoardList()
-                    }).catch((err) => {
-                    if (err.message.indexOf('Network Error') > -1) {
-                        alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-                    }
-                })
+            console.log("-----------11-" + this.postId);
+            //INSERT
+            this.$axios.post(`/api/v1/report/${this.form.postId}`, this.form, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('user_token')}`
+                }
+            })
+                .then(() => {
+                    alert('게시글 신고가 완료 되었습니다.')
+                    this.fnBoardList()
+                }).catch((err) => {
+                if (err.message.indexOf('Network Error') > -1) {
+                    alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+                }
+            })
             // }
         },
         fnBoardList() {
