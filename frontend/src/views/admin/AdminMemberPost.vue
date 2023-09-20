@@ -28,7 +28,7 @@
         </td>
         <td>{{item.deleteAt}}</td>
         <td>{{ item.memberNickname }}</td>
-        <td>{{ formatDateTime(item.regDate) }}</td>
+        <td>{{ formatDateTime(item.regDate) }}</td>e
       </tr>
       </tbody>
     </table>

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class ReportResponseDto {
 
     @AllArgsConstructor
@@ -28,6 +30,8 @@ public class ReportResponseDto {
         private String title;
 
         private String description;
+
+        private LocalDateTime regDate;
     }
 
 }
