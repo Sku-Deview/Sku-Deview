@@ -125,7 +125,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ReplyResponseDto.READ> getAllRepliesByMember(Long memberId) {
+    public List<ReplyResponseDto.adminREAD> getAllRepliesByMember(Long memberId) {
         List<Reply> list = replyRepository.findRepliesByMemberId(memberId);
 
         return list.stream()
@@ -205,7 +205,7 @@ public class AdminServiceImpl implements AdminService {
 
     private MemberRequestDto.UPDATE toUpdateDto(MemberRequestDto.UPDATE update) {
         MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
-                .password(passwordEncoder.encode(update.getPassword()))
+                .password(update.getPassword())
                 .address(update.getAddress())
                 .role(Role.of(update.getRole()).toString()) //이렇게 해도 되나..?
                 .name(update.getName())
@@ -225,6 +225,7 @@ public class AdminServiceImpl implements AdminService {
                     .memberNickname(post.getMember().getNickname())
                     .title(post.getTitle())
                     .content(post.getContent())
+                    .deleteAt(post.isDeleteAt())
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
@@ -251,11 +252,12 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    private ReplyResponseDto.READ toReadDto(Reply reply) {
-        ReplyResponseDto.READ dto = ReplyResponseDto.READ.builder()
+    private ReplyResponseDto.adminREAD toReadDto(Reply reply) {
+        ReplyResponseDto.adminREAD dto = ReplyResponseDto.adminREAD.builder()
                 .replyId(reply.getId())
                 .memberNickname(reply.getMember().getNickname())
                 .postId(reply.getPost().getId())
+                .deleteAt(reply.isDeleteAt())
                 .content(reply.getContent())
                 .regDate(reply.getRegDate())
                 .likeCount(reply.getLikeCount())

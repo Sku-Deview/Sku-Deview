@@ -41,6 +41,8 @@ public class PostResponseDto {
 
         private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
+        private boolean deleteAt;
+
         private LocalDateTime regDate;
 
         public READ(Post post) {
