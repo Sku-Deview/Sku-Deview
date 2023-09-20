@@ -15,6 +15,8 @@ import ReportWrite from "@/views/report/ReportWrite.vue";
 import AdminMemberPost from "@/views/admin/AdminMemberPost.vue";
 import AdminMemberPostDetail from "@/views/admin/AdminMemberPostDetail.vue";
 import AdminMemberReply from "@/views/admin/AdminMemberReply.vue";
+import AdminReport from "@/views/admin/AdminReport.vue";
+import AdminReportDetail from "@/views/admin/AdminReportDetail.vue";
 
 
 
@@ -30,6 +32,7 @@ const requireAuth = () => (from, to, next) => {
 
 
 const routes = [
+
     {
         path: '/',
         name: 'PageHome',
@@ -116,6 +119,18 @@ const routes = [
         path: '/admin/member/reply',
         name: 'AdminMemberReply',
         component: AdminMemberReply,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/report/list',
+        name: 'AdminReport',
+        component: AdminReport,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/report/detail',
+        name: 'AdminReportDetail',
+        component: AdminReportDetail,
         beforeEnter: requireAuth()
     },
 ]

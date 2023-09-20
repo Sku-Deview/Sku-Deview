@@ -277,6 +277,7 @@ public class AdminServiceImpl implements AdminService {
                 .postId(report.getPost().getId())
                 .memberEmail(report.getMember().getEmail())
                 .memberName(report.getMember().getName())
+                .regDate(report.getRegDate())
                 .reportCategory(String.valueOf(report.getReportCategory()))
                 .postTitle(report.getPost().getTitle())
                 .title(report.getTitle())

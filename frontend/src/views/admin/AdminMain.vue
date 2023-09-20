@@ -116,6 +116,7 @@
       </div>
     </div>
   </div>
+  <b-button v-on:click="toReportList">신고 리스트</b-button>
       <div class="board-list mt-5">
         <table class="table table-striped">
           <colgroup>
@@ -138,9 +139,9 @@
           <tr v-for="(item, idx) in list" :key="idx" class="hover-pointer">
             <td>{{ item.memberId }}</td>
             <td @click="modalOpen = true">
-              <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="clickModel(item)">
+              <b-button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="clickModel(item)">
                 {{ item.nickname }}
-              </button>
+              </b-button>
             </td>
             <td>{{ item.role }}</td>
             <td>
@@ -246,6 +247,12 @@ export default {
       this.$router.push({
         path: '/admin/member/reply',
         query: this.requestBody
+      })
+    },
+    toReportList() {
+      this.$router.push({
+        path: '/admin/report/list',
+
       })
     },
   }
