@@ -85,6 +85,7 @@ public class PostSearchRepository {
                         postSearchText(searchType, searchText)
 //                        DynamicQueryUtils.filter(searchText, post.title::contains)
                 )
+                .orderBy(post.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
