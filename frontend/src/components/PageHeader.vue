@@ -1,24 +1,3 @@
-<!-- PageHeader.vue -->
-<!--<template>-->
-<!--    <header>-->
-<!--        <div id="nav">-->
-<!--            <router-link to="/">Home</router-link>-->
-<!--            |-->
-<!--            <router-link to="/board/list">게시판</router-link>-->
-<!--            |-->
-<!--            <router-link to="/signup">회원 가입</router-link>-->
-<!--            |-->
-<!--            <router-link to="/message/received">받은 메세지</router-link>-->
-<!--            |-->
-<!--            <router-link to="/message/send">보낸 메세지</router-link>-->
-<!--            |-->
-<!--            <router-link to="/login" v-if="!this.$store.state.isLogin">로그인</router-link>-->
-<!--            <a v-if="this.$store.state.isLogin" @click="fnLogout">로그아웃</a>-->
-
-<!--        </div>-->
-<!--    </header>-->
-<!--    <hr/>-->
-<!--</template>-->
 
 <template>
     <header class="header">
@@ -42,10 +21,10 @@
                             <router-link to="/board/list" class="nav-link">게시판</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/message/received" class="nav-link">받은 메세지</router-link>
+                            <router-link to="/message/received" v-if="this.$store.state.isLogin" class="nav-link">받은 메세지</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/message/send" class="nav-link">보낸 메세지</router-link>
+                            <router-link to="/message/send" v-if="this.$store.state.isLogin" class="nav-link">보낸 메세지</router-link>
                         </li>
                         <li class="nav-item">
                             <router-link to="/admin/main" v-if="Role()" class="nav-link">관리자 페이지</router-link>
@@ -89,7 +68,10 @@ export default {
         fnLogout() {
             localStorage.removeItem("user_token")
             localStorage.removeItem("user_role")
-            location.reload()
+            location.reload();
+            this.$router.push({
+                path: '/login',
+            })
         },
         Role() {
             if (localStorage.getItem("user_role") === "ROLE_ADMIN") {

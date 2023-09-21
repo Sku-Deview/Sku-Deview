@@ -1,97 +1,3 @@
-<!--<template>-->
-<!--    <div>-->
-<!--        <b-container>-->
-<!--            <h4>회원가입</h4>-->
-<!--            <b-form>-->
-<!--                <b-form-group label="USER Email:" label-for="input-1">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.email"-->
-<!--                        type="email"-->
-<!--                        placeholder="이메일을 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-3" label="USER PW:" label-for="input-3">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.password"-->
-<!--                        type="password"-->
-<!--                        placeholder="비밀번호를 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-2" label="USER NAME:" label-for="input-2">-->
-<!--                    <b-form-input-->
-<!--                        type="text"-->
-<!--                        v-model="form.name"-->
-<!--                        placeholder="이름을 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-3" label="USER Nickname:" label-for="input-3">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.nickname"-->
-<!--                        type="text"-->
-<!--                        placeholder="닉네임을 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-3" label="USER telephone:" label-for="input-3">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.telephone"-->
-<!--                        type="tel"-->
-<!--                        placeholder="전화번호를 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-3" label="USER address:" label-for="input-3">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.address"-->
-<!--                        type="text"-->
-<!--                        placeholder="주소를 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <b-form-group id="input-group-3" label="USER birth-date:" label-for="input-3">-->
-<!--                    <b-form-input-->
-<!--                        v-model="form.birthDate"-->
-<!--                        type="date"-->
-<!--                        placeholder="생년 월일을 입력해주세요"-->
-<!--                        required-->
-<!--                    ></b-form-input>-->
-<!--                </b-form-group>-->
-
-<!--                <hr>-->
-<!--                <b-form-group id="input-group-3" label="USER gender:" label-for="input-3">-->
-<!--                    <b-form-radio v-model="form.gender" :aria-describedby="ariaDescribedby" name="some-radios"-->
-<!--                                  value="MALE">MALE-->
-<!--                    </b-form-radio>-->
-<!--                    <b-form-radio v-model="form.gender" :aria-describedby="ariaDescribedby" name="some-radios"-->
-<!--                                  value="FEMALE">FEMALE-->
-<!--                    </b-form-radio>-->
-<!--                </b-form-group>-->
-<!--                <hr>-->
-
-<!--                <div>-->
-<!--                    <label>Skills</label>-->
-<!--                    <b-form-select v-model="form.skillName" :options="form.options" multiple-->
-<!--                                   :select-size="4"></b-form-select>-->
-<!--                    <div class="mt-3">Selected: <strong>{{ form.skillName }}</strong></div>-->
-<!--                </div>-->
-
-
-<!--                <b-button @click="onSubmit" variant="primary">Submit</b-button>-->
-<!--                <b-button type="reset" variant="danger">Reset</b-button>-->
-<!--            </b-form>-->
-<!--        </b-container>-->
-<!--    </div>-->
-<!--</template>-->
-
 <template>
     <div>
         <div class="container my-5">
@@ -104,7 +10,7 @@
                             <label for="input-1" class="col-md-4 col-form-label text-md-right">이메일</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요"
-                                              required></b-form-input>
+                                              ref="emailInput" required></b-form-input>
                             </div>
                         </div>
 
@@ -112,7 +18,7 @@
                             <label for="input-2" class="col-md-4 col-form-label text-md-right">이름</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.name" type="text" id="input-2" placeholder="이름을 입력해주세요"
-                                              required></b-form-input>
+                                              ref="nameInput" required></b-form-input>
                             </div>
                         </div>
 
@@ -120,7 +26,7 @@
                             <label for="input-3" class="col-md-4 col-form-label text-md-right">비밀번호</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.password" type="password" id="input-3"
-                                              placeholder="비밀번호를 입력해주세요" required></b-form-input>
+                                              ref="passwordInput" placeholder="비밀번호를 입력해주세요" required></b-form-input>
                             </div>
                         </div>
 
@@ -128,7 +34,7 @@
                             <label for="input-4" class="col-md-4 col-form-label text-md-right">닉네임</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요"
-                                              required></b-form-input>
+                                              ref="nicknameInput" required></b-form-input>
                             </div>
                         </div>
 
@@ -136,7 +42,7 @@
                             <label for="input-5" class="col-md-4 col-form-label text-md-right">전화번호</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.telephone" type="tel" id="input-5"
-                                              placeholder="전화번호를 입력해주세요" required></b-form-input>
+                                              ref="telephoneInput" placeholder="전화번호를 입력해주세요" required></b-form-input>
                             </div>
                         </div>
 
@@ -144,7 +50,7 @@
                             <label for="input-6" class="col-md-4 col-form-label text-md-right">주소</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.address" type="text" id="input-6" placeholder="주소를 입력해주세요"
-                                              required></b-form-input>
+                                              ref="addressInput" required></b-form-input>
                             </div>
                         </div>
 
@@ -152,7 +58,7 @@
                             <label for="input-7" class="col-md-4 col-form-label text-md-right">생년 월일</label>
                             <div class="col-md-8">
                                 <b-form-input v-model="form.birthDate" type="date" id="input-7"
-                                              placeholder="생년 월일을 입력해주세요" required></b-form-input>
+                                              ref="birthInput" placeholder="생년 월일을 입력해주세요" required></b-form-input>
                             </div>
                         </div>
 
@@ -209,7 +115,7 @@ export default {
                 telephone: '',
                 address: '',
                 birthDate: '',
-                gender: '',
+                gender: 'MALE',
                 role: 'USER',
                 skillName: ['null'],
                 options: [
@@ -232,12 +138,49 @@ export default {
     methods: {
         options,
         onSubmit() {
+            if (!this.form.email) {
+                alert("이메일을 입력해주세요.");
+                this.$refs.emailInput.focus();
+                return;
+            }
+            if (!this.form.name) {
+                alert("이름을 입력해주세요.");
+                this.$refs.nameInput.focus();
+                return;
+            }
+            if (!this.form.password) {
+                alert("비밀번호를 입력해주세요.");
+                this.$refs.passwordInput.focus();
+                return;
+            }
+            if (!this.form.nickname) {
+                alert("닉네임을 입력해주세요.");
+                this.$refs.nicknameInput.focus();
+                return;
+            }
+            if (!this.form.telephone) {
+                alert("전화번호를 입력해주세요.");
+                this.$refs.telephoneInput.focus();
+                return;
+            }
+            if (!this.form.address) {
+                alert("주소를 입력해주세요.");
+                this.$refs.addressInput.focus();
+                return;
+            }
+            if (!this.form.birthDate) {
+                alert("생년월일을 선택해주세요.");
+                this.$refs.birthInput.focus();
+                return;
+            }
+
             this.$axios.post("/api/v1/member", this.form)
                 .then((res) => {
-                  alert(res.data.message)
+                    alert(res.data.message)
                     this.$router.push({name: 'Login'})
                 }).catch((err) => {
                     alert(err.response.data.message);
+                    return;
             })
         }
     }

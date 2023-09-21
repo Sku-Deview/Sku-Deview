@@ -1,25 +1,3 @@
-<!--<template>-->
-<!--    <div>-->
-<!--        <div>-->
-<!--            <h2>Please Log In</h2>-->
-<!--            <div id="loginForm">-->
-<!--                <form @submit.prevent="fnLogin">-->
-<!--                    <p>-->
-<!--                        <input class="w3-input" name="uid" placeholder="Enter your ID" v-model="user_id"><br>-->
-<!--                    </p>-->
-<!--                    <p>-->
-<!--                        <input name="password" class="w3-input" placeholder="Enter your password" v-model="user_pw"-->
-<!--                               type="password">-->
-<!--                    </p>-->
-<!--                    <p>-->
-<!--                        <button type="submit" class="w3-button w3-green w3-round">Login</button>-->
-<!--                    </p>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</template>-->
-
 <template>
     <div>
         <div class="container my-5">
@@ -34,13 +12,16 @@
                                 <div class="form-group row mb-3">
                                     <label for="uid" class="col-md-4 col-form-label text-md-right">아이디</label>
                                     <div class="col-md-8">
-                                        <input id="uid" class="form-control" name="uid" placeholder="아이디를 입력해주세요." v-model="user_id">
+                                        <input id="uid" class="form-control" name="uid" placeholder="아이디를 입력해주세요."
+                                               ref="idInput" v-model="user_id">
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">비밀번호</label>
                                     <div class="col-md-8">
-                                        <input id="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요." v-model="user_pw" type="password">
+                                        <input id="password" name="password" class="form-control"
+                                               placeholder="비밀번호를 입력해주세요."
+                                               ref="passwordInput" v-model="user_pw" type="password">
                                     </div>
                                 </div>
                                 <hr>
@@ -79,7 +60,6 @@
 </style>
 
 
-
 <script>
 import {mapActions, mapGetters} from 'vuex'   //vuex 추가
 
@@ -95,22 +75,22 @@ export default {
 
         async fnLogin() {       //async 함수로 변경
             if (this.user_id === '') {
-                alert('ID를 입력하세요.')
-                return
+                alert('아이디를 입력해주세요.');
+                this.$refs.idInput.focus();
+                return;
             }
-
             if (this.user_pw === '') {
-                alert('비밀번호를 입력하세요.')
-                return
+                alert('비밀번호를 입력해주세요.');
+                this.$refs.passwordInput.focus();
+                return;
             }
 
-            //로그인 API 호출
             try {
                 let loginResult = await this.login({user_id: this.user_id, user_pw: this.user_pw})
                 if (loginResult) this.goToPages()
             } catch (err) {
-              alert("아이디와 패스워드를 다시 확인해주세요")
-              location.reload()
+                alert("아이디와 패스워드를 다시 확인해주세요")
+                location.reload()
             }
         },
         goToPages() {
@@ -126,9 +106,3 @@ export default {
     }
 }
 </script>
-<style>
-#loginForm {
-    width: 500px;
-    margin: auto;
-}
-</style>
