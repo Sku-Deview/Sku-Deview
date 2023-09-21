@@ -2,11 +2,11 @@
   <div class="board-list mt-5">
     <table class="table table-striped">
       <colgroup>
-        <col style="width: 5%;" /> <!-- No 열의 너비 -->
-        <col style="width: 10%;" /> <!-- 카테고리 열의 너비 -->
-        <col style="width: auto;" /> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
-        <col style="width: 15%;" /> <!-- 작성자 열의 너비 -->
-        <col style="width: 20%;" /> <!-- 등록일시 열의 너비 -->
+        <col style="width: 5%;"/> <!-- No 열의 너비 -->
+        <col style="width: 10%;"/> <!-- 카테고리 열의 너비 -->
+        <col style="width: auto;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
+        <col style="width: 15%;"/> <!-- 작성자 열의 너비 -->
+        <col style="width: 20%;"/> <!-- 등록일시 열의 너비 -->
       </colgroup>
       <thead>
       <tr>
@@ -26,9 +26,10 @@
           <span v-if="item.title.length < 15"><b-button>{{ item.title }}</b-button></span>
           <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
         </td>
-        <td>{{item.deleteAt}}</td>
+        <td>{{ item.deleteAt }}</td>
         <td>{{ item.memberNickname }}</td>
-        <td>{{ formatDateTime(item.regDate) }}</td>e
+        <td>{{ formatDateTime(item.regDate) }}</td>
+
       </tr>
       </tbody>
     </table>
@@ -51,14 +52,15 @@
           <a class="page-link" @click="fnPage(paging.total_page_cnt)" href="javascript:;">&gt;&gt;</a>
         </li>
       </ul>
-    </div> <hr>
+    </div>
+    <hr>
 
     <!--        TODO : 검색 폼만 추가. 아직 동작 X -->
     <form @submit.prevent="fnSearch">
       <div class="form-group row align-items-center">
         <label for="searchText" class="col-md-2 col-form-label">검색:</label>
         <div class="col-md-8">
-          <input type="text" class="form-control" id="searchText" v-model="searchText" placeholder="검색어를 입력하세요" />
+          <input type="text" class="form-control" id="searchText" v-model="searchText" placeholder="검색어를 입력하세요"/>
         </div>
         <div class="col-md-2">
           <button type="submit" class="btn btn-primary btn-rounded">검색</button>
@@ -74,7 +76,7 @@ export default {
     return {
       requestBody: this.$route.query,
       memberId: this.$route.query.idx,
-      list:'',
+      list: '',
       no: '', //게시판 숫자처리
       paging: {
         block: 0,
@@ -105,7 +107,7 @@ export default {
     this.MemberPostList()
   },
   methods: {
-    MemberPostList(){
+    MemberPostList() {
       this.$axios.get("/api/v1/admin/member-post/" + this.memberId, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('user_token')}`
@@ -114,9 +116,7 @@ export default {
           .then((res) => {
             this.list = res.data.data  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
           }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-        }
+        alert(err.response.data.message)
       })
     },
     fnView(idx) {

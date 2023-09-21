@@ -120,8 +120,8 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('user_token')}`
         }
       })
-          .then(() => {
-            alert('게시글 신고가 완료 되었습니다.')
+          .then((res) => {
+            alert(res.data.message)
             this.fnBoardList()
           }).catch((err) => {
         alert(err.response.data.message)

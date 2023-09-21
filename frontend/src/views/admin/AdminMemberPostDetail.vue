@@ -64,9 +64,7 @@ export default {
         this.category = res.data.data.postCategory
         this.view_count = res.data.data.viewCount
       }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-        }
+        alert(err.response.data.message)
       })
     },
 
@@ -84,7 +82,7 @@ export default {
             alert(res.data.message)
             this.fnList();
           }).catch((err) => {
-        console.log(err);
+        alert(err.response.data.message)
       })
     },
 
