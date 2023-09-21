@@ -33,6 +33,8 @@ public class PostResponseDto {
 
         private int viewCount;
 
+        private int replyCount;
+
         private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
 
         private String originalFileName; // 원본 파일 이름
