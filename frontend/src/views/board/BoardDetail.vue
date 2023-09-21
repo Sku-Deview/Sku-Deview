@@ -1,9 +1,13 @@
 <template>
     <div class="board-detail mt-5">
         <div class="common-buttons mb-3">
-            <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate" style="margin-right: 3px;">수정</button>
-            <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete" style="margin-right: 3px;">삭제</button>
-            <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList" >목록</button>
+            <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate"
+                    style="margin-right: 3px;">수정
+            </button>
+            <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete"
+                    style="margin-right: 3px;">삭제
+            </button>
+            <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList">목록</button>
         </div>
         <h2><strong>[{{ category }}] {{ title }}</strong></h2>
         <div>
@@ -22,6 +26,8 @@
 
 
         <div v-for="(reply, idx) in replyList" :key="idx">
+<!--            <i class="fa-solid fa-trash" v-if="isReplyAuthor()" @click="removeReply(reply.replyId,reply.postId)"></i>-->
+<!--            <i class="fa-solid fa-comment" v-if="!isReplyAuthor()" @click="toMessageWrite(reply.memberNickname)"></i>-->
             <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
             <i class="fa-solid fa-comment" @click="toMessageWrite(reply.memberNickname)"></i>
             <div class="reply-detail">
@@ -36,9 +42,10 @@
         </div>
 
         <div class="mt-5">
-            <label for="postTitle"><strong>댓글</strong></label>
+            <label for="reply"><strong>댓글</strong></label>
             <div style="position: relative;">
-                <textarea id="postTitle" rows="5" v-model="reply" class="form-control" style="resize: none;"
+                <textarea id="reply" ref="replyInput" rows="5" v-model="reply" class="form-control"
+                          style="resize: none;"
                           placeholder="댓글을 남겨보세요."></textarea>
                 <button type="button" class="btn btn-outline-primary btn-rounded" @click="replySave"
                         style="position: absolute; right: 10px; bottom: 10px;">댓글 저장
@@ -63,7 +70,7 @@ export default {
         return {
             requestBody: this.$route.query,
             idx: this.$route.query.idx,
-            postId:'',
+            postId: '',
             category: '',
             title: '',
             author: '',
@@ -73,6 +80,7 @@ export default {
             //댓글
             replyList: [],
             reply: '',
+            replyAuthorNickname: '',
 
         }
     },
@@ -98,8 +106,8 @@ export default {
                 this.category = res.data.data.postCategory
                 this.view_count = res.data.data.viewCount
             }).catch((err) => {
-              alert(err.response.data.message)
-              this.fnList()
+                alert(err.response.data.message)
+                this.fnList()
             })
         },
 
@@ -128,18 +136,21 @@ export default {
                     alert(res.data.message)
                     this.fnList();
                 }).catch((err) => {
-              alert(err.response.data.message)
-              location.reload()
+                alert(err.response.data.message)
+                location.reload()
             })
         },
         fnGetReply() {
             this.$axios.get('/api/v1/reply/' + this.idx, {
                 params: this.requestBody
             }).then((res) => {
+                console.log("llll"+res);
+                console.log(res.data.data);
                 this.replyList = res.data.data
+                this.replyAuthorNickname = res.data.data.memberNickname
             }).catch((err) => {
-              alert(err.response.data.message)
-              location.reload()
+                alert(err.response.data.message)
+                location.reload()
             })
         },
         removeReply(replyId, postId) {
@@ -152,11 +163,17 @@ export default {
                 alert(res.data.message)
                 this.fnPost(postId);
             }).catch((err) => {
-              alert(err.response.data.message)
-              location.reload()
+                alert(err.response.data.message)
+                location.reload()
             })
         },
         replySave() {
+            if (!this.reply) {
+                alert("댓글을 입력해주세요.");
+                this.$refs.replyInput.focus();
+                return;
+            }
+
             this.form = {
                 "content": this.reply
             }
@@ -171,8 +188,8 @@ export default {
                     alert(res.data.message)
                     this.fnPost(this.idx);
                 }).catch((err) => {
-              alert(err.response.data.message)
-              location.reload()
+                alert(err.response.data.message)
+                location.reload()
             })
         },
         toMessageWrite(receiverNickname) {
@@ -192,11 +209,17 @@ export default {
 
             })
         },
-      isAuthor() {
-        if (localStorage.getItem("user_nickname") === this.author) {
-          return true;
-        } else return false;
-      },
+        isAuthor() {
+            if (localStorage.getItem("user_nickname") === this.author) {
+                return true;
+            } else return false;
+        },
+        isReplyAuthor() {
+            console.log("===="+this.replyAuthorNickname);
+            if (localStorage.getItem("user_nickname") === this.replyAuthorNickname) {
+                return true;
+            } else return false;
+        },
 
     }
 }
