@@ -26,6 +26,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findPostById(Long postId);
 
-    @Query("SELECT COUNT(r) FROM Reply r WHERE r.post.id = :postId")
+    @Query("SELECT COUNT(r) FROM Reply r WHERE r.post.id = :postId and r.deleteAt=false")
     int countRepliesByPostId(@Param("postId") Long postId);
+
+    @Query("SELECT COUNT(mlp) FROM MemberLikePost mlp WHERE mlp.post.id = :postId and mlp.deleteAt=false")
+    int countLikesByPostId(@Param("postId") Long postId);
 }

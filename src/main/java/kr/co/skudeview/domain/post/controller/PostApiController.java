@@ -87,7 +87,6 @@ public class PostApiController {
      * @param pageable
      * @return
      */
-
     @GetMapping("/posts")
     public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@PageableDefault(page = 0, size = 10) Pageable pageable
             , @RequestParam(required = false) String postCategory, @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchText) {
@@ -103,4 +102,12 @@ public class PostApiController {
     public ResponseFormat<List<PostResponseDto.READ>> getPagedPosts() {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchNoticePost());
     }
+
+    @PostMapping("/post/like/{postId}/{loginNickname}")
+    public ResponseFormat<PostResponseDto.READ> addPostLike(@PathVariable Long postId,
+                                            @PathVariable String loginNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.addPostLikeByLoginNickname(postId, loginNickname));
+    }
+
+
 }
