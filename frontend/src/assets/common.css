@@ -13,7 +13,8 @@
 .board-contents {
     padding-top: 12px ;
     padding-bottom: 12px ;
-    border-bottom: 2px solid black;
+    height: 300px;
+    /*border-bottom: 2px solid black;*/
 }
 
 .board-category {
