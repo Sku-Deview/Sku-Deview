@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.admin.service;
 
+import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.admin.service.AdminService;
 import kr.co.skudeview.domain.member.dto.MemberRequestDto;
 import kr.co.skudeview.domain.member.dto.MemberResponseDto;
@@ -156,6 +157,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
+    public void createSkill(SkillRequestDto.CREATE create) {
+        isSkillName(create.getName());
+
+        skillRepository.save(toEntity(create));
+    }
+
+    @Override
     public void updateSkill(SkillRequestDto.UPDATE update) {
         final Optional<Skill> skill = skillRepository.findSkillById(update.getSkillId());
 
@@ -184,6 +193,12 @@ public class AdminServiceImpl implements AdminService {
         isReport(report);
 
         return toReadDto(report.get());
+    }
+
+    private Skill toEntity(SkillRequestDto.CREATE create) {
+        return Skill.builder()
+                .name(create.getName())
+                .build();
     }
 
 

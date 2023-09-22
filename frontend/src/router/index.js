@@ -18,6 +18,7 @@ import AdminMemberReply from "@/views/admin/AdminMemberReply.vue";
 import AdminReport from "@/views/admin/AdminReport.vue";
 import AdminReportDetail from "@/views/admin/AdminReportDetail.vue";
 import AdminSkill from "@/views/admin/AdminSkill.vue";
+import AdminSkillUpdate from "@/views/admin/AdminSkillUpdate.vue";
 
 
 
@@ -138,6 +139,12 @@ const routes = [
         path: '/admin/skill/list',
         name: 'AdminSkill',
         component: AdminSkill,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/admin/skill',
+        name: 'AdminSkillUpdate',
+        component: AdminSkillUpdate,
         beforeEnter: requireAuth()
     },
 ]
