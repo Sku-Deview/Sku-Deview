@@ -23,9 +23,9 @@ export default {
     data() {
         return {
             images: [
-                'image0.jpg',
-                'image1.jpg',
-                'image2.jpg',
+                // 'image0.jpg',
+                // 'image1.jpg',
+                // 'image2.jpg',
                 // 'image3.png',
                 // 'image4.png'
             ],
