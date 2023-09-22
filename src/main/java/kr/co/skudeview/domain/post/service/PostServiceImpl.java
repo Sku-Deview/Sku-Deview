@@ -1,6 +1,8 @@
 package kr.co.skudeview.domain.post.service;
 
 import kr.co.skudeview.domain.member.entity.Member;
+import kr.co.skudeview.domain.member.entity.MemberLikePost;
+import kr.co.skudeview.domain.member.repository.MemberLikePostRepository;
 import kr.co.skudeview.domain.member.repository.MemberRepository;
 import kr.co.skudeview.domain.post.dto.PostRequestDto;
 import kr.co.skudeview.domain.post.dto.PostResponseDto;
@@ -10,6 +12,7 @@ import kr.co.skudeview.domain.post.repository.PostFileRepository;
 import kr.co.skudeview.domain.post.repository.PostRepository;
 import kr.co.skudeview.domain.post.repository.PostSearchRepository;
 import kr.co.skudeview.global.common.PostCategory;
+import kr.co.skudeview.global.exception.DuplicatedException;
 import kr.co.skudeview.global.exception.NotFoundException;
 import kr.co.skudeview.global.model.ResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,8 @@ public class PostServiceImpl implements PostService {
     private final MemberRepository memberRepository;
 
     private final PostSearchRepository postSearchRepository;
+
+    private final MemberLikePostRepository memberLikePostRepository;
 
     private final RedisTemplate<String, Object> redisTemplate; // RedisTemplate 주입
 
@@ -82,6 +87,27 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponseDto.READ> searchNoticePost() {
         return postSearchRepository.findNoticePost().stream().map(this::toReadDto).toList();
+    }
+
+    @Override
+    public PostResponseDto.READ addPostLikeByLoginNickname(Long postId, String loginNickname) {
+        Optional<Member> loginMember = memberRepository.findMemberByNicknameAndDeleteAtFalse(loginNickname);
+        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
+
+        isPostLikeDuplicated(postId, loginMember.get().getId());
+
+        MemberLikePost create = MemberLikePost.builder()
+                .member(loginMember.get())
+                .post(post.get())
+                .build();
+
+        memberLikePostRepository.save(create);
+
+        post.get().addLikeCount();
+
+        postRepository.save(post.get());
+
+        return toReadDto(postRepository.findPostByIdAndDeleteAtFalse(postId).get());
     }
 
     @Override
@@ -208,6 +234,12 @@ public class PostServiceImpl implements PostService {
         PostCategory.of(category);
     }
 
+    private void isPostLikeDuplicated(Long postId, Long memberId) {
+        if (memberLikePostRepository.existsMemberLikePostByPost_IdAndMember_IdAndDeleteAtFalse(postId, memberId)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_POST_LIKE_MEMBER_DUPLICATED);
+        }
+    }
+
     private PostResponseDto.READ toReadDto(Post post) {
         if (post.getFileAttached() == 0) {
             return PostResponseDto.READ.builder()
@@ -218,7 +250,7 @@ public class PostServiceImpl implements PostService {
                     .content(post.getContent())
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
+                    .likeCount(postRepository.countLikesByPostId(post.getId()))
                     .replyCount(postRepository.countRepliesByPostId(post.getId()))
                     .fileAttached(post.getFileAttached())
                     .regDate(post.getRegDate())
@@ -233,7 +265,7 @@ public class PostServiceImpl implements PostService {
                     .content(post.getContent())
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
+                    .likeCount(postRepository.countLikesByPostId(post.getId()))
                     .replyCount(postRepository.countRepliesByPostId(post.getId()))
                     .fileAttached(post.getFileAttached())
                     .originalFileName(post.getPostFileList().get(0).getOriginalFileName())

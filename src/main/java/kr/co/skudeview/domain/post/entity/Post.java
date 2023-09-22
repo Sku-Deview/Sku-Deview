@@ -80,7 +80,7 @@ public class Post extends BaseEntity {
         this.viewCount = viewCnt.intValue();
     }
 
-    public void addLikeCount(Long likeCnt) {
-        this.likeCount = likeCnt.intValue();
+    public void addLikeCount() {
+        this.likeCount += 1;
     }
 }

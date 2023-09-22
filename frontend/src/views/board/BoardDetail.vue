@@ -24,8 +24,15 @@
 
         <div class="board-contents" v-html="content"></div>
 
+        <div class="button-container">
+            <button @click="toPostLike(postId, loginUserNickname)" class="btn btn-outline-primary btn-rounded" :class="{ 'btn-liked': isLiked }">
+                {{ isLiked ? '좋아요' : '좋아요' }}
+            </button>
+        </div>
 
-        <div v-for="(reply, idx) in replyList" :key="idx">
+        <hr>
+
+        <div v-for="(reply, idx) in replyList" :key="idx" class="mt-5">
 <!--            <i class="fa-solid fa-trash" v-if="isReplyAuthor()" @click="removeReply(reply.replyId,reply.postId)"></i>-->
 <!--            <i class="fa-solid fa-comment" v-if="!isReplyAuthor()" @click="toMessageWrite(reply.memberNickname)"></i>-->
             <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
@@ -61,6 +68,23 @@
     font-size: 0.8rem;
     color: gray;
 }
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* 좋아요 버튼 스타일 */
+.btn {
+    margin: 0 auto; /* 가운데 정렬 */
+    /* 나머지 스타일 유지 */
+}
+/* 좋아요 버튼 채우기 스타일 */
+.btn-liked {
+    justify-content: center;
+    margin: 0 auto; /* 가운데 정렬 */
+    background-color: #007bff; /* 원하는 색상으로 변경 */
+    color: #fff; /* 텍스트 색상을 변경할 수도 있음 */
+}
 </style>
 
 
@@ -81,7 +105,10 @@ export default {
             replyList: [],
             reply: '',
             replyAuthorNickname: '',
-
+            // 좋아요
+            loginUserNickname: localStorage.getItem('user_nickname'),
+            isLiked: false,
+            likeCount: 0,
         }
     },
     mounted() {
@@ -105,6 +132,9 @@ export default {
                 this.created_at = this.formatDate(res.data.data.regDate)
                 this.category = res.data.data.postCategory
                 this.view_count = res.data.data.viewCount
+                // 서버에서 게시물의 좋아요 상태와 개수 가져오기
+                // this.isLiked = res.data.data.isLiked;
+                this.likeCount = res.data.data.likeCount;
             }).catch((err) => {
                 alert(err.response.data.message)
                 this.fnList()
@@ -199,7 +229,6 @@ export default {
             })
         },
         toReportPost(postId, title) {
-            console.log("-----" + postId);
             this.$router.push({
                 path: '/report/write',
                 query: {
@@ -208,6 +237,25 @@ export default {
                 }
 
             })
+        },
+        toPostLike(postId, loginNickname) {
+            // 좋아요 상태 토글
+            this.isLiked = !this.isLiked;
+
+            this.$axios.post(`/api/v1/post/like/${postId}/${loginNickname}`, { like: this.isLiked })
+
+                .then((res) => {
+                    if (this.isLiked) {
+                        this.likeCount++;
+                    } else {
+                        this.likeCount--;
+                    }
+                })
+                .catch((err) => {
+                    alert(err.response.data.message);
+                    location.reload();
+                    console.error(err);
+                });
         },
         isAuthor() {
             if (localStorage.getItem("user_nickname") === this.author) {

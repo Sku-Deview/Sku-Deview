@@ -80,6 +80,8 @@ public class PostSearchRepository {
                 .fetch();
     }
 
+
+
     private BooleanExpression postCategoryEq(String category) {
         if (!StringUtils.hasText(category)) {
             return null;

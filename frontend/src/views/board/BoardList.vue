@@ -37,7 +37,7 @@
                 <td>{{ item.postId }}</td>
                 <td>{{ item.postCategory }}</td>
                 <td>
-                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp; [{{ item.replyCount }}]</span>
+                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp;&nbsp; 댓글: [{{ item.replyCount }}]  좋아요: [{{ item.likeCount }}]</span>
                     <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
                 </td>
                 <td>{{ item.memberNickname }}</td>
@@ -48,7 +48,7 @@
                 <td>{{ item.postId }}</td>
                 <td>{{ item.postCategory }}</td>
                 <td>
-                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp; [{{ item.replyCount }}]</span>
+                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp;&nbsp; 댓글: [{{ item.replyCount }}]  좋아요: [{{ item.likeCount }}]</span>
                     <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
                 </td>
                 <td>{{ item.memberNickname }}</td>
@@ -167,6 +167,7 @@ export default {
             noticeList: {},
             postCategory: '',
             replyCount: '',
+            likeCount: '',
             searchType: 'title',
             searchText: '',
             totalPage: '',
@@ -221,10 +222,11 @@ export default {
                 this.page = res.data.data.number;
                 this.size = res.data.data.size;
                 this.totalPage = res.data.data.totalPages;
-                this.list = res.data.data.content
-                this.replyCount = res.data.data.replyCount
+                this.list = res.data.data.content;
+                this.replyCount = res.data.data.replyCount;
+                this.likeCount = res.data.data.likeCount;
             }).catch((err) => {
-                alert(err.response.data.message)
+                alert(err.response.data.message);
                 location.reload()
             })
         },

@@ -32,18 +32,18 @@ export default {
             currentIndex: 0,
         };
     },
-    methods: {
-        getImagePath(imageFileName) {
-            // 이미지 파일의 상대 경로를 반환합니다.
-            return require(`@/assets/images/${imageFileName}`);
-        },
-        nextSlide() {
-            this.currentIndex = (this.currentIndex + 1) % this.images.length;
-        },
-        prevSlide() {
-            this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-        },
-    },
+    // methods: {
+    //     getImagePath(imageFileName) {
+    //         // 이미지 파일의 상대 경로를 반환합니다.
+    //         return require(`@/assets/images/${imageFileName}`);
+    //     },
+    //     nextSlide() {
+    //         this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    //     },
+    //     prevSlide() {
+    //         this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    //     },
+    // },
 };
 </script>
 

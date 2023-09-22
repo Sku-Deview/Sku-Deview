@@ -60,6 +60,8 @@ public interface PostService {
      * @return PostCategory == NOTICE  List<PostResponseDto.READ>
      */
     List<PostResponseDto.READ> searchNoticePost();
+
+    PostResponseDto.READ addPostLikeByLoginNickname(Long postId, String loginNickname);
     /**
      * Redis에 포스트 조회수를 업데이트.
      *
