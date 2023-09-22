@@ -1,17 +1,17 @@
 package kr.co.skudeview.domain.post.service;
 
+import kr.co.skudeview.domain.member.entity.Member;
+import kr.co.skudeview.domain.member.repository.MemberRepository;
 import kr.co.skudeview.domain.post.dto.PostRequestDto;
 import kr.co.skudeview.domain.post.dto.PostResponseDto;
-import kr.co.skudeview.domain.member.entity.Member;
 import kr.co.skudeview.domain.post.entity.Post;
 import kr.co.skudeview.domain.post.entity.PostFile;
-import kr.co.skudeview.global.common.PostCategory;
-import kr.co.skudeview.global.exception.NotFoundException;
-import kr.co.skudeview.global.model.ResponseStatus;
-import kr.co.skudeview.domain.member.repository.MemberRepository;
 import kr.co.skudeview.domain.post.repository.PostFileRepository;
 import kr.co.skudeview.domain.post.repository.PostRepository;
 import kr.co.skudeview.domain.post.repository.PostSearchRepository;
+import kr.co.skudeview.global.common.PostCategory;
+import kr.co.skudeview.global.exception.NotFoundException;
+import kr.co.skudeview.global.model.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,17 +75,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition) {
-        final List<Post> posts = postSearchRepository.find(condition);
-
-        return posts.stream()
-                .map(this::toReadDto)
-                .collect(Collectors.toList());
+    public Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory, String searchType, String searchText) {
+        return postSearchRepository.findWithPaging(pageable, postCategory, searchType, searchText).map(this::toReadDto);
     }
 
     @Override
-    public Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory, String searchType, String searchText) {
-        return postSearchRepository.findWithPaging(pageable, postCategory, searchType, searchText).map(this::toReadDto);
+    public List<PostResponseDto.READ> searchNoticePost() {
+        return postSearchRepository.findNoticePost().stream().map(this::toReadDto).toList();
     }
 
     @Override
@@ -134,7 +129,6 @@ public class PostServiceImpl implements PostService {
         return dto;
     }
 
-
     /*
     게시글 상세조회 요청 시, 해당 postId에 해당하는 viewCnt를 +1 해준 값을 Redis에 저장
      */
@@ -148,8 +142,6 @@ public class PostServiceImpl implements PostService {
         if (hashOperations.get(key, hashKey) == null) {
             if (hashKey.equals("views")) {
                 hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getViewCount());
-            } else {
-                hashOperations.put(key, hashKey, postRepository.findPostByIdAndDeleteAtFalse(postId).get().getLikeCount());
             }
             hashOperations.increment(key, hashKey, 1L);
             System.out.println("hashOperations.get is null ---- " + hashOperations.get(key, hashKey));
@@ -168,7 +160,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deleteCntToRedis() {
         String viewKey = "views";
-        String likeKey = "likes";
         Set<String> redisKey = redisTemplate.keys("postId*");
         Iterator<String> it = redisKey.iterator();
 
@@ -184,13 +175,6 @@ public class PostServiceImpl implements PostService {
                 redisTemplate.opsForHash().delete(data, viewKey);
             }
 
-            if (redisTemplate.opsForHash().get(data, likeKey) == null) {
-                break;
-            } else {
-                Long likeCnt = Long.parseLong(String.valueOf(redisTemplate.opsForHash().get(data, likeKey)));
-                addLikeCntFromRedis(postId, likeCnt);
-                redisTemplate.opsForHash().delete(data, likeKey);
-            }
         }
         System.out.println("Update Complete From Redis");
     }
@@ -206,20 +190,6 @@ public class PostServiceImpl implements PostService {
             postRepository.save(post.get());
         }
 
-
-    }
-
-    private void addLikeCntFromRedis(Long postId, Long likeCnt) {
-        Optional<Post> post = postRepository.findPostByIdAndDeleteAtFalse(postId);
-
-//        isPost(post);
-
-        if (!post.isEmpty()) {
-
-            post.get().addLikeCount(likeCnt);
-
-            postRepository.save(post.get());
-        }
     }
 
     private void isMember(Optional<Member> member) {
@@ -249,6 +219,7 @@ public class PostServiceImpl implements PostService {
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
+                    .replyCount(postRepository.countRepliesByPostId(post.getId()))
                     .fileAttached(post.getFileAttached())
                     .regDate(post.getRegDate())
                     .build();
@@ -263,6 +234,7 @@ public class PostServiceImpl implements PostService {
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
+                    .replyCount(postRepository.countRepliesByPostId(post.getId()))
                     .fileAttached(post.getFileAttached())
                     .originalFileName(post.getPostFileList().get(0).getOriginalFileName())
                     .storedFileName(post.getPostFileList().get(0).getStoredFileName())

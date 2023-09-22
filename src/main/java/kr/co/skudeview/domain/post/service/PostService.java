@@ -20,13 +20,6 @@ public interface PostService {
      */
     Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
 
-//    /**
-//     * 모든 포스트 목록을 조회.
-//     *
-//     * @return 모든 포스트 목록을 담은 DTO 리스트 (List<PostResponseDto.READ>)
-//     */
-//    List<PostResponseDto.READ> getAllPosts();
-
     /**
      * 특정 포스트를 수정.
      *
@@ -54,14 +47,6 @@ public interface PostService {
     PostResponseDto.READ getPostDetail(final Long postId);
 
     /**
-     * 조건에 맞는 포스트 목록을 검색.
-     *
-     * @param condition 검색 조건을 담고 있는 DTO
-     * @return 조건에 맞는 포스트 목록을 담은 DTO 리스트 (List<PostResponseDto.READ>)
-     */
-    List<PostResponseDto.READ> getSearchPosts(PostRequestDto.CONDITION condition);
-
-    /**
      * 페이징을 사용하여 조건에 맞는 포스트 목록을 검색.
      *
      * @param pageable 페이징 정보
@@ -69,6 +54,12 @@ public interface PostService {
      */
     Page<PostResponseDto.READ> searchPostWithPaging(Pageable pageable, String postCategory, String searchType, String searchText);
 
+    /**
+     * PostCategory가 Notice인 포스트 목록 조회
+     *
+     * @return PostCategory == NOTICE  List<PostResponseDto.READ>
+     */
+    List<PostResponseDto.READ> searchNoticePost();
     /**
      * Redis에 포스트 조회수를 업데이트.
      *

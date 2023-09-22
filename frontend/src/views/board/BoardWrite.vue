@@ -7,7 +7,8 @@
                 <label for="postCategory" class="mt-3"><strong>카테고리</strong></label>
             </div>
             <div class="col">
-                <b-form-select v-model="postCategory" :options="options" class="mt-3" id="postCategory"></b-form-select>
+                <b-form-select v-model="postCategory" :options="options" v-if="!isAdmin()" class="mt-3" id="postCategory"></b-form-select>
+                <b-form-select v-model="postCategory" :options="adminOptions" v-if="isAdmin()" class="mt-3" id="postCategory"></b-form-select>
             </div>
         </div>
 
@@ -73,9 +74,14 @@ export default {
             created_at: '',
             postCategory: 'FREE',
             options: [
-                {value: 'NOTICE', text: '공지사항'},
-                {value: 'QNA', text: '질문'},
                 {value: 'FREE', text: '자유'},
+                {value: 'QNA', text: '질문'},
+                {value: 'INFO', text: '정보'},
+            ],
+            adminOptions: [
+                {value: 'NOTICE', text: '공지사항'},
+                {value: 'FREE', text: '자유'},
+                {value: 'QNA', text: '질문'},
                 {value: 'INFO', text: '정보'},
             ]
         }
@@ -163,7 +169,12 @@ export default {
                     location.reload()
                 })
             }
-        }
+        },
+        isAdmin() {
+            if (localStorage.getItem("user_role") === "ROLE_ADMIN") {
+                return true;
+            } else return false;
+        },
     }
 }
 </script>

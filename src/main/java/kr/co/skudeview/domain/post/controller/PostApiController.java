@@ -39,13 +39,6 @@ public class PostApiController {
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
     }
-//    public Long createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-//        return postService.createPost(userDetails.getUsername(), createParams);
-//
-//
-//    }
-
 
     /**
      * Update Post API
@@ -62,13 +55,6 @@ public class PostApiController {
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postId);
     }
-//    @PatchMapping("/post/{id}")
-//    public Long updatePost(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                           @PathVariable Long id,
-//                           @RequestBody @Valid PostRequestDto.UPDATE updateParams) {
-//
-//        return postService.updatePost(userDetails.getUsername(), id, updateParams);
-//    }
 
     /**
      * Delete Post API
@@ -84,21 +70,6 @@ public class PostApiController {
     }
 
     /**
-     * Read Post API - 모든 Post 다중 조회
-     *
-     * @return ResponseStatus.SUCCESS_OK + List<PostResponseDto.READ>
-     */
-//    @GetMapping("/post")
-//    public ResponseFormat<List<PostResponseDto.READ>> getAllPosts() {
-//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getAllPosts());
-//    }
-//    @GetMapping("/post")
-//    public List<PostResponseDto.READ> getAllPosts() {
-//        return postService.getAllPosts();
-//    }
-
-
-    /**
      * Read Post API - postId 값으로 단일 조회
      *
      * @param id
@@ -108,24 +79,9 @@ public class PostApiController {
     public ResponseFormat<PostResponseDto.READ> getPostDetail(@PathVariable Long id) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostDetail(id));
     }
-//    @GetMapping("/post/{id}")
-//    public PostResponseDto.READ getPostDetail(@PathVariable Long id) {
-//        return postService.getPostDetail(id);
-//    }
 
     /**
-     * Search Post API - 검색 조건에 맞는 post 다중 조회
-     *
-     * @param condition
-     * @return ResponseStatus.SUCCESS_OK + List<PostResponseDto.READ>
-     */
-    @GetMapping("/post/search")
-    public ResponseFormat<List<PostResponseDto.READ>> getSearchPosts(@RequestBody @Valid PostRequestDto.CONDITION condition) {
-        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getSearchPosts(condition));
-    }
-
-    /**
-     * Search Post API + Paging default page=0, size=20
+     * Search List Post API + Paging default page=0, size=10
      * http://localhost:8080/api/v1/posts?page=0&size=10 -> 이런식으로 지정해서 사용도 가능
      *
      * @param pageable
@@ -135,9 +91,16 @@ public class PostApiController {
     @GetMapping("/posts")
     public ResponseFormat<Page<PostResponseDto.READ>> getPagedPosts(@PageableDefault(page = 0, size = 10) Pageable pageable
             , @RequestParam(required = false) String postCategory, @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchText) {
-//        log.info("test={}", postService.searchPostWithPaging(pageable));
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchPostWithPaging(pageable, postCategory, searchType, searchText));
-
     }
 
+    /**
+     * NOTICE 인 게시글 가져오기 위한 API
+     *
+     * @return
+     */
+    @GetMapping("/posts/notice")
+    public ResponseFormat<List<PostResponseDto.READ>> getPagedPosts() {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchNoticePost());
+    }
 }

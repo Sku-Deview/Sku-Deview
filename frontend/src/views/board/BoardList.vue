@@ -4,9 +4,6 @@
             <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="fnSelectCategory('')">
                 전체글
             </button>
-            <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link" @click="fnSelectCategory('NOTICE')">
-                공지사항
-            </button>
             <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="fnSelectCategory('QNA')">
                 질문
             </button>
@@ -35,11 +32,23 @@
             </tr>
             </thead>
             <tbody>
+            <!--공지사항 상시 상단 고정-->
+            <tr v-for="(item, idx) in noticeList" :key="idx" @click="fnView(item.postId)" class="hover-pointer notice-post">
+                <td>{{ item.postId }}</td>
+                <td>{{ item.postCategory }}</td>
+                <td>
+                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp; [{{ item.replyCount }}]</span>
+                    <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
+                </td>
+                <td>{{ item.memberNickname }}</td>
+                <td>{{ formatDateTime(item.regDate) }}</td>
+            </tr>
+
             <tr v-for="(item, idx) in list" :key="idx" @click="fnView(item.postId)" class="hover-pointer">
                 <td>{{ item.postId }}</td>
                 <td>{{ item.postCategory }}</td>
                 <td>
-                    <span v-if="item.title.length < 15">{{ item.title }}</span>
+                    <span v-if="item.title.length < 15">{{ item.title }} &nbsp; [{{ item.replyCount }}]</span>
                     <span v-else>{{ item.title.substring(0, 15) + "..." }}</span>
                 </td>
                 <td>{{ item.memberNickname }}</td>
@@ -52,27 +61,6 @@
             <button type="button" class="btn btn-outline-dark btn-rounded" @click="fnWrite">글쓰기</button>
         </div>
 
-        <!--        <div class="pagination d-flex justify-content-center">-->
-        <!--            <ul class="pagination">-->
-        <!--&lt;!&ndash;                <li class="page-item" :class="{ disabled: paging.start_page <= 1 }">&ndash;&gt;-->
-        <!--                <li class="page-item" >-->
-        <!--                    <a class="page-link" @click="fnPage(1)" href="javascript:;">&lt;&lt;</a>-->
-        <!--                </li>-->
-        <!--                <li class="page-item" :class="{ disabled: paging.start_page <= 1 }">-->
-        <!--                    <a class="page-link" @click="fnPage(paging.start_page - 1)" href="javascript:;">&lt;</a>-->
-        <!--                </li>-->
-        <!--                <li class="page-item" v-for="n in paginavigation()" :key="n" :class="{ active: paging.page === n }">-->
-        <!--                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ n }}</a>-->
-        <!--                </li>-->
-        <!--                <li class="page-item" :class="{ disabled: paging.end_page >= paging.total_page_cnt }">-->
-        <!--                    <a class="page-link" @click="fnPage(paging.end_page + 1)" href="javascript:;">&gt;</a>-->
-        <!--                </li>-->
-        <!--                <li class="page-item" :class="{ disabled: paging.end_page >= paging.total_page_cnt }">-->
-        <!--                    <a class="page-link" @click="fnPage(paging.total_page_cnt)" href="javascript:;">&gt;&gt;</a>-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </div> <hr>-->
-
         <div class="pagination d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item">
@@ -81,11 +69,8 @@
                 <li class="page-item">
                     <a class="page-link" @click="fnPage(page - 1)" href="javascript:;">&lt;</a>
                 </li>
-                <!--                <li class="page-item" v-for="n in paginavigation()" :key="n">-->
-                <!--                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ page }}</a>-->
-                <!--                </li>-->
-                <li class="page-item" :key="n">
-                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ page }}</a>
+                <li class="page-item" v-for="n in paginavigation()" :key="n">
+                    <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ n + 1 }}</a>
                 </li>
                 <li class="page-item">
                     <a class="page-link" @click="fnPage(page + 1)" href="javascript:;">&gt;</a>
@@ -105,7 +90,8 @@
                 <input type="text" class="form-control" id="searchText" v-model="searchText" placeholder="검색어를 입력하세요"/>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary btn-rounded" @click="fnSearch(searchType, searchText)">검색</button>
+                <button type="submit" class="btn btn-primary btn-rounded" @click="fnSearch(searchType, searchText)">검색
+                </button>
             </div>
         </div>
     </div>
@@ -120,6 +106,10 @@
 /*TODO : 마우스 hover 시 테이블 열 색이 바뀌도록, 현재는 적용이 안됨 */
 .hover-pointer:hover {
     background-color: blue; /* 마우스 호버 시 원하는 배경색으로 변경하세요. */
+}
+
+.notice-post {
+    font-weight: bold;
 }
 
 .nav-buttons {
@@ -169,47 +159,19 @@
 <!--</script>-->
 <script>
 export default {
-    // data() { //변수생성
-    //     return {
-    //         requestBody: {}, //리스트 페이지 데이터전송
-    //         list: {}, //리스트 데이터
-    //         no: '', //게시판 숫자처리
-    //         paging: {
-    //             block: 0,
-    //             end_page: 0,
-    //             next_block: 0,
-    //             page: 0,
-    //             page_size: 0,
-    //             prev_block: 0,
-    //             start_index: 0,
-    //             start_page: 0,
-    //             total_block_cnt: 0,
-    //             total_list_cnt: 0,
-    //             total_page_cnt: 0,
-    //         }, //페이징 데이터
-    //         // URL에서 page, size 정보를 가져와서 저장
-    //         page: this.$route.query.page ? this.$route.query.page : 0,
-    //         size: this.$route.query.size ? this.$route.query.size : 10,
-    //         keyword: this.$route.query.keyword,
-    //         paginavigation: function () { //페이징 처리 for문 커스텀
-    //           let pageNumber = [] //;
-    //           let start_page = this.paging.start_page;
-    //           let end_page = this.paging.end_page;
-    //           for (let i = start_page; i <= end_page; i++) pageNumber.push(i);
-    //           return pageNumber;
-    //         }
-    //     }
-    // },
-    data() { //변수생성
-        let totalPage;
+
+    data() {
         return {
             requestBody: {}, //리스트 페이지 데이터전송
             list: {}, //리스트 데이터
+            noticeList: {},
             postCategory: '',
+            replyCount: '',
             searchType: 'title',
             searchText: '',
+            totalPage: '',
             selectedOption: [
-                {value: 'title', text: '제목' },
+                {value: 'title', text: '제목'},
                 {value: 'writer', text: '작성자'},
                 {value: 'titleAndWriter', text: '제목 + 작성자'},
             ],
@@ -218,22 +180,33 @@ export default {
             page: this.$route.query.page ? this.$route.query.page : 0,
             size: this.$route.query.size ? this.$route.query.size : 10,
 
-            paginavigation: function () { //페이징 처리 for문 커스텀
-                let pageNumber = [] //;
-                let start_page = this.page;
-                let end_page = this.page + 5;
-                for (let i = start_page; i <= end_page; i++) pageNumber.push(i);
+            paginavigation: function () {
+                let pageNumber = []
+                let start_page = 0;
+                let end_page = this.totalPage;
+                for (let i = start_page; i < end_page; i++) pageNumber.push(i);
                 return pageNumber;
             }
         }
     },
     mounted() {
-        this.fnGetList()
+        this.fnGetList();
+        this.fnGetNoticeList();
     },
     methods: {
+        fnGetNoticeList() {
+            this.$axios.get("/api/v1/posts/notice", {
+            }).then((res) => {
+                console.log(res);
+                this.noticeList = res.data.data;
+            }).catch((err) => {
+                alert(err.response.data.message)
+                location.reload()
+            })
+        },
+
         fnGetList() {
-            this.requestBody = { // 데이터 전송
-                // keyword: this.keyword,
+            this.requestBody = {
                 page: this.page,
                 size: this.size,
                 totalPage: this.totalPage,
@@ -244,13 +217,15 @@ export default {
             this.$axios.get("/api/v1/posts", {
                 params: this.requestBody,
             }).then((res) => {
+                console.log(res);
                 this.page = res.data.data.number;
                 this.size = res.data.data.size;
                 this.totalPage = res.data.data.totalPages;
-                this.list = res.data.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+                this.list = res.data.data.content
+                this.replyCount = res.data.data.replyCount
             }).catch((err) => {
-              alert(err.response.data.message)
-              location.reload()
+                alert(err.response.data.message)
+                location.reload()
             })
         },
         fnView(idx) {
@@ -265,13 +240,13 @@ export default {
                 path: './write'
             })
         },
-      fnList() {
-        delete this.requestBody.idx
-        this.$router.push({
-          path: './list',
-          query: this.requestBody
-        })
-      },
+        fnList() {
+            delete this.requestBody.idx
+            this.$router.push({
+                path: './list',
+                query: this.requestBody
+            })
+        },
         fnPage(n) {
             if (this.page !== n) {
                 if (this.totalPage > n && n >= 0) {
@@ -282,8 +257,7 @@ export default {
         },
         fnSelectCategory(postCategory) {
             this.postCategory = postCategory;
-            this.page = 0; // 카테고리 변경 시 페이지를 0으로 리셋
-            // URL을 업데이트하여 선택한 카테고리 정보를 서버로 전달
+            this.page = 0;
             this.$router.push({path: this.$route.path, query: {postCategory}});
             this.fnGetList();
         },
@@ -300,7 +274,6 @@ export default {
             });
             this.fnGetList();
         },
-        // 등록일시를 원하는 형식으로 포맷팅하는 메서드
         formatDateTime(dateTimeStr) {
             const dateTime = new Date(dateTimeStr);
             const year = dateTime.getFullYear();

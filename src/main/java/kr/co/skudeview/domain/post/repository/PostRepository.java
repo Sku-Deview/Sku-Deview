@@ -1,7 +1,9 @@
 package kr.co.skudeview.domain.post.repository;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import kr.co.skudeview.domain.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findPostsByMemberId(Long memberId);
 
     Optional<Post> findPostById(Long postId);
+
+    @Query("SELECT COUNT(r) FROM Reply r WHERE r.post.id = :postId")
+    int countRepliesByPostId(@Param("postId") Long postId);
 }
