@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.post.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import kr.co.skudeview.domain.post.dto.PostRequestDto;
 import kr.co.skudeview.domain.post.dto.PostResponseDto;
@@ -9,13 +10,21 @@ import kr.co.skudeview.global.model.ResponseStatus;
 import kr.co.skudeview.global.auth.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 @Slf4j
@@ -32,12 +41,46 @@ public class PostApiController {
      * @param createParams
      * @return ResponseStatus.SUCCESS_CREATE + Long postId
      */
-    @PostMapping("/post")
+//    @PostMapping("/post")
+//    public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
+//                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
+//        Long postId = postService.createPost(userDetails.getUsername(), createParams);
+//
+//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
+//    }
+    @PostMapping(value = "/post", consumes = {"multipart/form-data"})
     public ResponseFormat<Long> createPost(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                           @RequestBody @Valid PostRequestDto.CREATE createParams) throws IOException {
-        Long postId = postService.createPost(userDetails.getUsername(), createParams);
+                                           @RequestPart("createParams") @Valid PostRequestDto.CREATE createParams, // @RequestPart 사용
+                                           @RequestPart(name = "files", required = false) List<MultipartFile> files) throws IOException { // 파일 업로드 처리
+        log.info("userDetails = {}", userDetails);
+        log.info("createParams = {}", createParams.getContent());
+        log.info("files = {}", files);
+        Long postId = postService.createPost(userDetails.getUsername(), createParams, files); // 수정된 메서드 호출
 
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, postId);
+    }
+
+    /*파일 링크 클릭 시 파일 저장*/
+    @GetMapping("/files/{fileName}")
+    public ResponseEntity<?> downloadFile(@PathVariable("fileName") String fileName,
+                                          HttpServletRequest request) throws IOException {
+        /*프로젝트 루트 경로*/
+        String rootDir = System.getProperty("user.dir");
+
+        /*file의 path를 저장 -> 클릭 시 파일로 이동*/
+        Path filePath = Path.of(rootDir + "/media/" + fileName);
+
+        /*파일의 패스를 uri로 변경하고 resource로 저장.*/
+        Resource resource = new UrlResource(filePath.toUri());
+
+        /*컨텐츠 타입을 가지고 온다.*/
+        String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+
     }
 
     /**
@@ -105,7 +148,7 @@ public class PostApiController {
 
     @PostMapping("/post/like/{postId}/{loginNickname}")
     public ResponseFormat<PostResponseDto.READ> addPostLike(@PathVariable Long postId,
-                                            @PathVariable String loginNickname) {
+                                                            @PathVariable String loginNickname) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.addPostLikeByLoginNickname(postId, loginNickname));
     }
 

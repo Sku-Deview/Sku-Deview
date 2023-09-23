@@ -30,9 +30,6 @@ public class PostRequestDto {
 
         private Integer viewCount;
 
-        private Integer fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
-
-        private MultipartFile postFile;
     }
 
     @Getter

@@ -29,8 +29,6 @@ public class QPost extends EntityPathBase<Post> {
     //inherited
     public final BooleanPath deleteAt = _super.deleteAt;
 
-    public final NumberPath<Integer> fileAttached = createNumber("fileAttached", Integer.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
@@ -41,8 +39,6 @@ public class QPost extends EntityPathBase<Post> {
     public final DateTimePath<java.time.LocalDateTime> modDate = _super.modDate;
 
     public final EnumPath<kr.co.skudeview.global.common.PostCategory> postCategory = createEnum("postCategory", kr.co.skudeview.global.common.PostCategory.class);
-
-    public final ListPath<PostFile, QPostFile> postFileList = this.<PostFile, QPostFile>createList("postFileList", PostFile.class, QPostFile.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;

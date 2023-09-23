@@ -4,6 +4,7 @@ import kr.co.skudeview.domain.post.dto.PostRequestDto;
 import kr.co.skudeview.domain.post.dto.PostResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,10 @@ public interface PostService {
      * @return 생성된 포스트의 ID
      * @throws IOException 포스트 생성 중 발생한 예외 처리
      */
-    Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
+//    Long createPost(String email, PostRequestDto.CREATE create) throws IOException;
+
+    Long createPost(String email, PostRequestDto.CREATE create, List<MultipartFile> files) throws IOException;
+
 
     /**
      * 특정 포스트를 수정.
@@ -62,6 +66,7 @@ public interface PostService {
     List<PostResponseDto.READ> searchNoticePost();
 
     PostResponseDto.READ addPostLikeByLoginNickname(Long postId, String loginNickname);
+
     /**
      * Redis에 포스트 조회수를 업데이트.
      *

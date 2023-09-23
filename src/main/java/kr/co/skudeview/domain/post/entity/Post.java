@@ -45,11 +45,6 @@ public class Post extends BaseEntity {
     @Column(name = "view_count")
     private int viewCount;
 
-    @Column
-    private int fileAttached; // 1 or 0
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<PostFile> postFileList = new ArrayList<>();
 
     @Builder
     public Post(Member member,
@@ -65,7 +60,6 @@ public class Post extends BaseEntity {
         this.likeCount = likeCount;
         this.viewCount = viewCount;
         this.postCategory = postCategory;
-        this.fileAttached = fileAttached;
     }
 
 

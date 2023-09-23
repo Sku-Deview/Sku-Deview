@@ -233,7 +233,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private PostResponseDto.READ toReadDto(Post post) {
-        if (post.getFileAttached() == 0) {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
                     .memberEmail(post.getMember().getEmail())
@@ -244,26 +243,8 @@ public class AdminServiceImpl implements AdminService {
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
-                    .fileAttached(post.getFileAttached())
                     .regDate(post.getRegDate())
                     .build();
-
-        } else {
-            return PostResponseDto.READ.builder()
-                    .postId(post.getId())
-                    .memberEmail(post.getMember().getEmail())
-                    .memberNickname(post.getMember().getNickname())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postCategory(post.getPostCategory())
-                    .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
-                    .fileAttached(post.getFileAttached())
-                    .originalFileName(post.getPostFileList().get(0).getOriginalFileName())
-                    .storedFileName(post.getPostFileList().get(0).getStoredFileName())
-                    .regDate(post.getRegDate())
-                    .build();
-        }
 
     }
 

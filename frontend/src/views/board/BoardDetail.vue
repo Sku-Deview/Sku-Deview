@@ -2,15 +2,15 @@
   <div class="board-detail mt-5">
     <div class="common-buttons mb-3">
       <i v-if="isAuthor()" @click="fnUpdate" class="fa-2x fa-solid fa-pen-to-square"></i>
-<!--      <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate"-->
-<!--              style="margin-right: 3px;">수정-->
-<!--      </button>-->
+      <!--      <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate"-->
+      <!--              style="margin-right: 3px;">수정-->
+      <!--      </button>-->
       <i v-if="isAuthor()" @click="fnDelete" class="fa-2x fa-solid fa-delete-left"></i>
-<!--      <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete"-->
-<!--              style="margin-right: 3px;">삭제-->
-<!--      </button>-->
-      <i class="fa-2x fa-solid fa-list"  @click="fnList"></i>
-<!--      <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList">목록</button>-->
+      <!--      <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete"-->
+      <!--              style="margin-right: 3px;">삭제-->
+      <!--      </button>-->
+      <i class="fa-2x fa-solid fa-list" @click="fnList"></i>
+      <!--      <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList">목록</button>-->
     </div>
     <h2><strong>[{{ category }}] {{ title }}</strong></h2>
     <div>
@@ -28,17 +28,24 @@
     <div class="board-contents" v-html="content"></div>
 
 
-<!--    <div class="button-container">-->
-<!--      <button @click="toPostLike(postId, loginUserNickname)" class="btn btn-outline-primary btn-rounded"-->
-<!--              :class="{ 'btn-liked': isLiked }">-->
-<!--        {{ isLiked ? '좋아요' : '좋아요' }}-->
-<!--      </button>-->
-<!--    </div>-->
+    <!--    <div class="button-container">-->
+    <!--      <button @click="toPostLike(postId, loginUserNickname)" class="btn btn-outline-primary btn-rounded"-->
+    <!--              :class="{ 'btn-liked': isLiked }">-->
+    <!--        {{ isLiked ? '좋아요' : '좋아요' }}-->
+    <!--      </button>-->
+    <!--    </div>-->
     <div class="button-container">
-      <button  @click="toPostLike(postId, loginUserNickname)" class="btn-liked btn btn-outline-primary btn-rounded">
+      <button @click="toPostLike(postId, loginUserNickname)" class="btn-liked btn btn-outline-primary btn-rounded">
         <i class="fa-3x fa-solid fa-heart heart-icon" @click="toPostLike(postId, loginUserNickname)"></i>
-
       </button>
+    </div>
+
+    <div>
+      <ul>
+        <li v-for="file in files" :key="file.fileUrl">
+          첨부파일 : <a :href="file.fileUrl" download>{{ file.fileName }}</a>
+        </li>
+      </ul>
     </div>
 
     <hr>
@@ -100,6 +107,7 @@
   margin: 0 auto; /* 가운데 정렬 */
   /* 나머지 스타일 유지 */
 }
+
 /* 좋아요 버튼 스타일 */
 .btn-liked {
   background-color: transparent; /* 배경색을 투명으로 설정합니다. */
@@ -121,6 +129,7 @@ export default {
       content: '',
       created_at: '',
       view_count: '',
+      files: [],
       //댓글
       replyList: [],
       reply: '',
@@ -155,6 +164,8 @@ export default {
         // 서버에서 게시물의 좋아요 상태와 개수 가져오기
         // this.isLiked = res.data.data.isLiked;
         this.likeCount = res.data.data.likeCount;
+        //파일 가져오기
+        this.files = res.data.data.fileFormat
       }).catch((err) => {
         alert(err.response.data.message)
         this.fnList()
@@ -190,6 +201,8 @@ export default {
         location.reload()
       })
     },
+
+
     fnGetReply() {
       this.$axios.get('/api/v1/reply/' + this.idx, {
         params: this.requestBody
@@ -264,7 +277,7 @@ export default {
 
       this.$axios.post(`/api/v1/post/like/${postId}/${loginNickname}`, {like: this.isLiked})
 
-          .then((res) => {
+          .then(() => {
             if (this.isLiked) {
               this.likeCount++;
             } else {
