@@ -2,6 +2,8 @@
 
 - 회의록 -> https://www.notion.so/adcdbd464b774a20b51f38f624f7fb14
 
+- API명세서 -> https://documenter.getpostman.com/view/19258332/2s9YJW5RTV
+
 
 - 개발 환경
     - Java 17
