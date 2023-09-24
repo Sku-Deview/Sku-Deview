@@ -141,7 +141,7 @@ export default {
 
       // DTO를 JSON 문자열로 변환하여 FormData에 추가
       const json = JSON.stringify(this.postRequestDto);
-      const blob = new Blob([json], {type: "application/json"});
+      const blob = new Blob([json], { type: "application/json" });
       formData.append("createParams", blob);
 
       // 파일 업로드 처리
@@ -160,7 +160,7 @@ export default {
         })
             .then((response) => {
               alert("게시글 업로드 성공");
-              this.fnView(response.data.data)
+              this.fnView(response.data.data.postId)
             })
             .catch(() => {
               alert("게시글 업로드 실패");

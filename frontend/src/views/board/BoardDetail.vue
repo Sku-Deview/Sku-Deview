@@ -24,8 +24,12 @@
     </div>
 
     <hr>
-
-    <div class="board-contents" v-html="content"></div>
+    <div class="board-contents">
+      <div v-if="hasImages">
+        <img v-for="(file, index) in files" :key="index" :src="file.fileUrl" :alt="'게시글 이미지 ' + (index + 1)" class="img-fluid" />
+      </div>
+      <div v-html="content"></div>
+    </div>
 
 
     <!--    <div class="button-container">-->
@@ -113,6 +117,23 @@
   background-color: transparent; /* 배경색을 투명으로 설정합니다. */
   border: none; /* 테두리 제거 */
 }
+/* 이미지가 내용의 최대 높이를 넘지 않도록 스타일링 */
+
+/* 게시글 내용 스타일링 */
+.board-contents {
+  position: relative;
+  height: auto; /* 내용의 크기에 따라 늘어남 */
+  overflow: hidden; /* 내용이 특정 크기를 넘어갈 경우 스크롤 표시 */
+}
+
+/* 이미지 스타일 유지 */
+.img-fluid {
+  display: block;
+  margin: 0 auto; /* 가운데 정렬 */
+  max-width: 100%; /* 이미지의 최대 너비 설정 */
+  height: auto; /* 이미지의 높이 자동 조정 */
+  object-fit: contain; /* 이미지 비율 유지 */
+}
 </style>
 
 
@@ -143,6 +164,15 @@ export default {
   mounted() {
     this.fnGetView()
     this.fnGetReply()
+  },
+  computed: {
+    hasImages() {
+      return this.files && this.files.length > 0;
+    },
+    contentWithoutImages() {
+      // 이미지를 제외한 내용을 반환
+      return this.content.replace(/!\[.*?\]\(.*?\)/g, ''); // 이미지 링크 제거
+    },
   },
   methods: {
     formatDate(dateString) {
@@ -200,6 +230,12 @@ export default {
         alert(err.response.data.message)
         location.reload()
       })
+    },
+    isImageFile(file) {
+      // 파일이 이미지 파일인지 확인 (확장자 기준)
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg'];
+      const fileExtension = file.fileName.split('.').pop().toLowerCase();
+      return imageExtensions.includes('.' + fileExtension);
     },
 
 
