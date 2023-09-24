@@ -92,20 +92,22 @@ public class PostServiceImpl implements PostService {
         Post post = toEntity(create, findMember.get());
         postRepository.save(post);
 
-        /*지원하지 않는 확장자 파일 제거*/
-        List<MultipartFile> validatedFiles = filesValidation(files);
 
-        /*걸러진 파일들 업로드*/
-        filesUpload(validatedFiles, post.getId());
+        if (files != null && !files.isEmpty()) {
+            /* 지원하지 않는 확장자 파일 제거 */
+            List<MultipartFile> validatedFiles = filesValidation(files);
 
-        /*유효성 검증을 끝낸 파일들을 하나씩 꺼냄.*/
-        for (MultipartFile validatedFile : validatedFiles) {
+            /* 걸러진 파일들 업로드 */
+            filesUpload(validatedFiles, post.getId());
 
-            /*File Entity 생성 후 저장*/
-            File file = new kr.co.skudeview.domain.file.entity.File(validatedFile, post);
-            fileRepository.save(file);
-
+            /* 유효성 검증을 끝낸 파일들을 하나씩 꺼냄. */
+            for (MultipartFile validatedFile : validatedFiles) {
+                /* File Entity 생성 후 저장 */
+                File file = new kr.co.skudeview.domain.file.entity.File(validatedFile, post);
+                fileRepository.save(file);
+            }
         }
+        log.info("post.getId() = {}",post.getId());
         return post.getId();
     }
 

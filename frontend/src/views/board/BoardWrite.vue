@@ -54,14 +54,14 @@ export default {
       },
       editor: ClassicEditor,
       editorConfig: {
-        toolbar: ['heading', '|', 'fontBackgroundColor', 'fontColor', 'fontSize', 'bold', 'italic', '|', 'alignment', 'bulletedList', 'numberedList', 'indent', 'outdent', '|', 'imageUpload', 'insertTable', 'link', '|', 'undo', 'redo'],
+        toolbar: ['heading', '|', 'fontBackgroundColor', 'fontColor', 'fontSize', 'bold', 'italic', '|', 'alignment', 'bulletedList', 'numberedList', 'indent', 'outdent', '|',  'insertTable', 'link', '|', 'undo', 'redo'],
         table: {
           contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
         },
-        image: {
-          resize: true,
-          toolbar: ['imageStyle:alignLeft', 'imageStyle:alignRight', 'imageStyle:inline', 'imageStyle:side'],
-        },
+        // image: {
+        //   resize: true,
+        //   toolbar: ['imageStyle:alignLeft', 'imageStyle:alignRight', 'imageStyle:inline', 'imageStyle:side'],
+        // },
         extraPlugins: [function (editor) {
           editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
             return new UploadAdapter(loader);
@@ -160,9 +160,12 @@ export default {
         })
             .then((response) => {
               alert("게시글 업로드 성공");
-              this.fnView(response.data.data.postId)
+              console.log(response.data.data)
+              this.fnView(response.data.data)
+
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               alert("게시글 업로드 실패");
               location.reload()
             });
