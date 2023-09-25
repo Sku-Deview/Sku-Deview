@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.admin.service;
 
+import jakarta.transaction.Transactional;
 import kr.co.skudeview.domain.admin.service.AdminService;
 import kr.co.skudeview.domain.member.dto.MemberRequestDto;
 import kr.co.skudeview.domain.member.dto.MemberResponseDto;
@@ -156,6 +157,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
+    public void createSkill(SkillRequestDto.CREATE create) {
+        isSkillName(create.getName());
+
+        skillRepository.save(toEntity(create));
+    }
+
+    @Override
     public void updateSkill(SkillRequestDto.UPDATE update) {
         final Optional<Skill> skill = skillRepository.findSkillById(update.getSkillId());
 
@@ -184,6 +193,12 @@ public class AdminServiceImpl implements AdminService {
         isReport(report);
 
         return toReadDto(report.get());
+    }
+
+    private Skill toEntity(SkillRequestDto.CREATE create) {
+        return Skill.builder()
+                .name(create.getName())
+                .build();
     }
 
 
@@ -218,7 +233,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private PostResponseDto.READ toReadDto(Post post) {
-        if (post.getFileAttached() == 0) {
             return PostResponseDto.READ.builder()
                     .postId(post.getId())
                     .memberEmail(post.getMember().getEmail())
@@ -229,26 +243,8 @@ public class AdminServiceImpl implements AdminService {
                     .postCategory(post.getPostCategory())
                     .viewCount(post.getViewCount())
                     .likeCount(post.getLikeCount())
-                    .fileAttached(post.getFileAttached())
                     .regDate(post.getRegDate())
                     .build();
-
-        } else {
-            return PostResponseDto.READ.builder()
-                    .postId(post.getId())
-                    .memberEmail(post.getMember().getEmail())
-                    .memberNickname(post.getMember().getNickname())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .postCategory(post.getPostCategory())
-                    .viewCount(post.getViewCount())
-                    .likeCount(post.getLikeCount())
-                    .fileAttached(post.getFileAttached())
-                    .originalFileName(post.getPostFileList().get(0).getOriginalFileName())
-                    .storedFileName(post.getPostFileList().get(0).getStoredFileName())
-                    .regDate(post.getRegDate())
-                    .build();
-        }
 
     }
 

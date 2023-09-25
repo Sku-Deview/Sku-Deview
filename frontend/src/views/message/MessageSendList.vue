@@ -91,47 +91,55 @@ export default {
 
 <style>
 .m-sendName {
-    color: #ff2b1d;
+  color: #ff2b1d;
 }
 
 .receiverName {
-    color: #204bff;
+  color: #204bff;
 }
 
 .m-black-bg {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.432);
-    position: fixed;
-    padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 수평, 수직 가운데 정렬을 위해 추가 */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.432);
+  position: fixed;
+  padding: 5px;
 }
 
 .m-white-bg {
-    width: 60%;
-    height: 50%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: left; /* 왼쪽 정렬로 변경 */
+  width: 60%;
+  height: 50%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 화면 중앙으로 이동 */
+  text-align: left;
+  border: 2px solid black; /* 테두리 추가 (검은색, 2px 두께) */
 }
 
 .m-button-container {
-    text-align: right; /* 버튼을 오른쪽 정렬 */
+  text-align: right;
 }
 
 .m-modal-exit-btn {
-    margin-top: 0; /* 마진 값 제거 */
-    margin-right: 0; /* 마진 값 제거 */
-    float: right; /* 버튼을 오른쪽으로 띄움 */
+  margin-top: 0;
+  margin-right: 0;
+  float: right;
+}
+
+.m-button-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 
 .m-modal-exit-btn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

@@ -208,39 +208,39 @@ public class DummyDataTest {
         }
     }
 
-    @Test
-    void createPost() throws IOException {
-        for (int i = 1; i < 100; i++) {
-            PostRequestDto.CREATE create = PostRequestDto.CREATE.builder()
-                    .title("제목..." + i)
-                    .content("내용..." + i)
-                    .postCategory(PostCategory.FREE)
-                    .likeCount(1)
-                    .viewCount(1)
-                    .postFile(null)
-                    .fileAttached(0)
-                    .build();
-
-            String email  = "test1@test.com";
-            postService.createPost(email,create);
-        }
-
-        for (int i = 100; i < 200; i++) {
-            PostRequestDto.CREATE create = PostRequestDto.CREATE.builder()
-
-                    .title("제목..." + i)
-                    .content("내용..." + i)
-                    .postCategory(PostCategory.QNA)
-                    .likeCount(1)
-                    .viewCount(1)
-                    .postFile(null)
-                    .fileAttached(0)
-                    .build();
-            String email  = "test2@test.com";
-            postService.createPost(email,create);
-        }
-
-    }
+//    @Test
+//    void createPost() throws IOException {
+//        for (int i = 1; i < 100; i++) {
+//            PostRequestDto.CREATE create = PostRequestDto.CREATE.builder()
+//                    .title("제목..." + i)
+//                    .content("내용..." + i)
+//                    .postCategory(PostCategory.FREE)
+//                    .likeCount(1)
+//                    .viewCount(1)
+//                    .postFile(null)
+//                    .fileAttached(0)
+//                    .build();
+//
+//            String email  = "test1@test.com";
+//            postService.createPost(email,create);
+//        }
+//
+//        for (int i = 100; i < 200; i++) {
+//            PostRequestDto.CREATE create = PostRequestDto.CREATE.builder()
+//
+//                    .title("제목..." + i)
+//                    .content("내용..." + i)
+//                    .postCategory(PostCategory.QNA)
+//                    .likeCount(1)
+//                    .viewCount(1)
+//                    .postFile(null)
+//                    .fileAttached(0)
+//                    .build();
+//            String email  = "test2@test.com";
+//            postService.createPost(email,create);
+//        }
+//
+//    }
 
     @Test
     void createReply() {

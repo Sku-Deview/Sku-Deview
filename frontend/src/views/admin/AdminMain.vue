@@ -159,9 +159,6 @@
 
 
 <script>
-
-
-
 export default {
   data() { //변수생성
     return {

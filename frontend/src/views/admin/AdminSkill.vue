@@ -1,4 +1,10 @@
 <template>
+  <div class="d-flex justify-content-end">
+    추가 할  기술 명 :&nbsp&nbsp<input type="text" id="input-2" required @change="onChangeInput">&nbsp&nbsp
+    <button type="button" class="btn btn-warning btn-rounded" v-on:click="createSkill">추가</button>&nbsp;
+    <button type="button" class="btn btn-primary btn-rounded" v-on:click="SkillUpdate">수정</button>&nbsp;
+  </div>
+
   <table class="table table-striped table-bordered text-center">
     <thead>
     <tr>
@@ -8,7 +14,7 @@
     </thead>
 
     <tbody>
-    <tr v-for="(item, idx) in list" :key="idx" class="hover-pointer">
+    <tr v-for="(item, idx) in list" :key="idx" >
       <td>{{ item.skillId }}</td>
       <td>{{ item.name }}</td>
     </tr>
@@ -20,14 +26,18 @@
 export default {
   data() {
     return {
+      skillRequestDto: {
+        name: ''
+      },
       list: [],
+      InputName:''
     };
   },
   mounted() {
-    this.ReportList();
+    this.SkillList();
   },
   methods: {
-    ReportList() {
+    SkillList() {
       this.$axios
           .get("/api/v1/admin/skill", {
             headers: {
@@ -40,6 +50,31 @@ export default {
           .catch((err) => {
             alert(err.response.data.message)
           });
+    },
+    createSkill() {
+      this.skillRequestDto = {
+        name: this.InputName
+      }
+      this.$axios
+          .post("/api/v1/admin/skill", this.skillRequestDto,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('user_token')}`
+            }
+          })
+          .then(() => {
+            location.reload()
+          })
+          .catch((err) => {
+            alert(err.response.data.message)
+          });
+    },
+    SkillUpdate() {
+      this.$router.push({
+        path: '/admin/skill',
+      })
+    },
+    onChangeInput(event) {
+      this.InputName = event.target.value
     },
   },
 };

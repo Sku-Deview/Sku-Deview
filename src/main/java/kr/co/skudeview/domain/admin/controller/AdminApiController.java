@@ -12,10 +12,12 @@ import kr.co.skudeview.domain.skill.dto.SkillResponseDto;
 import kr.co.skudeview.global.model.ResponseFormat;
 import kr.co.skudeview.global.model.ResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
@@ -69,8 +71,15 @@ public class AdminApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, adminService.getAllSkills());
     }
 
+    @PostMapping("/skill")
+    public ResponseFormat<Void> createSkill(@RequestBody @Valid SkillRequestDto.CREATE create) {
+        adminService.createSkill(create);
+        return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
+    }
+
     @PutMapping("/skill")
     public ResponseFormat<Void> updateSkill(@RequestBody SkillRequestDto.UPDATE update) {
+        log.info(update.getName());
         adminService.updateSkill(update);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }

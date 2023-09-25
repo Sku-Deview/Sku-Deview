@@ -39,6 +39,7 @@ public interface AdminService {
 
     void updateSkill(SkillRequestDto.UPDATE update);
 
+    void createSkill(SkillRequestDto.CREATE create);
 
     //Report
     List<ReportResponseDto.READ> getAllReports();
