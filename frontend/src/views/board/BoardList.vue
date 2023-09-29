@@ -1,4 +1,6 @@
 <template>
+  <PageBanner/>
+
   <div class="board-list mt-5">
     <div class="nav-buttons mb-3">
       <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="fnSelectCategory('')">
@@ -37,11 +39,14 @@
         <td>{{ item.postId }}</td>
         <td>{{ item.postCategory }}</td>
         <td>
-                    <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp; <i
-                        class="fa-solid fa-comment">{{ item.replyCount }}</i>
-                      <i class="fa-solid fa-heart">{{ item.likeCount }}</i> </span>
-          <span v-else>{{ item.title.substring(0, 10) + "..." }}<i class="fa-solid fa-comment">{{ item.replyCount }}</i>
-                      <i class="fa-solid fa-heart">{{ item.likeCount }}</i></span>
+          <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp;
+            <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+            <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+          </span>
+          <span v-else>{{ item.title.substring(0, 10) + "..." }}
+            <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+            <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+          </span>
         </td>
         <td>{{ item.memberNickname }}</td>
         <td>{{ formatDateTime(item.regDate) }}</td>
@@ -51,11 +56,14 @@
         <td>{{ item.postId }}</td>
         <td>{{ item.postCategory }}</td>
         <td>
-                    <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp; <i
-                        class="fa-solid fa-comment">{{ item.replyCount }}</i>
-                      <i class="fa-solid fa-heart">{{ item.likeCount }}</i> </span>
-          <span v-else>{{ item.title.substring(0, 10) + "..." }}<i class="fa-solid fa-comment">{{ item.replyCount }}</i>
-                      <i class="fa-solid fa-heart">{{ item.likeCount }}</i></span>
+          <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp;
+            <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+            <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+          </span>
+          <span v-else>{{ item.title.substring(0, 10) + "..." }}
+            <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+            <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+          </span>
         </td>
         <td>{{ item.memberNickname }}</td>
         <td>{{ formatDateTime(item.regDate) }}</td>
@@ -64,9 +72,9 @@
     </table>
 
     <div class="common-buttons mb-3">
-      <button type="button" class="btn btn-outline-dark btn-rounded" @click="fnWrite">
-        <i class="fa-solid fa-pen"></i>
-        <!--              글쓰기-->
+      <button type="button" class="btn btn-outline-dark btn-rounded small-button" @click="fnWrite">
+        <span><i class="fa-solid fa-pen small-icon"></i></span>
+        <!--글쓰기-->
       </button>
     </div>
 
@@ -110,6 +118,15 @@
 .hover-pointer {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+}
+
+.small-icon {
+  font-size: 15px; /* Adjust the font size to your preference */
+}
+
+.small-button {
+  font-size: 12px; /* Adjust the font size for the button text */
+  padding: 4px 8px; /* Adjust padding for the button */
 }
 
 /*TODO : 마우스 hover 시 테이블 열 색이 바뀌도록, 현재는 적용이 안됨 */
@@ -167,8 +184,12 @@
 <!--}-->
 <!--</script>-->
 <script>
-export default {
+import PageBanner from "@/components/PageBanner.vue";
 
+export default {
+  components: {
+    PageBanner
+  },
   data() {
     return {
       requestBody: {}, //리스트 페이지 데이터전송
