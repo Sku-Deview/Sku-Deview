@@ -1,22 +1,15 @@
 <template>
   <div class="board-detail mt-5">
     <div class="common-buttons mb-3">
-      <i v-if="isAuthor()" @click="fnUpdate" class="fa-2x fa-solid fa-pen-to-square"></i>
-      <!--      <button v-if="isAuthor()" type="button" class="btn btn-primary btn-rounded mr-2" @click="fnUpdate"-->
-      <!--              style="margin-right: 3px;">수정-->
-      <!--      </button>-->
-      <i v-if="isAuthor()" @click="fnDelete" class="fa-2x fa-solid fa-delete-left"></i>
-      <!--      <button v-if="isAuthor()" type="button" class="btn btn-danger btn-rounded mr-2" @click="fnDelete"-->
-      <!--              style="margin-right: 3px;">삭제-->
-      <!--      </button>-->
-      <i class="fa-2x fa-solid fa-list" @click="fnList"></i>
-      <!--      <button type="button" class="btn btn-success btn-rounded mr-2" @click="fnList">목록</button>-->
+      <i v-if="isAuthor()" @click="fnUpdate" class="fa-2x fa-solid fa-pen-to-square mouse-cursor small-icon"></i>
+      <i v-if="isAuthor()" @click="fnDelete" class="fa-2x fa-solid fa-delete-left mouse-cursor small-icon"></i>
+      <i @click="fnList" class="fa-2x fa-solid fa-list mouse-cursor small-icon"></i>
     </div>
     <h2><strong>[{{ category }}] {{ title }}</strong></h2>
     <div>
       <p class="w3-large mb-3 mt-3">
-        <i class="fa-solid fa-reply" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
-        <i class="fa-solid fa-ban" v-if="!isAuthor()" @click="toReportPost(postId, title)"></i>
+        <i class="fa-solid fa-reply mouse-cursor" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
+        <i class="fa-solid fa-ban mouse-cursor" v-if="!isAuthor()" @click="toReportPost(postId, title)"></i>
         {{ author }}
         <span class="small-font">&nbsp {{ created_at }}</span>
         <span class="small-font">&nbsp&nbsp 조회수: {{ view_count }}</span>
@@ -31,17 +24,8 @@
       <div v-html="content"></div>
     </div>
 
-
-    <!--    <div class="button-container">-->
-    <!--      <button @click="toPostLike(postId, loginUserNickname)" class="btn btn-outline-primary btn-rounded"-->
-    <!--              :class="{ 'btn-liked': isLiked }">-->
-    <!--        {{ isLiked ? '좋아요' : '좋아요' }}-->
-    <!--      </button>-->
-    <!--    </div>-->
     <div class="button-container">
-      <button @click="toPostLike(postId, loginUserNickname)" class="btn-liked btn btn-outline-primary btn-rounded">
         <i class="fa-3x fa-solid fa-heart heart-icon" @click="toPostLike(postId, loginUserNickname)"></i>
-      </button>
     </div>
 
     <div>
@@ -55,8 +39,6 @@
     <hr>
 
     <div v-for="(reply, idx) in replyList" :key="idx" class="mt-5">
-      <!--            <i class="fa-solid fa-trash" v-if="isReplyAuthor()" @click="removeReply(reply.replyId,reply.postId)"></i>-->
-      <!--            <i class="fa-solid fa-comment" v-if="!isReplyAuthor()" @click="toMessageWrite(reply.memberNickname)"></i>-->
       <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
       <i class="fa-solid fa-reply" @click="toMessageWrite(reply.memberNickname)"></i>
       <div class="reply-detail">
@@ -64,21 +46,15 @@
         <div class="create-at">
           <span>{{ formatDate(reply.regDate) }}</span>
         </div>
-        <p>
-          {{ reply.content }}
-        </p>
+        <p>{{ reply.content }}</p>
       </div>
     </div>
 
     <div class="mt-5">
       <label for="reply"><strong>댓글</strong></label>
       <div style="position: relative;">
-                <textarea id="reply" ref="replyInput" rows="5" v-model="reply" class="form-control"
-                          style="resize: none;"
-                          placeholder="댓글을 남겨보세요."></textarea>
-        <button type="button" class="btn btn-outline-primary btn-rounded" @click="replySave"
-                style="position: absolute; right: 10px; bottom: 10px;">댓글 저장
-        </button>
+        <textarea id="reply" ref="replyInput" rows="5" v-model="reply" class="form-control" style="resize: none;" placeholder="댓글을 남겨보세요."></textarea>
+        <button type="button" class="btn btn-outline-primary btn-rounded" @click="replySave" style="position: absolute; right: 10px; bottom: 10px;">댓글 저장</button>
       </div>
     </div>
   </div>
@@ -91,11 +67,20 @@
   color: gray;
 }
 
+.small-icon {
+  font-size: 20px; /* Adjust the font size to your preference */
+}
+
+.mouse-cursor {
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+}
+
 /* 하트 아이콘 스타일링 */
 .heart-icon {
   color: red; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
   font-size: 3rem; /* 원하는 크기로 설정합니다. */
   cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+  font-size: 30px;
 }
 
 /* 하트 아이콘과 버튼 컨테이너 스타일 */
@@ -316,11 +301,12 @@ export default {
       this.$axios.post(`/api/v1/post/like/${postId}/${loginNickname}`, {like: this.isLiked})
 
           .then(() => {
-            if (this.isLiked) {
-              this.likeCount++;
-            } else {
-              this.likeCount--;
-            }
+            // if (this.isLiked) {
+            //   this.likeCount++;
+            // } else {
+            //   this.likeCount--;
+            // }
+            alert("좋아요!");
           })
           .catch((err) => {
             alert(err.response.data.message);
