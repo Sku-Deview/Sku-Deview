@@ -67,6 +67,8 @@ public interface PostService {
 
     PostResponseDto.READ addPostLikeByLoginNickname(Long postId, String loginNickname);
 
+    List<PostResponseDto.READ> getPostsByMemberNickname (String memberNickname);
+
     /**
      * Redis에 포스트 조회수를 업데이트.
      *

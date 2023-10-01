@@ -80,6 +80,16 @@ public class PostSearchRepository {
                 .fetch();
     }
 
+    public List<Post> findPostsByMemberNickname(String memberNickname) {
+        return queryFactory
+                .selectFrom(post)
+                .join(member).fetchJoin()
+                .where(
+                        post.deleteAt.eq(Boolean.FALSE),
+                        post.member.nickname.eq(memberNickname)
+                )
+                .fetch();
+    }
 
 
     private BooleanExpression postCategoryEq(String category) {
