@@ -190,11 +190,12 @@ export default {
     },
 
     fnList() {
-      delete this.requestBody.idx
-      this.$router.push({
-        path: './list',
-        query: this.requestBody
-      })
+      delete this.requestBody.idx;
+      this.$router.go(-1);
+      // this.$router.push({
+      //   path: './list',
+      //   query: this.requestBody
+      // })
     },
     fnPost(postId) {
       this.requestBody.idx = postId
@@ -310,8 +311,7 @@ export default {
           })
           .catch((err) => {
             alert(err.response.data.message);
-            location.reload();
-            console.error(err);
+            this.$store.state.loadingStatus = false;
           });
     },
     isAuthor() {
