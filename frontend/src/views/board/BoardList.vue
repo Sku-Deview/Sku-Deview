@@ -151,38 +151,8 @@
   background-color: #007bff;
   color: #fff;
 }
-
 </style>
 
-
-<!--<script>-->
-<!--import {reactive} from "vue";-->
-<!--import axios from "axios";-->
-
-<!--export default {-->
-<!--  setup() {-->
-<!--    const state = reactive({-->
-<!--      items: [],-->
-<!--      form: {-->
-<!--        name: "",-->
-
-<!--      }-->
-<!--    })-->
-
-<!--    const load = () => {-->
-<!--      axios.get("/api/v1/post").then(({data}) => {-->
-<!--        console.log(data);-->
-<!--        state.items = data;-->
-<!--      })-->
-<!--    };-->
-
-
-<!--    load();-->
-
-<!--    return {state}-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
 <script>
 import PageBanner from "@/components/PageBanner.vue";
 
