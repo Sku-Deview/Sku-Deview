@@ -1,17 +1,24 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import store from "@/vuex/store";
+import Login from "@/views/common/Login.vue";
+import Signup from "@/views/common/Signup.vue";
+
 import PageHome from '@/views/PageHome.vue'
+
+import MemberMain from "@/views/member/MemberMain.vue";
+import MemberDetail from "@/views/member/MemberDetail.vue";
+
 import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from "@/views/board/BoardDetail.vue";
 import BoardWrite from "@/views/board/BoardWrite.vue";
-import Login from "@/views/common/Login.vue";
-import Signup from "@/views/common/Signup.vue";
-import store from "@/vuex/store";
+
 import MessageWrite from "@/views/message/MessageWrite.vue";
 import MessageReceiveList from "@/views/message/MessageReceiveList.vue";
 import MessageSendList from "@/views/message/MessageSendList.vue";
-import AdminMain from "@/views/admin/AdminMain.vue";
 
 import ReportWrite from "@/views/report/ReportWrite.vue";
+
+import AdminMain from "@/views/admin/AdminMain.vue";
 import AdminMemberPost from "@/views/admin/AdminMemberPost.vue";
 import AdminMemberPostDetail from "@/views/admin/AdminMemberPostDetail.vue";
 import AdminMemberReply from "@/views/admin/AdminMemberReply.vue";
@@ -19,8 +26,6 @@ import AdminReport from "@/views/admin/AdminReport.vue";
 import AdminReportDetail from "@/views/admin/AdminReportDetail.vue";
 import AdminSkill from "@/views/admin/AdminSkill.vue";
 import AdminSkillUpdate from "@/views/admin/AdminSkillUpdate.vue";
-
-
 
 const requireAuth = () => (from, to, next) => {
     const token = localStorage.getItem('user_token')
@@ -145,6 +150,18 @@ const routes = [
         path: '/admin/skill',
         name: 'AdminSkillUpdate',
         component: AdminSkillUpdate,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/member/main',
+        name: 'MemberMain',
+        component: MemberMain,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/member/detail',
+        name: 'MemberDetail',
+        component: MemberDetail,
         beforeEnter: requireAuth()
     },
 ]
