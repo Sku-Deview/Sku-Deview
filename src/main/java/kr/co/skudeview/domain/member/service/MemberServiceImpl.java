@@ -92,6 +92,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberResponseDto.READ getMemberDetailByMemberNickname(String memberNickname) {
+        final Optional<Member> member = memberRepository.findMemberByNicknameAndDeleteAtFalse(memberNickname);
+
+        isMember(member);
+
+        return toReadDto(member.get());
+    }
+
+    @Override
     public List<MemberResponseDto.READ> getAllMembers() {
         List<Member> members = memberRepository.findAllByDeleteAtFalse();
 
@@ -245,6 +254,27 @@ public class MemberServiceImpl implements MemberService {
                 .refreshToken(refreshToken.getRefreshToken())
                 .build();
 
+    }
+
+    @Override
+    public String checkEmailValid(String email) {
+        isEmail(email);
+
+        return email;
+    }
+
+    @Override
+    public String checkNicknameValid(String nickname) {
+        isNickname(nickname);
+
+        return nickname;
+    }
+
+    @Override
+    public String checkTelephoneValid(String telephone) {
+        isTelephone(telephone);
+
+        return telephone;
     }
 
     private void isMember(Optional<Member> member) {

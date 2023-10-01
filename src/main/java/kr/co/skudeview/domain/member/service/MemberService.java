@@ -25,6 +25,8 @@ public interface MemberService {
      */
     MemberResponseDto.READ getMemberDetail(Long memberId);
 
+    MemberResponseDto.READ getMemberDetailByMemberNickname(String memberNickname);
+
     /**
      * 모든 회원의 목록을 조회.
      *
@@ -78,4 +80,10 @@ public interface MemberService {
      * @return 새로고침된 액세스 토큰을 담은 DTO (TokenDto)
      */
     TokenDto refreshAccessToken(TokenDto tokenDto);
+
+    String checkEmailValid(String email);
+
+    String checkNicknameValid(String nickname);
+
+    String checkTelephoneValid(String telephone);
 }
