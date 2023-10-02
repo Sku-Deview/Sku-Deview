@@ -1,58 +1,173 @@
 <template>
 
-  <div>
-    MemberMain 페이지 입니다!
-    <router-link to="/member/detail">MemberDetail</router-link>
-  </div>
+  <div class="row mt-5">
 
-  <div class="row mt-3">
+    <div class="col-md-3">
+      <div class="row">
+        <h2>내 정보</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <i class="fa-solid fa-user" style="font-size: 50px"></i>
+        </div>
+        <div class="col">
+          <table>
+            <tr>
+              <td>이름:</td>
+              <td>{{ this.name }}</td>
+            </tr>
+            <tr>
+              <td>닉네임:</td>
+              <td>{{ this.nickname }}</td>
+            </tr>
+            <tr>
+              <td>기술:</td>
+              <td>{{ this.skillName }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <br>
+      <button>
+        <router-link to="/member/detail">정보 수정</router-link>
+      </button>
 
-    <div class="col-md-2">
-      <h2>내 정보</h2>
-      <span>{{this.memberInfo}}</span>
     </div>
 
     <div class="col-md">
-      <div class="board-list">
-        <h2>내가 작성한 게시물</h2>
-        <table class="table table-striped">
-          <colgroup>
-            <col style="width: 5%;"/> <!-- No 열의 너비 -->
-            <col style="width: 5%;"/> <!-- 카테고리 열의 너비 -->
-            <col style="width: auto;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
-            <col style="width: 15%;"/> <!-- 작성자 열의 너비 -->
-            <col style="width: 15%;"/> <!-- 등록일시 열의 너비 -->
-          </colgroup>
-          <thead>
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">카테고리</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">등록일시</th>
-          </tr>
-          </thead>
-          <tbody>
 
-          <tr v-for="(item, idx) in list" :key="idx" @click="fnView(item.postId)" class="hover-pointer">
-            <td>{{ item.postId }}</td>
-            <td>{{ item.postCategory }}</td>
-            <td>
+      <!-- 네비게이션 탭 -->
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" @click="showTab('myPosts')" :class="{ active: activeTab === 'myPosts' }">내가 작성한 게시물</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click="showTab('likedPosts')" :class="{ active: activeTab === 'likedPosts' }">내가 좋아요 누른
+            게시물</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" @click="showTab('myReplies')" :class="{ active: activeTab === 'myReplies' }">내가 작성한 댓글</a>
+        </li>
+      </ul>
+
+      <div v-if="activeTab === 'myPosts'">
+        <div class="board-list mt-3">
+          <h2>내가 작성한 게시물</h2>
+          <table class="table table-striped">
+            <colgroup>
+              <col style="width: 5%;"/> <!-- No 열의 너비 -->
+              <col style="width: 5%;"/> <!-- 카테고리 열의 너비 -->
+              <col style="width: auto;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
+              <col style="width: 20%;"/> <!-- 등록일시 열의 너비 -->
+            </colgroup>
+            <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">카테고리</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성일시</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr v-for="(item, idx) in boardList" :key="idx" @click="fnBoardView(item.postId)" class="hover-pointer">
+              <td>{{ item.postId }}</td>
+              <td>{{ item.postCategory }}</td>
+              <td>
               <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp;
                 <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
                 <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
               </span>
-              <span v-else>{{ item.title.substring(0, 10) + "..." }}
+                <span v-else>{{ item.title.substring(0, 10) + "..." }}
                 <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
                 <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
               </span>
-            </td>
-            <td>{{ item.memberNickname }}</td>
-            <td>{{ formatDateTime(item.regDate) }}</td>
-          </tr>
+              </td>
+              <td>{{ formatDateTime(item.regDate) }}</td>
+            </tr>
 
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div v-if="activeTab === 'likedPosts'">
+        <div class="board-list mt-3">
+          <h2>내가 좋아요 누른 게시물</h2>
+          <table class="table table-striped">
+            <colgroup>
+              <col style="width: 5%;"/> <!-- No 열의 너비 -->
+              <col style="width: 5%;"/> <!-- 카테고리 열의 너비 -->
+              <col style="width: auto;"/> <!-- 제목 열의 너비를 최대한 확보하고 나머지 열은 자동 조정 -->
+              <col style="width: 15%;"/> <!-- 작성자 열의 너비 -->
+              <col style="width: 15%;"/> <!-- 등록일시 열의 너비 -->
+            </colgroup>
+            <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">카테고리</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성자</th>
+              <th scope="col">작성일시</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr v-for="(item, idx) in likeBoardList" :key="idx" @click="fnBoardView(item.postId)" class="hover-pointer">
+              <td>{{ item.postId }}</td>
+              <td>{{ item.postCategory }}</td>
+              <td>
+              <span v-if="item.title.length < 10">{{ item.title }} &nbsp;&nbsp;
+                <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+                <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+              </span>
+                <span v-else>{{ item.title.substring(0, 10) + "..." }}
+                <i class="fa-solid fa-comment small-icon">{{ item.replyCount }}</i>
+                <i class="fa-solid fa-heart small-icon">{{ item.likeCount }}</i>
+              </span>
+              </td>
+              <td>{{ item.memberNickname }}</td>
+              <td>{{ formatDateTime(item.regDate) }}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div v-if="activeTab === 'myReplies'">
+        <div class="board-list mt-3">
+          <h2>내가 작성한 댓글</h2>
+          <table class="table table-striped">
+            <colgroup>
+              <col style="width: 5%;"/>
+              <col style="width: 15%;"/>
+              <col style="width: auto;"/>
+              <col style="width: 15%;"/>
+            </colgroup>
+            <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">게시글 ID</th>
+              <th scope="col">댓글 내용</th>
+              <th scope="col">작성일시</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr v-for="(item, idx) in replyList" :key="idx" @click="fnReplyView(item.postId)" class="hover-pointer">
+              <td>{{ item.replyId }}</td>
+              <td>{{ item.postId }}</td>
+              <td>
+                <span v-if="item.content.length < 20">{{ item.content }} &nbsp;&nbsp;</span>
+                <span v-else>{{ item.content.substring(0, 20) + "..." }}</span>
+              </td>
+              <td>{{ formatDateTime(item.regDate) }}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -67,9 +182,14 @@ export default {
 
   data() {
     return {
-      requestBody: {}, //리스트 페이지 데이터전송
-      list: {}, //리스트 데이터
-      memberInfo: {},
+      requestBody: {}, // 리스트 페이지 데이터전송
+      boardList: {}, // 내가 작성한 게시물 리스트
+      likeBoardList: {}, // 내가 좋아요 누른 게시물 리스트
+      replyList: {}, // 내가 작성한 댓글 리스트
+      activeTab: 'myPosts',
+      name: '',
+      nickname: '',
+      skillName: {},
       postCategory: '',
       replyCount: '',
       likeCount: '',
@@ -79,7 +199,9 @@ export default {
 
   mounted() {
     this.fnLoginMember(this.memberNickname);
-    this.fnGetList();
+    this.fnBoardList();
+    this.fnLikeBoardList();
+    this.fnReplyList();
   },
 
   methods: {
@@ -89,28 +211,58 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('user_token')}`
         }
       }).then((res) => {
-        console.log(res.data.data);
-        // this.memberInfo = res.data.data  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+        this.name = res.data.data.name;
+        this.nickname = res.data.data.nickname;
+        this.skillName = res.data.data.skillName;
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
         }
       })
     },
-    fnGetList() {
-      this.$axios.post(`/api/v1/posts/member/${this.memberNickname}`, {})
+    fnBoardList() {
+      this.$axios.post(`/api/v1/posts/member/${this.memberNickname}`)
           .then((res) => {
-            this.list = res.data.data;
+            this.boardList = res.data.data;
           }).catch((err) => {
         alert(err.response.data.message)
         location.reload()
       })
     },
-    fnView(idx) {
+    fnLikeBoardList() {
+      this.$axios.post(`/api/v1/posts/like/member/${this.memberNickname}`)
+          .then((res) => {
+            this.likeBoardList = res.data.data;
+          }).catch((err) => {
+        alert(err.response.data.message)
+        location.reload()
+      })
+    },
+    fnReplyList() {
+      this.$axios.post(`/api/v1/reply/member/${this.memberNickname}`)
+          .then((res) => {
+            this.replyList = res.data.data;
+            console.log(res.data.data);
+          }).catch((err) => {
+        alert(err.response.data.message)
+        location.reload()
+      })
+    },
+    showTab(tabName) {
+      this.activeTab = tabName;
+    },
+    fnBoardView(idx) {
       this.requestBody.idx = idx
       this.$router.push({
         path: '../board/detail',
         query: {idx}
+      })
+    },
+    // TODO: --> 내가 작성한 댓글 클릭 시, 해당 댓글을 조회하는 걸로 할지, 해당 게시글을 보여줄지 ?
+    fnReplyView(idx) {
+      this.requestBody.idx = idx;
+      this.$router.push({
+        path: '../reply/detail'
       })
     },
     formatDateTime(dateTimeStr) {
