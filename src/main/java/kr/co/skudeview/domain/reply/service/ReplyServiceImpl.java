@@ -54,18 +54,14 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     @Transactional(readOnly = true)
     public List<ReplyResponseDto.READ> getAllReplies(Long postId) {
-        List<Reply> list = replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId);
-
-        return list.stream()
+        return replyRepository.findRepliesByPostIdAndDeleteAtFalse(postId).stream()
                 .map(this::toReadDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ReplyResponseDto.READ> getSearchReplies(ReplyRequestDto.CONDITION condition) {
-        final List<Reply> posts = replySearchRepository.find(condition);
-
-        return posts.stream()
+        return replySearchRepository.find(condition).stream()
                 .map(this::toReadDto)
                 .collect(Collectors.toList());
     }
@@ -83,6 +79,16 @@ public class ReplyServiceImpl implements ReplyService {
 
         return reply.get().getId();
     }
+
+    @Override
+    public List<ReplyResponseDto.READ> getRepliesByMemberNickname(String memberNickname) {
+        Optional<Member> member = memberRepository.findMemberByNicknameAndDeleteAtFalse(memberNickname);
+
+        isMember(member);
+
+        return replySearchRepository.findRepliesByMemberId(member.get().getId()).stream().map(this::toReadDto).toList();
+    }
+
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {

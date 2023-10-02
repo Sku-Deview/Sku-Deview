@@ -43,4 +43,6 @@ public interface ReplyService {
      */
     Long deleteReply(String email, Long postId, Long replyId);
 
+    List<ReplyResponseDto.READ> getRepliesByMemberNickname(String memberNickname);
+
 }
