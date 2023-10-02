@@ -160,10 +160,18 @@ public class PostApiController {
     }
 
 
-    /** Member 가 작성한 게시물들 조회를 위한 API **/
+    /**
+     * Member 가 작성한 게시물들 조회를 위한 API
+     **/
     @PostMapping("/posts/member/{memberNickname}")
     public ResponseFormat<List<PostResponseDto.READ>> getPostsByMemberNickname(@PathVariable String memberNickname) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostsByMemberNickname(memberNickname));
+    }
+
+    /** Member 가 좋아요 누른 게시물들 조회를 위한 API **/
+    @PostMapping("/posts/like/member/{memberNickname}")
+    public ResponseFormat<List<PostResponseDto.READ>> getLikePostsByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getLikePostsByMemberNickname(memberNickname));
     }
 
 }

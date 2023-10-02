@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.skudeview.domain.member.entity.QMember;
+import kr.co.skudeview.domain.member.entity.QMemberLikePost;
 import kr.co.skudeview.domain.post.entity.Post;
 import kr.co.skudeview.domain.post.entity.QPost;
 import kr.co.skudeview.global.common.PostCategory;
@@ -28,6 +29,8 @@ public class PostSearchRepository {
     private final QPost post = QPost.post;
 
     private final QMember member = QMember.member;
+
+    private final QMemberLikePost memberLikePost = QMemberLikePost.memberLikePost;
 
 //    public List<Post> find(PostRequestDto.CONDITION condition) {
 //        return queryFactory
@@ -90,6 +93,19 @@ public class PostSearchRepository {
                 )
                 .fetch();
     }
+
+    public List<Post> findLikePostsByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(post)
+                .join(memberLikePost).on(memberLikePost.post.eq(post))
+                .join(member).on(memberLikePost.member.eq(member))
+                .fetchJoin()
+                .where(
+                        member.id.eq(memberId)
+                )
+                .fetch();
+    }
+
 
 
     private BooleanExpression postCategoryEq(String category) {

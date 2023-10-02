@@ -65,9 +65,30 @@ public interface PostService {
      */
     List<PostResponseDto.READ> searchNoticePost();
 
+    /**
+     * 게시물에서 좋아요 버튼 클릭 시, 연관테이블에 추가해주기 위한 서비스
+     *
+     * @param postId
+     * @param loginNickname
+     * @return
+     */
     PostResponseDto.READ addPostLikeByLoginNickname(Long postId, String loginNickname);
 
+    /**
+     * memberNickname 으로 member가 작성한 게시물 조회하는 서비스
+     *
+     * @param memberNickname
+     * @return
+     */
     List<PostResponseDto.READ> getPostsByMemberNickname (String memberNickname);
+
+    /**
+     * memberNickname 으로 member가 좋아요 누른 게시물 조회하는 서비스
+     *
+     * @param memberNickname
+     * @return
+     */
+    List<PostResponseDto.READ> getLikePostsByMemberNickname (String memberNickname);
 
     /**
      * Redis에 포스트 조회수를 업데이트.
