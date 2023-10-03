@@ -36,20 +36,11 @@ public class MemberApiController {
         memberService.createMember(create);
         return ResponseFormat.success(ResponseStatus.SUCCESS_CREATE);
     }
-//    @PostMapping("/member")
-//    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequestDto.CREATE create) {
-//        memberService.createMember(create);
-//        return  new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     /**
      * @param login
      * @return ResponseStatus.SUCCESS_OK + MemberResponseDto.READ
      */
-//    @PostMapping("/login")
-//    public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
-//        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.loginMember(login));
-//    }
     @PostMapping("/login")
     public ResponseFormat<MemberResponseDto.READ> loginMember(@RequestBody @Valid MemberRequestDto.LOGIN login) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK,memberService.loginMember(login));
@@ -65,7 +56,7 @@ public class MemberApiController {
     public ResponseFormat<Void> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @RequestBody @Valid MemberRequestDto.UPDATE update) {
         memberService.updateMember(userDetails.getUsername(), update);
-        return ResponseFormat.success(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_NO_CONTENT);
+        return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 
     /**
@@ -77,7 +68,7 @@ public class MemberApiController {
     @DeleteMapping("/member/{memberId}")
     public ResponseFormat<Void> deleteMember(@PathVariable(name = "memberId") Long memberId) {
         memberService.deleteMember(memberId);
-        return ResponseFormat.success(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_NO_CONTENT);
+        return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 
     /**
@@ -88,7 +79,12 @@ public class MemberApiController {
      */
     @GetMapping("/member/{memberId}")
     public ResponseFormat<MemberResponseDto.READ> getMemberDetail(@PathVariable(name = "memberId") Long memberId) {
-        return ResponseFormat.successWithData(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_OK, memberService.getMemberDetail(memberId));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getMemberDetail(memberId));
+    }
+
+    @PostMapping("/member/{memberNickname}")
+    public ResponseFormat<MemberResponseDto.READ> getMemberDetailByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getMemberDetailByMemberNickname(memberNickname));
     }
 
     /**
@@ -98,7 +94,7 @@ public class MemberApiController {
      */
     @GetMapping("/member")
     public ResponseFormat<List<MemberResponseDto.READ>> getAllMembers() {
-        return ResponseFormat.successWithData(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_OK, memberService.getAllMembers());
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getAllMembers());
     }
 
     /**
@@ -109,7 +105,7 @@ public class MemberApiController {
      */
     @GetMapping("/member/search")
     public ResponseFormat<List<MemberResponseDto.READ>> getSearchMembers(@RequestBody @Valid MemberRequestDto.CONDITION condition) {
-        return ResponseFormat.successWithData(kr.co.skudeview.global.model.ResponseStatus.SUCCESS_OK, memberService.getSearchMembers(condition));
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.getSearchMembers(condition));
     }
 
     /**
@@ -121,6 +117,28 @@ public class MemberApiController {
     @GetMapping("/refresh")
     public ResponseFormat<TokenDto> refresh(@RequestBody @Valid TokenDto tokenDto) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.refreshAccessToken(tokenDto));
+    }
+
+
+
+
+
+
+    /** 회원가입 시, 중복 확인 버튼 체크 위한 API **/
+
+    @PostMapping("/member/checkEmail/{email}")
+    public ResponseFormat<String> checkEmailValid(@PathVariable String email) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.checkEmailValid(email));
+    }
+
+    @PostMapping("/member/checkNickname/{nickname}")
+    public ResponseFormat<String> checkNicknameValid(@PathVariable String nickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.checkNicknameValid(nickname));
+    }
+
+    @PostMapping("/member/checkTelephone/{telephone}")
+    public ResponseFormat<String> checkTelephoneValid(@PathVariable String telephone) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, memberService.checkTelephoneValid(telephone));
     }
 
 }

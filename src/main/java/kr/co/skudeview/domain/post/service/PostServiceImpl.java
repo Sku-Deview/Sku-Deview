@@ -143,6 +143,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostResponseDto.READ> getPostsByMemberNickname(String memberNickname) {
+        return postSearchRepository.findPostsByMemberNickname(memberNickname).stream().map(this::toReadDto).toList();
+    }
+
+    @Override
+    public List<PostResponseDto.READ> getLikePostsByMemberNickname(String memberNickname) {
+        Optional<Member> member = memberRepository.findMemberByNicknameAndDeleteAtFalse(memberNickname);
+
+        isMember(member);
+
+        return postSearchRepository.findLikePostsByMemberId(member.get().getId()).stream().map(this::toReadDto).toList();
+    }
+
+    @Override
     @Transactional
     public Long updatePost(String email, Long postId, PostRequestDto.UPDATE update) {
         //email을 통한 인가 추가 예정(프론트에서 진행해야 할 것으로 생각 중 논의 예정)

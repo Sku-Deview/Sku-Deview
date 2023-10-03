@@ -2,14 +2,14 @@
   <div class="board-detail mt-5">
     <div class="common-buttons mb-3">
       <i v-if="isAuthor()" @click="fnUpdate" class="fa-2x fa-solid fa-pen-to-square mouse-cursor small-icon"></i>
-      <i v-if="isAuthor()" @click="fnDelete" class="fa-2x fa-solid fa-delete-left mouse-cursor small-icon"></i>
+      <i v-if="isAuthor()" @click="fnDelete" class="fa-2x fa-solid fa-trash mouse-cursor small-icon"></i>
       <i @click="fnList" class="fa-2x fa-solid fa-list mouse-cursor small-icon"></i>
     </div>
     <h2><strong>[{{ category }}] {{ title }}</strong></h2>
     <div>
       <p class="w3-large mb-3 mt-3">
-        <i class="fa-solid fa-reply mouse-cursor" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
         <i class="fa-solid fa-ban mouse-cursor" v-if="!isAuthor()" @click="toReportPost(postId, title)"></i>
+        <i class="fa-solid fa-envelope mouse-cursor" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
         {{ author }}
         <span class="small-font">&nbsp {{ created_at }}</span>
         <span class="small-font">&nbsp&nbsp 조회수: {{ view_count }}</span>
@@ -39,8 +39,8 @@
     <hr>
 
     <div v-for="(reply, idx) in replyList" :key="idx" class="mt-5">
-      <i class="fa-solid fa-trash" @click="removeReply(reply.replyId,reply.postId)"></i>
-      <i class="fa-solid fa-reply" @click="toMessageWrite(reply.memberNickname)"></i>
+      <i class="fa-solid fa-trash mouse-cursor" @click="removeReply(reply.replyId,reply.postId)"></i>
+      <i class="fa-solid fa-envelope mouse-cursor" @click="toMessageWrite(reply.memberNickname)"></i>
       <div class="reply-detail">
         <strong>[{{ reply.memberNickname }}]</strong>
         <div class="create-at">
@@ -190,11 +190,12 @@ export default {
     },
 
     fnList() {
-      delete this.requestBody.idx
-      this.$router.push({
-        path: './list',
-        query: this.requestBody
-      })
+      delete this.requestBody.idx;
+      this.$router.go(-1);
+      // this.$router.push({
+      //   path: './list',
+      //   query: this.requestBody
+      // })
     },
     fnPost(postId) {
       this.requestBody.idx = postId
@@ -310,8 +311,7 @@ export default {
           })
           .catch((err) => {
             alert(err.response.data.message);
-            location.reload();
-            console.error(err);
+            this.$store.state.loadingStatus = false;
           });
     },
     isAuthor() {

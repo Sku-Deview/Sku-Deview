@@ -146,11 +146,32 @@ public class PostApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.searchNoticePost());
     }
 
+    /**
+     * post 와 member 사이의 좋아요 연관테이블에 좋아요 정보를 넘겨주기 위한 API
+     *
+     * @param postId
+     * @param loginNickname
+     * @return
+     */
     @PostMapping("/post/like/{postId}/{loginNickname}")
     public ResponseFormat<PostResponseDto.READ> addPostLike(@PathVariable Long postId,
                                                             @PathVariable String loginNickname) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.addPostLikeByLoginNickname(postId, loginNickname));
     }
 
+
+    /**
+     * Member 가 작성한 게시물들 조회를 위한 API
+     **/
+    @PostMapping("/posts/member/{memberNickname}")
+    public ResponseFormat<List<PostResponseDto.READ>> getPostsByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getPostsByMemberNickname(memberNickname));
+    }
+
+    /** Member 가 좋아요 누른 게시물들 조회를 위한 API **/
+    @PostMapping("/posts/like/member/{memberNickname}")
+    public ResponseFormat<List<PostResponseDto.READ>> getLikePostsByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, postService.getLikePostsByMemberNickname(memberNickname));
+    }
 
 }

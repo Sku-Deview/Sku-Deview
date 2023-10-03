@@ -34,12 +34,6 @@ public class ReplyApiController {
         Long replyId = replyService.createReply(userDetails.getUsername(), postId, create);
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_CREATE, replyId);
     }
-//    @PostMapping("/reply/{postId}")
-//    public Long createReply(@AuthenticationPrincipal CustomUserDetails userDetails,
-//                                            @PathVariable Long postId,
-//                                            @RequestBody @Valid ReplyRequestDto.CREATE create) {
-//        return replyService.createReply(userDetails.getUsername(), postId, create);
-//    }
 
 //    /**
 //     * 댓글 수정
@@ -83,10 +77,6 @@ public class ReplyApiController {
     public ResponseFormat<List<ReplyResponseDto.READ>> getReplies(@PathVariable Long postId) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getAllReplies(postId));
     }
-//    @GetMapping("/reply/{postId}")
-//    public List<ReplyResponseDto.READ> getReplies(@PathVariable Long postId) {
-//        return  replyService.getAllReplies(postId);
-//    }
 
     /**
      * Search Reply API - 검색 조건에 맞는 Reply 다중 조회
@@ -99,4 +89,8 @@ public class ReplyApiController {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getSearchReplies(condition));
     }
 
+    @PostMapping("/reply/member/{memberNickname}")
+    public ResponseFormat<List<ReplyResponseDto.READ>> getRepliesByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getRepliesByMemberNickname(memberNickname));
+    }
 }

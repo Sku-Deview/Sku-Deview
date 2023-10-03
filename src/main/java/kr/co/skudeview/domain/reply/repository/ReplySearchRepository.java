@@ -45,6 +45,17 @@ public class ReplySearchRepository {
                 .fetch();
     }
 
+    public List<Reply> findRepliesByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(reply)
+                .join(member).fetchJoin()
+                .where(
+                        reply.member.id.eq(memberId),
+                        reply.deleteAt.eq(Boolean.FALSE)
+                )
+                .fetch();
+    }
+
     private BooleanExpression replyDateBetween(LocalDate fromReplyDate, LocalDate toReplyDate) {
         if (fromReplyDate == null && toReplyDate == null) {
             return null;

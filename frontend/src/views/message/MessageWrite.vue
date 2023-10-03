@@ -1,20 +1,3 @@
-<!--<template>-->
-<!--    <h2>쪽지 보내기</h2>-->
-<!--    <hr>-->
-<!--    <h3> 받는 사람 : {{ receiverName }}</h3>-->
-<!--    <div class="board-contents">-->
-<!--        <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">-->
-<!--    </div>-->
-<!--    <div class="board-contents">-->
-<!--      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;"-->
-<!--                placeholder="내용을 입력해주세요.">-->
-<!--      </textarea>-->
-<!--    </div>-->
-<!--    <div class="common-buttons">-->
-<!--        <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;-->
-<!--    </div>-->
-<!--</template>-->
-
 <template>
   <div class="container my-5 col-8">
     <div class="message-header">
@@ -31,6 +14,7 @@
               v-model="title"
               class="form-control message-text-input"
               placeholder="제목을 입력해주세요."
+              ref="titleInput"
               required
           >
         </div>
@@ -59,6 +43,7 @@
               class="form-control message-text-input"
               style="resize: none;"
               placeholder="내용을 입력해주세요."
+              ref="contentInput"
               required
           ></textarea>
         </div>
@@ -85,10 +70,12 @@ export default {
     fnSave() {
       if (!this.title) { // 제목 또는 내용이 입력되지 않은 경우
         alert("제목을 입력해주세요.");
+        this.$refs.titleInput.focus();
         return;
       }
       if (!this.content) {
         alert("내용을 입력해주세요.");
+        this.$refs.contentInput.focus();
         return;
       }
 

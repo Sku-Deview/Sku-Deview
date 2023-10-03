@@ -3,7 +3,7 @@
     <div class="container my-5">
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <h4 class="text-center mb-4"><strong>회원가입</strong></h4>
+          <h4 class="text-center mb-4"><strong>회원수정 - 아직 구현 X</strong></h4>
           <hr/>
           <b-form @submit.prevent="onSubmit">
 
@@ -11,9 +11,9 @@
               <label for="input-1" class="col-md-4 col-form-label text-md-right"><strong>이메일</strong></label>
               <div class="col-md-8">
                 <div class="input-group">
-                  <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요" ref="emailInput" required></b-form-input>
+                  <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요" ref="emailInput" disabled></b-form-input>
                   <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="emailChkBtn(form.email)">중복확인</button>
+                    <button class="btn btn-primary" type="button" @click="emailChkBtn(form.email)" disabled>중복확인</button>
                   </div>
                 </div>
               </div>
@@ -191,11 +191,11 @@ export default {
             alert("사용 가능한 이메일 입니다.");
             return;
           }).catch((err) => {
-            alert(err.response.data.message);
-            this.form.email = '';
-            this.$refs.emailInput.focus();
-            this.$store.state.loadingStatus = false;
-            return;
+        alert(err.response.data.message);
+        this.form.email = '';
+        this.$refs.emailInput.focus();
+        this.$store.state.loadingStatus = false;
+        return;
       });
     },
 

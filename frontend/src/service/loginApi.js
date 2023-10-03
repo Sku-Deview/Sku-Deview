@@ -7,7 +7,6 @@ const getUserInfo = (userId, userPw) => {
         'password': userPw
     }
 
-
     return axios.post('api/v1/login', reqData, {
         headers: {
             'Content-type': 'application/json'
