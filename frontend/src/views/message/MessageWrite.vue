@@ -97,8 +97,12 @@ export default {
               alert(res.data.message)
               this.fnSendList()
             }).catch((err) => {
-          alert(err.response.data.message)
-          location.reload()
+          if (err.response.status === 401 || err.response.status === 404) {
+            this.$router.push({ path: '/login' });
+          } else {
+            alert(err.response.data.message);
+            location.reload()
+          }
         })
       }
     },

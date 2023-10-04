@@ -126,8 +126,13 @@ export default {
                     alert(res.data.message)
                     this.fnBoardList()
                 }).catch((err) => {
-                alert(err.response.data.message)
+              if (err.response.status === 401 || err.response.status === 404) {
+                this.$router.push({ path: '/login' });
+              } else {
+                alert(err.response.data.message);
                 this.fnView(this.postId)
+              }
+
             })
         },
         fnBoardList() {

@@ -215,8 +215,10 @@ export default {
         this.nickname = res.data.data.nickname;
         this.skillName = res.data.data.skillName;
       }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
         }
       })
     },
@@ -225,8 +227,12 @@ export default {
           .then((res) => {
             this.boardList = res.data.data;
           }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     fnLikeBoardList() {
@@ -234,8 +240,12 @@ export default {
           .then((res) => {
             this.likeBoardList = res.data.data;
           }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     fnReplyList() {
@@ -244,8 +254,12 @@ export default {
             this.replyList = res.data.data;
             console.log(res.data.data);
           }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     showTab(tabName) {

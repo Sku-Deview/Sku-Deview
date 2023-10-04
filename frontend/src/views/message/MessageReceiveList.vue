@@ -82,7 +82,11 @@ export default {
                 .then((res) => {
                     this.list = res.data.data
                 }).catch((err) => {
-                alert(err.response.data.message)
+              if (err.response.status === 401 || err.response.status === 404) {
+                this.$router.push({ path: '/login' });
+              } else {
+                alert(err.response.data.message);
+              }
             })
         },
         clickModel(item) {
