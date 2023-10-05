@@ -5,6 +5,8 @@ import Signup from "@/views/common/Signup.vue";
 
 import PageHome from '@/views/PageHome.vue'
 
+import ScrollButton from "@/components/ScrollButton.vue";
+
 import MemberMain from "@/views/member/MemberMain.vue";
 import MemberDetail from "@/views/member/MemberDetail.vue";
 
