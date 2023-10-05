@@ -71,7 +71,11 @@ export default {
         this.title = res.data.data.title
         this.description = res.data.data.description
       }).catch((err) => {
-        alert(err.response.data.message)
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
       })
     },
 

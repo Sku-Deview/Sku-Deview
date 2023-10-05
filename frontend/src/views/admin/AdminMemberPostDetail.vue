@@ -64,7 +64,11 @@ export default {
         this.category = res.data.data.postCategory
         this.view_count = res.data.data.viewCount
       }).catch((err) => {
-        alert(err.response.data.message)
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
       })
     },
 
@@ -82,7 +86,11 @@ export default {
             alert(res.data.message)
             this.fnList();
           }).catch((err) => {
-        alert(err.response.data.message)
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
       })
     },
 

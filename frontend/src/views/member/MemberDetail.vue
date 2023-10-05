@@ -191,7 +191,11 @@ export default {
             alert("사용 가능한 이메일 입니다.");
             return;
           }).catch((err) => {
-        alert(err.response.data.message);
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
         this.form.email = '';
         this.$refs.emailInput.focus();
         this.$store.state.loadingStatus = false;
@@ -205,7 +209,11 @@ export default {
             alert("사용 가능한 닉네임 입니다.");
             return;
           }).catch((err) => {
-        alert(err.response.data.message);
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
         this.form.nickname = '';
         this.$refs.nicknameInput.focus();
         this.$store.state.loadingStatus = false;
@@ -218,7 +226,11 @@ export default {
             alert("사용 가능한 전화번호 입니다.");
             return;
           }).catch((err) => {
-        alert(err.response.data.message);
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
         this.form.telephone = '';
         this.$refs.telephoneInput.focus();
         this.$store.state.loadingStatus = false;
@@ -280,7 +292,11 @@ export default {
             alert(res.data.message)
             this.$router.push({name: 'Login'})
           }).catch((err) => {
-        alert(err.response.data.message);
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
         this.$store.state.loadingStatus = false;
         return;
       });

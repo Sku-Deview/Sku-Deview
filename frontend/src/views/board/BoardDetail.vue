@@ -182,10 +182,11 @@ export default {
         //파일 가져오기
         this.files = res.data.data.fileFormat
       }).catch((err) => {
-        console.error("fnGetView 메서드에서 오류 발생:", err);
-        alert("게시글 업로드 또는 업데이트 중 오류가 발생했습니다.");
-        // alert(err.response.data.message)
-        // this.fnList()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+        }
       })
     },
 
@@ -215,8 +216,12 @@ export default {
             alert(res.data.message)
             this.fnList();
           }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     isImageFile(file) {
@@ -236,8 +241,12 @@ export default {
         this.replyList = res.data.data
         this.replyAuthorNickname = res.data.data.memberNickname
       }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     removeReply(replyId, postId) {
@@ -250,8 +259,12 @@ export default {
         alert(res.data.message)
         this.fnPost(postId);
       }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     replySave() {
@@ -275,8 +288,12 @@ export default {
             alert(res.data.message)
             this.fnPost(this.idx);
           }).catch((err) => {
-        alert(err.response.data.message)
-        location.reload()
+        if (err.response.status === 401 || err.response.status === 404) {
+          this.$router.push({ path: '/login' });
+        } else {
+          alert(err.response.data.message);
+          location.reload()
+        }
       })
     },
     toMessageWrite(receiverNickname) {
@@ -310,7 +327,11 @@ export default {
             alert("좋아요!");
           })
           .catch((err) => {
-            alert(err.response.data.message);
+            if (err.response.status === 401 || err.response.status === 404) {
+              this.$router.push({ path: '/login' });
+            } else {
+              alert(err.response.data.message);
+            }
             this.$store.state.loadingStatus = false;
           });
     },
