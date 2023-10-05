@@ -3,7 +3,7 @@
     <div class="container my-5">
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <h4 class="text-center mb-4"><strong>회원수정 - 아직 구현 X</strong></h4>
+          <h4 class="text-center mb-4"><strong>회원수정</strong></h4>
           <hr/>
           <b-form @submit.prevent="onSubmit">
 
@@ -12,9 +12,9 @@
               <div class="col-md-8">
                 <div class="input-group">
                   <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요" ref="emailInput" disabled></b-form-input>
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="emailChkBtn(form.email)" disabled>중복확인</button>
-                  </div>
+
+                  <b-form-input v-model="form.email" type="email" id="input-1" placeholder="이메일을 입력해주세요" ref="emailInput" hidden></b-form-input>
+
                 </div>
               </div>
             </div>
@@ -47,10 +47,10 @@
               <label for="input-4" class="col-md-4 col-form-label text-md-right"><strong>닉네임</strong></label>
               <div class="col-md-8">
                 <div class="input-group">
-                  <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요" ref="nicknameInput" required></b-form-input>
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="nicknameChkBtn(form.nickname)">중복확인</button>
-                  </div>
+                  <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요" ref="nicknameInput" disabled></b-form-input>
+
+                  <b-form-input v-model="form.nickname" type="text" id="input-4" placeholder="닉네임을 입력해주세요" ref="nicknameInput" hidden></b-form-input>
+
                 </div>
               </div>
             </div>
@@ -59,10 +59,10 @@
               <label for="input-5" class="col-md-4 col-form-label text-md-right"><strong>전화번호</strong></label>
               <div class="col-md-8">
                 <div class="input-group">
-                  <b-form-input v-model="form.telephone" type="tel" id="input-5" ref="telephoneInput" placeholder="전화번호를 입력해주세요" required></b-form-input>
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" @click="telephoneChkBtn(form.telephone)">중복확인</button>
-                  </div>
+                  <b-form-input v-model="form.telephone" type="tel" id="input-5" ref="telephoneInput" placeholder="전화번호를 입력해주세요" disabled></b-form-input>
+
+                  <b-form-input v-model="form.telephone" type="tel" id="input-5" ref="telephoneInput" placeholder="전화번호를 입력해주세요" hidden></b-form-input>
+
                 </div>
               </div>
             </div>
@@ -123,9 +123,9 @@
 
             <div class="text-center">
               <b-button type="button" @click="onSubmit" variant="primary" style="margin-right: 10px;">
-                가입하기
+                수정
               </b-button>
-              <b-button type="reset" variant="danger">초기화</b-button>
+              <b-button @click="fnList">취소</b-button>
             </div>
 
           </b-form>
@@ -174,6 +174,10 @@ export default {
       }
     }
   },
+  mounted() {
+    let memberNickname = localStorage.getItem('user_nickname');
+    this.fnLoginMember(memberNickname);
+  },
   methods: {
     options,
     openPostcode() {
@@ -184,60 +188,30 @@ export default {
         },
       }).open();
     },
-
-    emailChkBtn(email) {
-      this.$axios.post(`/api/v1/member/checkEmail/${email}`)
-          .then((res) => {
-            alert("사용 가능한 이메일 입니다.");
-            return;
-          }).catch((err) => {
+    fnLoginMember(memberNickname) {
+      this.$axios.post(`/api/v1/member/${memberNickname}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user_token')}`
+        }
+      }).then((res) => {
+        console.log(res.data.data);
+        // this.form = res.data.data;
+        this.form.email = res.data.data.email;
+        this.form.name = res.data.data.name;
+        this.form.nickname = res.data.data.nickname;
+        this.form.telephone = res.data.data.telephone;
+        this.form.birthDate = res.data.data.birthDate;
+        this.form.address = res.data.data.address;
+        this.form.skillName = res.data.data.skillName;
+        this.form.gender = res.data.data.gender;
+      }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
+          this.$router.push({path: '/login'});
         } else {
           alert(err.response.data.message);
         }
-        this.form.email = '';
-        this.$refs.emailInput.focus();
-        this.$store.state.loadingStatus = false;
-        return;
-      });
+      })
     },
-
-    nicknameChkBtn(nickname) {
-      this.$axios.post(`/api/v1/member/checkNickname/${nickname}`)
-          .then((res) => {
-            alert("사용 가능한 닉네임 입니다.");
-            return;
-          }).catch((err) => {
-        if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
-        } else {
-          alert(err.response.data.message);
-        }
-        this.form.nickname = '';
-        this.$refs.nicknameInput.focus();
-        this.$store.state.loadingStatus = false;
-        return;
-      });
-    },
-    telephoneChkBtn(telephone) {
-      this.$axios.post(`/api/v1/member/checkTelephone/${telephone}`)
-          .then((res) => {
-            alert("사용 가능한 전화번호 입니다.");
-            return;
-          }).catch((err) => {
-        if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
-        } else {
-          alert(err.response.data.message);
-        }
-        this.form.telephone = '';
-        this.$refs.telephoneInput.focus();
-        this.$store.state.loadingStatus = false;
-        return;
-      });
-    },
-
     onSubmit() {
       if (!this.form.email) {
         alert("이메일을 입력해주세요.");
@@ -287,10 +261,19 @@ export default {
 
       this.form.address = (this.form.roadAddress + " " + this.form.detailAddress);
 
-      this.$axios.post("/api/v1/member", this.form)
-          .then((res) => {
-            alert(res.data.message)
-            this.$router.push({name: 'Login'})
+      this.$axios.put("/api/v1/member/" + this.form.email, this.form, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('user_token')}`
+        }
+      }).then((res) => {
+        console.log("-------1");
+        console.log(this.form);
+        console.log("-------2");
+            console.log(res.data);
+        console.log("-------3");
+
+            alert('수정 완료!');
+            this.$router.go(-1);
           }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
           this.$router.push({ path: '/login' });
@@ -300,6 +283,9 @@ export default {
         this.$store.state.loadingStatus = false;
         return;
       });
+    },
+    fnList() {
+      this.$router.go(-1);
     }
   }
 }

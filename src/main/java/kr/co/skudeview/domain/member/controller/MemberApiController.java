@@ -52,10 +52,12 @@ public class MemberApiController {
      * @param update
      * @return ResponseStatus.SUCCESS_NO_CONTENT + Void
      */
-    @PutMapping("/member")
+    @PutMapping("/member/{memberEmail}")
     public ResponseFormat<Void> updateMember(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                             @PathVariable String memberEmail,
                                              @RequestBody @Valid MemberRequestDto.UPDATE update) {
-        memberService.updateMember(userDetails.getUsername(), update);
+//        memberService.updateMember(userDetails.getUsername(), update);
+        memberService.updateMember(memberEmail, update);
         return ResponseFormat.success(ResponseStatus.SUCCESS_NO_CONTENT);
     }
 

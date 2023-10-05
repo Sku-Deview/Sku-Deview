@@ -2,7 +2,7 @@
 
   <div class="row mt-5">
 
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="row">
         <h2>내 정보</h2>
       </div>
@@ -36,22 +36,25 @@
 
     <div class="col-md">
 
-      <!-- 네비게이션 탭 -->
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link" @click="showTab('myPosts')" :class="{ active: activeTab === 'myPosts' }">내가 작성한 게시물</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" @click="showTab('likedPosts')" :class="{ active: activeTab === 'likedPosts' }">내가 좋아요 누른
-            게시물</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" @click="showTab('myReplies')" :class="{ active: activeTab === 'myReplies' }">내가 작성한 댓글</a>
-        </li>
-      </ul>
+      <div class="board-mypage-list">
+        <!-- 네비게이션 탭 -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" @click="showTab('myPosts')" :class="{ active: activeTab === 'myPosts' }">내가 작성한 게시물</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" @click="showTab('likedPosts')" :class="{ active: activeTab === 'likedPosts' }">내가 좋아요 누른
+              게시물</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" @click="showTab('myReplies')" :class="{ active: activeTab === 'myReplies' }">내가 작성한
+              댓글</a>
+          </li>
+        </ul>
+      </div>
 
       <div v-if="activeTab === 'myPosts'">
-        <div class="board-list mt-3">
+        <div class="board-mypage-list mt-3">
           <h2>내가 작성한 게시물</h2>
           <table class="table table-striped">
             <colgroup>
@@ -92,7 +95,7 @@
       </div>
 
       <div v-if="activeTab === 'likedPosts'">
-        <div class="board-list mt-3">
+        <div class="board-mypage-list mt-3">
           <h2>내가 좋아요 누른 게시물</h2>
           <table class="table table-striped">
             <colgroup>
@@ -136,7 +139,7 @@
       </div>
 
       <div v-if="activeTab === 'myReplies'">
-        <div class="board-list mt-3">
+        <div class="board-mypage-list mt-3">
           <h2>내가 작성한 댓글</h2>
           <table class="table table-striped">
             <colgroup>
@@ -155,7 +158,7 @@
             </thead>
             <tbody>
 
-            <tr v-for="(item, idx) in replyList" :key="idx" @click="fnReplyView(item.postId)" class="hover-pointer">
+            <tr v-for="(item, idx) in replyList" :key="idx" @click="fnBoardView(item.postId)" class="hover-pointer">
               <td>{{ item.replyId }}</td>
               <td>{{ item.postId }}</td>
               <td>
@@ -216,7 +219,7 @@ export default {
         this.skillName = res.data.data.skillName;
       }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
+          this.$router.push({path: '/login'});
         } else {
           alert(err.response.data.message);
         }
@@ -228,7 +231,7 @@ export default {
             this.boardList = res.data.data;
           }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
+          this.$router.push({path: '/login'});
         } else {
           alert(err.response.data.message);
           location.reload()
@@ -241,7 +244,7 @@ export default {
             this.likeBoardList = res.data.data;
           }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
+          this.$router.push({path: '/login'});
         } else {
           alert(err.response.data.message);
           location.reload()
@@ -255,7 +258,7 @@ export default {
             console.log(res.data.data);
           }).catch((err) => {
         if (err.response.status === 401 || err.response.status === 404) {
-          this.$router.push({ path: '/login' });
+          this.$router.push({path: '/login'});
         } else {
           alert(err.response.data.message);
           location.reload()
@@ -270,13 +273,6 @@ export default {
       this.$router.push({
         path: '../board/detail',
         query: {idx}
-      })
-    },
-    // TODO: --> 내가 작성한 댓글 클릭 시, 해당 댓글을 조회하는 걸로 할지, 해당 게시글을 보여줄지 ?
-    fnReplyView(idx) {
-      this.requestBody.idx = idx;
-      this.$router.push({
-        path: '../reply/detail'
       })
     },
     formatDateTime(dateTimeStr) {
