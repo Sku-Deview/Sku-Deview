@@ -28,6 +28,7 @@ public class Reply extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    //초기에 varchar(255)로 설정하였으나 내용을 초과하는 내용이 들어올 시 버그가 발생하여 dataType을 longText로 변경
     @Column(name = "content")
     @NotNull
     private String content;
