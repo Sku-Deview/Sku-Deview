@@ -1,5 +1,6 @@
 package kr.co.skudeview.domain.reply.service;
 
+import kr.co.skudeview.domain.post.dto.PostResponseDto;
 import kr.co.skudeview.domain.reply.dto.ReplyRequestDto;
 import kr.co.skudeview.domain.reply.dto.ReplyResponseDto;
 
@@ -44,5 +45,22 @@ public interface ReplyService {
     Long deleteReply(String email, Long postId, Long replyId);
 
     List<ReplyResponseDto.READ> getRepliesByMemberNickname(String memberNickname);
+
+    /**
+     * 댓글 좋아요 버튼 클릭 시, 연관테이블에 추가해주기 위한 서비스
+     *
+     * @param replyId
+     * @param loginNickname
+     * @return
+     */
+    ReplyResponseDto.READ addRepliesLikeByLoginNickname(Long replyId, String loginNickname);
+
+    /**
+     * memberNickname 으로 member가 좋아요 누른 게시물 조회하는 서비스
+     *
+     * @param memberNickname
+     * @return
+     */
+    List<ReplyResponseDto.READ> getLikeRepliesByMemberNickname (String memberNickname);
 
 }

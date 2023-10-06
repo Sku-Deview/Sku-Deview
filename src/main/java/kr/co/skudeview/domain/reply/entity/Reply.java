@@ -50,4 +50,8 @@ public class Reply extends BaseEntity {
 //        this.content = content;
 //    }
 
+    public void addLikeCount() {
+        this.likeCount += 1;
+    }
+
 }

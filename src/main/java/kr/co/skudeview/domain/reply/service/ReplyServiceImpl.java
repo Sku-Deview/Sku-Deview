@@ -1,10 +1,14 @@
 package kr.co.skudeview.domain.reply.service;
 
+import kr.co.skudeview.domain.member.entity.MemberLikePost;
+import kr.co.skudeview.domain.member.entity.MemberLikeReply;
+import kr.co.skudeview.domain.member.repository.MemberLikeReplyRepository;
 import kr.co.skudeview.domain.reply.dto.ReplyRequestDto;
 import kr.co.skudeview.domain.reply.dto.ReplyResponseDto;
 import kr.co.skudeview.domain.member.entity.Member;
 import kr.co.skudeview.domain.post.entity.Post;
 import kr.co.skudeview.domain.reply.entity.Reply;
+import kr.co.skudeview.global.exception.DuplicatedException;
 import kr.co.skudeview.global.exception.NotFoundException;
 import kr.co.skudeview.global.model.ResponseStatus;
 import kr.co.skudeview.domain.member.repository.MemberRepository;
@@ -32,6 +36,8 @@ public class ReplyServiceImpl implements ReplyService {
     private final ReplyRepository replyRepository;
 
     private final ReplySearchRepository replySearchRepository;
+
+    private final MemberLikeReplyRepository memberLikeReplyRepository;
 
     @Override
     @Transactional
@@ -89,6 +95,32 @@ public class ReplyServiceImpl implements ReplyService {
         return replySearchRepository.findRepliesByMemberId(member.get().getId()).stream().map(this::toReadDto).toList();
     }
 
+    @Override
+    public ReplyResponseDto.READ addRepliesLikeByLoginNickname(Long replyId, String loginNickname) {
+        Optional<Member> loginMember = memberRepository.findMemberByNicknameAndDeleteAtFalse(loginNickname);
+        Optional<Reply> reply = replyRepository.findReplyById(replyId);
+
+        isReplyLikeDuplicated(replyId, loginMember.get().getId());
+
+        MemberLikeReply create = MemberLikeReply.builder()
+                .member(loginMember.get())
+                .reply(reply.get())
+                .build();
+
+        memberLikeReplyRepository.save(create);
+
+        reply.get().addLikeCount();
+
+        replyRepository.save(reply.get());
+
+        return toReadDto(replyRepository.findReplyByIdAndDeleteAtFalse(replyId).get());
+    }
+
+    @Override
+    public List<ReplyResponseDto.READ> getLikeRepliesByMemberNickname(String memberNickname) {
+        return null;
+    }
+
 
     private void isMember(Optional<Member> member) {
         if (member.isEmpty()) {
@@ -105,6 +137,12 @@ public class ReplyServiceImpl implements ReplyService {
     private void isReply(Optional<Reply> reply) {
         if (reply.isEmpty()) {
             throw new NotFoundException(ResponseStatus.FAIL_REPLY_NOT_FOUND);
+        }
+    }
+
+    private void isReplyLikeDuplicated(Long replyId, Long memberId) {
+        if (memberLikeReplyRepository.existsMemberLikeReplyByReply_IdAndMember_IdAndDeleteAtFalse(replyId, memberId)) {
+            throw new DuplicatedException(ResponseStatus.FAIL_Reply_LIKE_MEMBER_DUPLICATED);
         }
     }
 
