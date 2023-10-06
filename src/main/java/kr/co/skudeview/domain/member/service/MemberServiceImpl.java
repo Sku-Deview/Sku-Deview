@@ -125,11 +125,12 @@ public class MemberServiceImpl implements MemberService {
 
         isMember(member);
         //isTelephone(update.getTelephone());
-        isNickname(update.getNickname());
+//        isNickname(update.getNickname());
 
         final List<MemberSkill> memberSkills = updateSkillByMember(update.getSkillName(), member.get());
 
-        member.get().updateMember(toUpdateDto(update));
+        member.get().updateMemberForMember(toUpdateDto(update));
+
         member.get().changeMemberSkills(memberSkills);
 
         memberRepository.save(member.get());
@@ -354,7 +355,7 @@ public class MemberServiceImpl implements MemberService {
         MemberRequestDto.UPDATE encoding = MemberRequestDto.UPDATE.builder()
                 .password(passwordEncoder.encode(update.getPassword()))
                 .address(update.getAddress())
-                .role(update.getRole())
+//                .role(update.getRole())
                 .name(update.getName())
                 .nickname(update.getNickname())
                 .telephone(update.getTelephone())

@@ -125,6 +125,17 @@ public class Member extends BaseEntity {
         this.role = Role.valueOf(update.getRole());
     }
 
+    public void updateMemberForMember(MemberRequestDto.UPDATE update) {
+        this.password = update.getPassword();
+        this.name = update.getName();
+        this.nickname = update.getNickname();
+        this.telephone = update.getTelephone();
+        this.address = update.getAddress();
+        this.birthDate = update.getBirthDate();
+        this.gender = Gender.valueOf(update.getGender());
+//        this.role = Role.valueOf(update.getRole());
+    }
+
     public void changeMemberSkills(List<MemberSkill> changeMemberSkills) {
         this.memberSkills = changeMemberSkills;
     }
