@@ -6,6 +6,9 @@
       <button :class="{ active: postCategory === '' }" class="btn btn-link" @click="fnSelectCategory('')">
         전체글
       </button>
+      <button :class="{ active: postCategory === 'NOTICE' }" class="btn btn-link" @click="fnSelectCategory('NOTICE')">
+        공지사항
+      </button>
       <button :class="{ active: postCategory === 'QNA' }" class="btn btn-link" @click="fnSelectCategory('QNA')">
         질문
       </button>
