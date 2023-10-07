@@ -182,12 +182,14 @@ export default {
       size: this.$route.query.size ? this.$route.query.size : 10,
 
       paginavigation: function () {
-        let pageNumber = []
-        let start_page = 0;
-        let end_page = this.totalPage;
+        let pageNumber = [];
+        let start_page = Math.floor(this.page / 10) * 10; // 현재 페이지 그룹의 시작 페이지
+        let end_page = Math.min(start_page + 10, this.totalPage); // 현재 페이지 그룹의 끝 페이지, 최대 10개까지 표시
         for (let i = start_page; i < end_page; i++) pageNumber.push(i);
         return pageNumber;
       }
+
+
     }
   },
   mounted() {
