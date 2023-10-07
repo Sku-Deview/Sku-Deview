@@ -84,13 +84,13 @@
           <a class="page-link" @click="fnPage(0)" href="javascript:;">&lt;&lt;</a>
         </li>
         <li class="page-item">
-          <a class="page-link" @click="fnPage(page - 1)" href="javascript:;">&lt;</a>
+          <a class="page-link" @click="fnPage(page - 10)" href="javascript:;">&lt;</a>
         </li>
         <li class="page-item" v-for="n in paginavigation()" :key="n">
           <a class="page-link" @click="fnPage(n)" href="javascript:;">{{ n + 1 }}</a>
         </li>
         <li class="page-item">
-          <a class="page-link" @click="fnPage(page + 1)" href="javascript:;">&gt;</a>
+          <a class="page-link" @click="fnPage(page + 10)" href="javascript:;">&gt;</a>
         </li>
         <li class="page-item">
           <a class="page-link" @click="fnPage(totalPage - 1)" href="javascript:;">&gt;&gt;</a>
