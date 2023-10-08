@@ -1,19 +1,25 @@
 <template>
   <div>
-    <PageBanner />
+    <PageBanner/>
     <div class="container mt-3">
+      <br><h2>안녕하세요! <strong>SK-DEVIEW</strong> 에 방문하신 것을 환영합니다! 😄</h2><br><br>
       <div class="card-container-wrapper">
         <div v-for="(category) in categories" :key="category.name" class="card-container">
           <div class="card">
-            <h3>{{ category.name }}</h3>
-            <span class="ml-auto" @click="fnSelectCategory(category.name)"><strong>더보기></strong></span>
-            <hr>
+            <span class="mt-2">
+              <span style="font-size: 20px"><strong>{{ category.name }}</strong></span>
+              <span class="ml-auto mouse-cursor" @click="fnSelectCategory(category.name)">
+                <i class="fa-solid fa-angle-right small-icon"></i> <!-- 오른쪽 화살표 아이콘 추가 -->
+              </span>
+              <hr>
+            </span>
+
             <div class="card-deck">
               <div v-for="post in category.posts" :key="post.postId" class="card-item hover-pointer" @click="fnView(post.postId)">
                 <div class="card-body">
-                  <div class="title-wrapper">
+                  <div>
                     <span v-if="post.title.length < 10">
-                      <strong>{{ post.title }}</strong> &nbsp;&nbsp;
+                      <strong>{{ post.title }}</strong>
                       <i class="fa-solid fa-comment small-icon">{{ post.replyCount }}</i>
                       <i class="fa-solid fa-heart small-icon">{{ post.likeCount }}</i>
                     </span>
@@ -129,7 +135,7 @@ export default {
           queryCategory = ""; // 다른 경우에는 빈 문자열로 처리
       }
       // 해당 카테고리로 이동하기 위해 라우터를 사용합니다.
-      this.$router.push({ path: 'board/list', query: { postCategory: queryCategory } });
+      this.$router.push({path: 'board/list', query: {postCategory: queryCategory}});
     },
   }
 };
@@ -151,9 +157,21 @@ export default {
 
 /* 카드 스타일 */
 .card {
-  background-color: #d0f3c7;
+  background-color: ghostwhite;
   border: 1px solid #ddd;
   border-radius: 5px;
   width: 100%;
+}
+
+.small-icon {
+  font-size: 15px; /* Adjust the font size to your preference */
+}
+
+.hover-pointer:hover {
+  background-color: lightgray; /* 마우스 호버 시 원하는 배경색으로 변경하세요. */
+}
+
+.mouse-cursor {
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
 }
 </style>
