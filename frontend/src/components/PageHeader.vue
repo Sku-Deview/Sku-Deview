@@ -2,7 +2,7 @@
   <header class="header">
     <div id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <router-link to="/" class="navbar-brand">홈</router-link>
+        <router-link to="/" class="navbar-brand">SK-DEVIEW</router-link>
         <button
             class="navbar-toggler"
             type="button"
@@ -17,7 +17,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link to="/board/list" class="nav-link">게시판</router-link>
+              <router-link to="/board/list" v-if="this.$store.state.isLogin" class="nav-link">게시판</router-link>
             </li>
 <!--            <li>-->
 <!--              <b-dropdown v-if="this.$store.state.isLogin" text="메세지" class="m-md-2" split>-->
