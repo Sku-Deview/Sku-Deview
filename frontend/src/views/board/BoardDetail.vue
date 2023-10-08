@@ -10,7 +10,7 @@
       <p class="w3-large mb-3 mt-3">
         <i class="fa-solid fa-ban mouse-cursor" v-if="!isAuthor()" @click="toReportPost(postId, title)"></i>
         <i class="fa-solid fa-envelope mouse-cursor" v-if="!isAuthor()" @click="toMessageWrite(author)"></i>
-        {{ author }}
+        <span class="mouse-cursor" @click="fnMemberView(author)">{{ author }}</span>
         <span class="small-font">&nbsp {{ created_at }}</span>
         <span class="small-font">&nbsp&nbsp 조회수: {{ view_count }}</span>
       </p>
@@ -41,9 +41,9 @@
     <div v-for="(reply, idx) in replyList" :key="idx" class="mt-5">
       <i class="fa-solid fa-trash mouse-cursor" @click="removeReply(reply.replyId,reply.postId)"></i>
       <i class="fa-solid fa-envelope mouse-cursor" @click="toMessageWrite(reply.memberNickname)"></i>
-      <i class="fa-solid fa-heart Reply-heart-icon" @click="toReplyLike(reply.replyId, loginUserNickname)">{{ reply.likeCount }}</i>
+      <i class="fa-solid fa-heart Reply-heart-icon" @click="toReplyLike(reply.replyId, loginUserNickname)"><small>&nbsp;{{ reply.likeCount }}</small></i>
       <div class="reply-detail">
-        <strong>[{{ reply.memberNickname }}]</strong>
+        <strong class="mouse-cursor" @click="fnMemberView(reply.memberNickname)">[{{ reply.memberNickname }}]</strong>
         <div class="create-at">
           <span>{{ formatDate(reply.regDate) }}</span>
         </div>
@@ -61,75 +61,6 @@
     </div>
   </div>
 </template>
-
-
-<style scoped>
-.small-font {
-  font-size: 0.8rem;
-  color: gray;
-}
-
-.small-icon {
-  font-size: 20px; /* Adjust the font size to your preference */
-}
-
-.mouse-cursor {
-  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
-}
-
-/* 하트 아이콘 스타일링 */
-.heart-icon {
-  color: red; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
-  font-size: 3rem; /* 원하는 크기로 설정합니다. */
-  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
-  font-size: 30px;
-}
-.Reply-heart-icon {
-  color: #fd8181; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
-  font-size: 3rem; /* 원하는 크기로 설정합니다. */
-  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
-  font-size: 25px;
-  vertical-align: -10px;
-}
-
-/* 하트 아이콘과 버튼 컨테이너 스타일 */
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center; /* 수직 정렬 추가 */
-  padding: 10px; /* 원하는 패딩 값으로 조정 */
-}
-
-/* 좋아요 버튼 스타일 */
-.btn {
-  margin: 0 auto; /* 가운데 정렬 */
-  /* 나머지 스타일 유지 */
-}
-
-/* 좋아요 버튼 스타일 */
-.btn-liked {
-  background-color: transparent; /* 배경색을 투명으로 설정합니다. */
-  border: none; /* 테두리 제거 */
-}
-/* 이미지가 내용의 최대 높이를 넘지 않도록 스타일링 */
-
-/* 게시글 내용 스타일링 */
-.board-contents {
-  position: relative;
-  height: auto; /* 내용의 크기에 따라 늘어남 */
-  overflow: hidden; /* 내용이 특정 크기를 넘어갈 경우 스크롤 표시 */
-}
-
-/* 이미지 스타일 유지 */
-.img-fluid {
-  display: block;
-  margin: 0 auto; /* 가운데 정렬 */
-  max-width: 100%; /* 이미지의 최대 너비 설정 */
-  height: auto; /* 이미지의 높이 자동 조정 */
-  object-fit: contain; /* 이미지 비율 유지 */
-}
-</style>
-
 
 <script>
 export default {
@@ -381,7 +312,80 @@ export default {
         return true;
       } else return false;
     },
+    fnMemberView(author) {
+      this.$router.push({
+        path: '../member/view',
+        query: {author}
+      })
+    },
 
   }
 }
 </script>
+
+
+<style scoped>
+.small-font {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.small-icon {
+  font-size: 20px; /* Adjust the font size to your preference */
+}
+
+.mouse-cursor {
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+}
+
+/* 하트 아이콘 스타일링 */
+.heart-icon {
+  color: red; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
+  font-size: 3rem; /* 원하는 크기로 설정합니다. */
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+  font-size: 30px;
+}
+.Reply-heart-icon {
+  color: #fd8181; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+  font-size: 20px;
+  vertical-align: -10px;
+}
+
+/* 하트 아이콘과 버튼 컨테이너 스타일 */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 정렬 추가 */
+  padding: 10px; /* 원하는 패딩 값으로 조정 */
+}
+
+/* 좋아요 버튼 스타일 */
+.btn {
+  margin: 0 auto; /* 가운데 정렬 */
+  /* 나머지 스타일 유지 */
+}
+
+/* 좋아요 버튼 스타일 */
+.btn-liked {
+  background-color: transparent; /* 배경색을 투명으로 설정합니다. */
+  border: none; /* 테두리 제거 */
+}
+/* 이미지가 내용의 최대 높이를 넘지 않도록 스타일링 */
+
+/* 게시글 내용 스타일링 */
+.board-contents {
+  position: relative;
+  height: auto; /* 내용의 크기에 따라 늘어남 */
+  overflow: hidden; /* 내용이 특정 크기를 넘어갈 경우 스크롤 표시 */
+}
+
+/* 이미지 스타일 유지 */
+.img-fluid {
+  display: block;
+  margin: 0 auto; /* 가운데 정렬 */
+  max-width: 100%; /* 이미지의 최대 너비 설정 */
+  height: auto; /* 이미지의 높이 자동 조정 */
+  object-fit: contain; /* 이미지 비율 유지 */
+}
+</style>
