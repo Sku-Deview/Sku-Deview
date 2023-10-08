@@ -4,6 +4,8 @@ package kr.co.skudeview.domain.reply.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.skudeview.domain.member.entity.QMember;
+import kr.co.skudeview.domain.member.entity.QMemberLikeReply;
+import kr.co.skudeview.domain.post.entity.Post;
 import kr.co.skudeview.domain.post.entity.QPost;
 import kr.co.skudeview.domain.reply.dto.ReplyRequestDto;
 import kr.co.skudeview.domain.reply.entity.QReply;
@@ -26,6 +28,8 @@ public class ReplySearchRepository {
     private final QPost post = QPost.post;
 
     private final QMember member = QMember.member;
+
+    private final QMemberLikeReply memberLikeReply = QMemberLikeReply.memberLikeReply;
 
     public List<Reply> find(ReplyRequestDto.CONDITION condition) {
         return queryFactory
@@ -52,6 +56,18 @@ public class ReplySearchRepository {
                 .where(
                         reply.member.id.eq(memberId),
                         reply.deleteAt.eq(Boolean.FALSE)
+                )
+                .fetch();
+    }
+
+    public List<Reply> findLikeRepliesByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(reply)
+                .join(memberLikeReply).on(memberLikeReply.reply.eq(reply))
+                .join(member).on(memberLikeReply.member.eq(member))
+                .fetchJoin()
+                .where(
+                        member.id.eq(memberId)
                 )
                 .fetch();
     }

@@ -41,12 +41,14 @@
     <div v-for="(reply, idx) in replyList" :key="idx" class="mt-5">
       <i class="fa-solid fa-trash mouse-cursor" @click="removeReply(reply.replyId,reply.postId)"></i>
       <i class="fa-solid fa-envelope mouse-cursor" @click="toMessageWrite(reply.memberNickname)"></i>
+      <i class="fa-solid fa-heart Reply-heart-icon" @click="toReplyLike(reply.replyId, loginUserNickname)">{{ reply.likeCount }}</i>
       <div class="reply-detail">
         <strong>[{{ reply.memberNickname }}]</strong>
         <div class="create-at">
           <span>{{ formatDate(reply.regDate) }}</span>
         </div>
         <p>{{ reply.content }}</p>
+
       </div>
     </div>
 
@@ -81,6 +83,13 @@
   font-size: 3rem; /* 원하는 크기로 설정합니다. */
   cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
   font-size: 30px;
+}
+.Reply-heart-icon {
+  color: #fd8181; /* 원하는 색상(빨간색 또는 다른 원하는 색상)으로 설정합니다. */
+  font-size: 3rem; /* 원하는 크기로 설정합니다. */
+  cursor: pointer; /* 마우스 포인터가 포인팅 형태로 변경됩니다. */
+  font-size: 25px;
+  vertical-align: -10px;
 }
 
 /* 하트 아이콘과 버튼 컨테이너 스타일 */
@@ -142,7 +151,8 @@ export default {
       replyAuthorNickname: '',
       // 좋아요
       loginUserNickname: localStorage.getItem('user_nickname'),
-      isLiked: false,
+      isPostLiked: false,
+      isReplyLiked: false,
       likeCount: 0,
     }
   },
@@ -314,9 +324,9 @@ export default {
     },
     toPostLike(postId, loginNickname) {
       // 좋아요 상태 토글
-      this.isLiked = !this.isLiked;
+      this.isPostLiked = !this.isPostLiked;
 
-      this.$axios.post(`/api/v1/post/like/${postId}/${loginNickname}`, {like: this.isLiked})
+      this.$axios.post(`/api/v1/post/like/${postId}/${loginNickname}`, {like: this.isPostLiked})
 
           .then(() => {
             // if (this.isLiked) {
@@ -325,6 +335,31 @@ export default {
             //   this.likeCount--;
             // }
             alert("좋아요!");
+          })
+          .catch((err) => {
+            if (err.response.status === 401 || err.response.status === 404) {
+              this.$router.push({ path: '/login' });
+            } else {
+              alert(err.response.data.message);
+            }
+            this.$store.state.loadingStatus = false;
+          });
+    },
+
+    toReplyLike(replyId, loginNickname) {
+      // 좋아요 상태 토글
+      this.isReplyLiked = !this.isReplyLiked;
+
+      this.$axios.post(`/api/v1/reply/like/${replyId}/${loginNickname}`, {like: this.isReplyLiked})
+
+          .then(() => {
+            // if (this.isLiked) {
+            //   this.likeCount++;
+            // } else {
+            //   this.likeCount--;
+            // }
+            alert("좋아요!");
+            location.reload()
           })
           .catch((err) => {
             if (err.response.status === 401 || err.response.status === 404) {

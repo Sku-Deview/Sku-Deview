@@ -42,6 +42,7 @@ public enum ResponseStatus {
 
     // Reply
     FAIL_REPLY_NOT_FOUND("클라이언트가 요청한 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FAIL_Reply_LIKE_MEMBER_DUPLICATED("이미 좋아요를 누른 댓글입니다.", HttpStatus.BAD_REQUEST),
 
     // Report
     FAIL_REPORT_NOT_FOUND("클라이언트가 요청한 신고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

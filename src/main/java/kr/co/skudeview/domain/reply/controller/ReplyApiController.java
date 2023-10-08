@@ -1,6 +1,7 @@
 package kr.co.skudeview.domain.reply.controller;
 
 import jakarta.validation.Valid;
+import kr.co.skudeview.domain.post.dto.PostResponseDto;
 import kr.co.skudeview.domain.reply.dto.ReplyRequestDto;
 import kr.co.skudeview.domain.reply.dto.ReplyResponseDto;
 import kr.co.skudeview.domain.reply.service.ReplyService;
@@ -92,5 +93,25 @@ public class ReplyApiController {
     @PostMapping("/reply/member/{memberNickname}")
     public ResponseFormat<List<ReplyResponseDto.READ>> getRepliesByMemberNickname(@PathVariable String memberNickname) {
         return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getRepliesByMemberNickname(memberNickname));
+    }
+
+    /**
+     * reply 와 member 사이의 좋아요 연관테이블에 좋아요 정보를 넘겨주기 위한 API
+     *
+     * @param replyId
+     * @param loginNickname
+     * @return
+     */
+    @PostMapping("/reply/like/{replyId}/{loginNickname}")
+    public ResponseFormat<ReplyResponseDto.READ> addReplyLike(@PathVariable Long replyId,
+                                                            @PathVariable String loginNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.addRepliesLikeByLoginNickname(replyId, loginNickname));
+    }
+
+
+    /** Member 가 좋아요 누른 댓글들을 조회를 위한 API **/
+    @PostMapping("/replies/like/member/{memberNickname}")
+    public ResponseFormat<List<ReplyResponseDto.READ>> getLikeRepliesByMemberNickname(@PathVariable String memberNickname) {
+        return ResponseFormat.successWithData(ResponseStatus.SUCCESS_OK, replyService.getLikeRepliesByMemberNickname(memberNickname));
     }
 }
