@@ -9,6 +9,7 @@ import ScrollButton from "@/components/ScrollButton.vue";
 
 import MemberMain from "@/views/member/MemberMain.vue";
 import MemberDetail from "@/views/member/MemberDetail.vue";
+import MemberView from "@/views/member/MemberView.vue";
 
 import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from "@/views/board/BoardDetail.vue";
@@ -164,6 +165,12 @@ const routes = [
         path: '/member/detail',
         name: 'MemberDetail',
         component: MemberDetail,
+        beforeEnter: requireAuth()
+    },
+    {
+        path: '/member/view',
+        name: 'MemberView',
+        component: MemberView,
         beforeEnter: requireAuth()
     },
 ]

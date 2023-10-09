@@ -198,6 +198,12 @@ export default {
     }
   },
   mounted() {
+    const postCategoryFromURL = this.$route.query.postCategory;
+
+    if (postCategoryFromURL) {
+      this.postCategory = postCategoryFromURL;
+    }
+
     this.fnGetList();
     this.fnGetNoticeList();
   },
