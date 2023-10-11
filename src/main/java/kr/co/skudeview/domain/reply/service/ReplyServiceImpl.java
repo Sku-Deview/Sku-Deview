@@ -142,7 +142,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     private void isReplyLikeDuplicated(Long replyId, Long memberId) {
         if (memberLikeReplyRepository.existsMemberLikeReplyByReply_IdAndMember_IdAndDeleteAtFalse(replyId, memberId)) {
-            throw new DuplicatedException(ResponseStatus.FAIL_Reply_LIKE_MEMBER_DUPLICATED);
+            throw new DuplicatedException(ResponseStatus.FAIL_REPLY_LIKE_MEMBER_DUPLICATED);
         }
     }
 

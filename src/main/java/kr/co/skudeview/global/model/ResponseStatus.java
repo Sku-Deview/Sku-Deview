@@ -42,12 +42,16 @@ public enum ResponseStatus {
 
     // Reply
     FAIL_REPLY_NOT_FOUND("클라이언트가 요청한 댓글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    FAIL_Reply_LIKE_MEMBER_DUPLICATED("이미 좋아요를 누른 댓글입니다.", HttpStatus.BAD_REQUEST),
+    FAIL_REPLY_LIKE_MEMBER_DUPLICATED("이미 좋아요를 누른 댓글입니다.", HttpStatus.BAD_REQUEST),
 
     // Report
     FAIL_REPORT_NOT_FOUND("클라이언트가 요청한 신고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     FAIL_REPORT_DUPLICATED("클라이언트가 요청한 신고는 이미 접수되었습니다. 중복 신고는 불가능합나디.", HttpStatus.BAD_REQUEST),
     FAIL_REPORT_CATEGORY_NOT_FOUND("클라이언트가 요청한 신고의 카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    // Follow
+    FAIL_FOLLOW_NOT_FOUND("클라이언트가 요청한 팔로잉 목록을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FAIL_FOLLOW_DUPLICATED("클라이언트가 이미 요청한 팔로잉입니다.", HttpStatus.BAD_REQUEST),
 
     // Skill
     FAIL_SKILL_NOT_FOUND("클라이언트가 요청한 스킬을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
